@@ -1,7 +1,7 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Accounts;
 using WSantosDev.EventSourcing.Commons;
-using WSantosDev.EventSourcing;
+using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.WebApi.Accounts
 {
@@ -16,10 +16,8 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
                 : Option.None<Account>();
         }
 
-        public void Store(Account account)
-        {
+        public Result<IError> Store(Account account) =>
             eventStore.Append(StreamId(account.AccountId), account.UncommittedEvents);
-        }
             
 
         private static string StreamId(AccountId accountId) =>

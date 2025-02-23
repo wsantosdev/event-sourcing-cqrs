@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Moonad;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing
@@ -14,14 +15,23 @@ namespace WSantosDev.EventSourcing
             EventIndex.Seed(_context.Events.Count());
         }
 
-        public void Append(string streamId, IEnumerable<IEvent> events)
+        public Result<IError> Append(string streamId, IEnumerable<IEvent> events)
         {
-            var toAppend = events.Select(@event => EventSerializer.Serialize(EventIndex.Next(),
-                                                                          streamId,
-                                                                          @event));
+            try
+            {
+                var toAppend = events.Select(@event => EventSerializer.Serialize(EventIndex.Next(),
+                                                                              streamId,
+                                                                              @event));
 
-            _context.Events.AddRange(toAppend);
-            _context.SaveChanges();
+                _context.Events.AddRange(toAppend);
+                _context.SaveChanges();
+
+                return Result<IError>.Ok();
+            }
+            catch
+            {
+                return EventStoreErrors.CouldNotPersistEvents;
+            }
         }
 
         public IEnumerable<IEvent> Load(string streamId) =>
@@ -30,6 +40,13 @@ namespace WSantosDev.EventSourcing
                     .OrderBy(e => e.Id)
                     .Select(EventSerializer.Desserialize);
     }
+
+    public static class EventStoreErrors
+    {
+        public static readonly CouldNotPersistEventsError CouldNotPersistEvents;
+    }
+
+    public readonly struct CouldNotPersistEventsError : IError;
 
     public sealed class EventDbContext(DbContextOptions<EventDbContext> options) : DbContext(options)
     {

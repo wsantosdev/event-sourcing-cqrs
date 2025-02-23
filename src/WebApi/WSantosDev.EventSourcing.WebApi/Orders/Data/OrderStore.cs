@@ -16,11 +16,8 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
                 : Option.None<Order>();
         }
 
-        public Result<IError> Store(Order order)
-        {
+        public Result<IError> Store(Order order) =>
             eventStore.Append(StreamId(order.OrderId), order.UncommittedEvents);
-            return Result<IError>.Ok();
-        }
         
         private static string StreamId(OrderId orderId) =>
             $"Order_{orderId}";

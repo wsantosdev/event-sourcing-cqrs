@@ -1,5 +1,6 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Commons;
+using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
@@ -7,6 +8,6 @@ namespace WSantosDev.EventSourcing.Accounts
     {
         Option<Account> GetById(AccountId accountId);
         
-        void Store(Account account);
+        Result<IError> Store(Account account);
     }
 }

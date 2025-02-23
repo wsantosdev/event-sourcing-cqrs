@@ -16,12 +16,9 @@ namespace WSantosDev.EventSourcing.WebApi.Positions
                 : Option.None<Position>();
         }
 
-        public Result<IError> Store(Position position)
-        {
+        public Result<IError> Store(Position position) =>
             eventStore.Append(StreamId(position.AccountId, position.Symbol), position.UncommittedEvents);
-            return Result<IError>.Ok();
-        }
-
+            
         private static string StreamId(AccountId accountId, Symbol symbol) =>
             $"Position_{accountId}_{symbol}";
     }
