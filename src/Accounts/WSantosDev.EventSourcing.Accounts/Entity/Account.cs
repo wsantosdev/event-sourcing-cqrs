@@ -55,6 +55,8 @@ namespace WSantosDev.EventSourcing.Accounts
         {
             if(amount == Money.Zero)
                 return Errors.InvalidAmount;
+            if (Money.Zero < amount)
+                return Errors.InsufficientFunds;
 
             RaiseEvent(new AmountDebited(amount));
 

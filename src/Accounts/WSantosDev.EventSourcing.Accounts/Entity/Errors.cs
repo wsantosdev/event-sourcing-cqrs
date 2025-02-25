@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.Accounts
     {
         public static readonly EmptyAccountIdError EmptyAccountId;
         public static readonly InvalidAmountError InvalidAmount;
-        public static readonly InsuficientFundsError InsuficientFunds;
+        public static readonly InsuficientFundsError InsufficientFunds;
     }
 
     public readonly struct EmptyAccountIdError : IError { }
