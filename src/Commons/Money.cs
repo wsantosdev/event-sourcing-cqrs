@@ -9,7 +9,7 @@ namespace WSantosDev.EventSourcing.Commons
         private Money(decimal value) : base(value)
         {
             if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value));
+                throw new ArgumentOutOfRangeException(nameof(value), "Only non-negative values are allowed to represent Money.");
         }
 
         public static implicit operator Money(decimal value) =>
