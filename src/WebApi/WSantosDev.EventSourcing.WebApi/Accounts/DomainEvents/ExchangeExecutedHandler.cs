@@ -1,9 +1,9 @@
 ﻿using WSantosDev.EventSourcing.Accounts.Actions;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
-using WSantosDev.EventSourcing.Exchange.ExternalEvents;
+using WSantosDev.EventSourcing.Exchange.DomainEvents;
 
-namespace WSantosDev.EventSourcing.WebApi.Accounts.ExternalEvents
+namespace WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents
 {
     public sealed class ExchangeExecutedHandler(CreditAction action) : IMessageHandler<ExchangeExecuted>
     {

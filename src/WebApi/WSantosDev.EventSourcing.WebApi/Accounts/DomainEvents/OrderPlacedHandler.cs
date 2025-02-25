@@ -3,7 +3,7 @@ using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Orders.ExternalEvents;
 using WSantosDev.EventSourcing.Accounts.Actions;
 
-namespace WSantosDev.EventSourcing.WebApi.Accounts.ExternalEvents
+namespace WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents
 {
     public sealed class OrderPlacedHandler(DebitAction action) : IMessageHandler<OrderPlaced>
     {

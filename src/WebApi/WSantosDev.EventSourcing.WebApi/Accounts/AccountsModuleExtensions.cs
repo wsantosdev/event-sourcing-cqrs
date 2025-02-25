@@ -2,7 +2,7 @@
 using WSantosDev.EventSourcing.Accounts.Actions;
 using WSantosDev.EventSourcing.Accounts.DomainEvents;
 using WSantosDev.EventSourcing.Accounts.Queries;
-using WSantosDev.EventSourcing.WebApi.Accounts.ExternalEvents;
+using WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Accounts
 {

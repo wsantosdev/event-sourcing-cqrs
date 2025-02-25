@@ -1,10 +1,10 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
-using WSantosDev.EventSourcing.Exchange.ExternalEvents;
+using WSantosDev.EventSourcing.Exchange.DomainEvents;
 
 namespace WSantosDev.EventSourcing.Exchange.Actions
 {
-    public class CreateAction(IOrderStore store, IMessageBus messageBus)
+    public class CreateAction(IExchangeOrderStore store, IMessageBus messageBus)
     {
         public void Execute(CreateActionParams command)
         {
