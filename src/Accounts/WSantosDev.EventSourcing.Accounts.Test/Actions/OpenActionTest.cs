@@ -1,5 +1,5 @@
 ﻿using WSantosDev.EventSourcing.Accounts.Actions;
-using WSantosDev.EventSourcing.Accounts.ExternalEvents;
+using WSantosDev.EventSourcing.Accounts.DomainEvents;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 
