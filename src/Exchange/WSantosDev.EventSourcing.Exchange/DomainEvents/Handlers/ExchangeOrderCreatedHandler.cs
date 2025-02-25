@@ -2,9 +2,9 @@
 
 namespace WSantosDev.EventSourcing.Exchange.DomainEvents
 {
-    public class ExchangeCreatedHandler(IExchangeOrderReadModelStore readModelStore) : IMessageHandler<ExchangeCreated>
+    public class ExchangeOrderCreatedHandler(IExchangeOrderReadModelStore readModelStore) : IMessageHandler<ExchangeOrderCreated>
     {
-        public void Handle(ExchangeCreated @event)
+        public void Handle(ExchangeOrderCreated @event)
         {
             readModelStore.Store(new OrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
                                                     @event.Quantity, @event.Symbol, @event.Price, @event.Status));

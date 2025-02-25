@@ -1,6 +1,6 @@
 ﻿using WSantosDev.EventSourcing.Commons.Messaging;
 
-namespace WSantosDev.EventSourcing.Positions.ExternalEvents
+namespace WSantosDev.EventSourcing.Positions.DomainEvents
 {
     public class PositionOpenedHandler(IPositionReadModelStore store) : IMessageHandler<PositionOpened>
     {

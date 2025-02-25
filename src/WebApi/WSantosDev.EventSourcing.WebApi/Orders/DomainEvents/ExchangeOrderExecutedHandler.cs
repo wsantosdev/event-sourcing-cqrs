@@ -3,13 +3,13 @@ using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Exchange.DomainEvents;
 using WSantosDev.EventSourcing.Orders.Actions;
 
-namespace WSantosDev.EventSourcing.WebApi.Orders.ExternalEvents
+namespace WSantosDev.EventSourcing.WebApi.Orders.DomainEvents
 {
-    public class ExchangeExecutedHandler(ExecuteAction action) : IMessageHandler<ExchangeExecuted>
+    public class ExchangeOrderExecutedHandler(ExecuteAction action) : IMessageHandler<ExchangeOrderExecuted>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
-        public void Handle(ExchangeExecuted @event)
+        public void Handle(ExchangeOrderExecuted @event)
         {
             if (_handledOrderIds.Contains(@event.OrderId))
                 return;

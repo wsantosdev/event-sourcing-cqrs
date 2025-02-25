@@ -11,8 +11,8 @@ namespace WSantosDev.EventSourcing.Exchange.Actions
             var order = ExchangeOrder.Create(command.AccountId, command.OrderId, command.Side,
                                              command.Quantity, command.Symbol, command.Price);
             store.Store(order);
-            messageBus.Publish(new ExchangeCreated(order.AccountId, order.OrderId, order.Side,
-                                                   order.Quantity, order.Symbol, order.Price, order.Status));
+            messageBus.Publish(new ExchangeOrderCreated(order.AccountId, order.OrderId, order.Side,
+                                                        order.Quantity, order.Symbol, order.Price, order.Status));
         }
     }
 

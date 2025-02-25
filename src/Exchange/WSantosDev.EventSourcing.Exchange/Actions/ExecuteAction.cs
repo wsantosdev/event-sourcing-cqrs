@@ -18,7 +18,7 @@ namespace WSantosDev.EventSourcing.Exchange.Actions
                 if (executed)
                 {
                     store.Store(order);
-                    messageBus.Publish(new ExchangeExecuted(order.AccountId, order.OrderId, order.Side,
+                    messageBus.Publish(new ExchangeOrderExecuted(order.AccountId, order.OrderId, order.Side,
                                                             order.Quantity, order.Symbol, order.Price, order.Status));
 
                     return Result<IError>.Ok();

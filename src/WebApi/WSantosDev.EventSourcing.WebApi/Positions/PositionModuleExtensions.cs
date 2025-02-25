@@ -1,7 +1,7 @@
 ﻿using WSantosDev.EventSourcing.Positions;
-using WSantosDev.EventSourcing.Positions.ExternalEvents;
+using WSantosDev.EventSourcing.Positions.DomainEvents;
 using WSantosDev.EventSourcing.Positions.Actions;
-using WSantosDev.EventSourcing.WebApi.Positions.ExternalEvents;
+using WSantosDev.EventSourcing.WebApi.Positions.DomainEvents;
 using WSantosDev.EventSourcing.Positions.Queries;
 
 namespace WSantosDev.EventSourcing.WebApi.Positions
@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.WebApi.Positions
                            .AddSingleton<PositionsByAccountQuery>()
                            .AddSingleton<PositionBySymbolQuery>()
                            .AddSingleton<OrderPlacedHandler>()
-                           .AddSingleton<ExchangeExecutedHandler>()
+                           .AddSingleton<ExchangeOrderExecutedHandler>()
                            .AddSingleton<PositionOpenedHandler>()
                            .AddSingleton<DepositedHandler>()
                            .AddSingleton<WithdrawnHandler>();

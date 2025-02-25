@@ -1,9 +1,9 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
-using WSantosDev.EventSourcing.Orders.ExternalEvents;
+using WSantosDev.EventSourcing.Orders.DomainEvents;
 using WSantosDev.EventSourcing.Positions.Actions;
 
-namespace WSantosDev.EventSourcing.WebApi.Positions.ExternalEvents
+namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
 {
     public sealed class OrderPlacedHandler(WithdrawAction action) : IMessageHandler<OrderPlaced>
     {

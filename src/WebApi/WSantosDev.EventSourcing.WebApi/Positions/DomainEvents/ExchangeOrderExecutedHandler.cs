@@ -3,13 +3,13 @@ using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Exchange.DomainEvents;
 using WSantosDev.EventSourcing.Positions.Actions;
 
-namespace WSantosDev.EventSourcing.WebApi.Positions.ExternalEvents
+namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
 {
-    public class ExchangeExecutedHandler(DepositAction depositAction) : IMessageHandler<ExchangeExecuted>
+    public class ExchangeOrderExecutedHandler(DepositAction depositAction) : IMessageHandler<ExchangeOrderExecuted>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
-        public void Handle(ExchangeExecuted @event)
+        public void Handle(ExchangeOrderExecuted @event)
         {
             if (@event.Side == OrderSide.Sell || _handledOrderIds.Contains(@event.OrderId))
                 return;

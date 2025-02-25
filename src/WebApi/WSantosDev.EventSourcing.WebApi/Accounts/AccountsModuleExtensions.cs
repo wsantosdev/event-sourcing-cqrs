@@ -19,7 +19,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
                            .AddSingleton<AccountOpenedHandler>()
                            .AddSingleton<AccountUpdatedHandler>()
                            .AddSingleton<OrderPlacedHandler>()
-                           .AddSingleton<ExchangeExecutedHandler>();
+                           .AddSingleton<ExchangeOrderExecutedHandler>();
         }
     }
 }

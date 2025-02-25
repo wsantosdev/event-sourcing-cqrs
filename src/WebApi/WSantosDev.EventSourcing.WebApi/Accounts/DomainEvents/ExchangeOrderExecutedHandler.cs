@@ -5,11 +5,11 @@ using WSantosDev.EventSourcing.Exchange.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents
 {
-    public sealed class ExchangeExecutedHandler(CreditAction action) : IMessageHandler<ExchangeExecuted>
+    public sealed class ExchangeOrderExecutedHandler(CreditAction action) : IMessageHandler<ExchangeOrderExecuted>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
-        public void Handle(ExchangeExecuted @event)
+        public void Handle(ExchangeOrderExecuted @event)
         {
             if (@event.Side == OrderSide.Buy || _handledOrderIds.Contains(@event.OrderId))
                 return;

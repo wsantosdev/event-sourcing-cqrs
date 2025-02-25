@@ -3,7 +3,7 @@ using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
 using WSantosDev.EventSourcing.Positions;
-using WSantosDev.EventSourcing.Positions.ExternalEvents;
+using WSantosDev.EventSourcing.Positions.DomainEvents;
 
 
 namespace WSantosDev.EventSourcing.Positions.Actions

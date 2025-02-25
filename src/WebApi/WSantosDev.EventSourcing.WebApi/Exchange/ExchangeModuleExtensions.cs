@@ -16,8 +16,8 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
                            .AddTransient<ExecuteAction>()
                            .AddTransient<ExchangeOrdersQuery>()
                            .AddSingleton<OrderPlacedEventHandler>()
-                           .AddSingleton<ExchangeCreatedHandler>()
-                           .AddSingleton<ExchangeExecutedHandler>();
+                           .AddSingleton<ExchangeOrderCreatedHandler>()
+                           .AddSingleton<ExchangeOrderExecutedHandler>();
         }
     }
 }

@@ -2,7 +2,7 @@
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
-using WSantosDev.EventSourcing.Orders.ExternalEvents;
+using WSantosDev.EventSourcing.Orders.DomainEvents;
 
 namespace WSantosDev.EventSourcing.Orders.Actions
 {

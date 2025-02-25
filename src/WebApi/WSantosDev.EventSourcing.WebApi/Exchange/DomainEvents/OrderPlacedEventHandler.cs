@@ -1,7 +1,7 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Exchange.Actions;
-using WSantosDev.EventSourcing.Orders.ExternalEvents;
+using WSantosDev.EventSourcing.Orders.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Exchange.DomainEvents
 {

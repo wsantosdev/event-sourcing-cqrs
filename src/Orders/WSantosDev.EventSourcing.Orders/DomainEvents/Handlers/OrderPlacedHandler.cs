@@ -1,6 +1,6 @@
 ﻿using WSantosDev.EventSourcing.Commons.Messaging;
 
-namespace WSantosDev.EventSourcing.Orders.ExternalEvents
+namespace WSantosDev.EventSourcing.Orders.DomainEvents
 {
     public class OrderPlacedHandler(IOrderReadModelStore store) : IMessageHandler<OrderPlaced>
     {

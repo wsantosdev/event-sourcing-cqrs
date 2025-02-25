@@ -1,9 +1,9 @@
 ﻿using WSantosDev.EventSourcing.Orders;
 using WSantosDev.EventSourcing.Orders.Actions;
-using WSantosDev.EventSourcing.Orders.ExternalEvents;
+using WSantosDev.EventSourcing.Orders.DomainEvents;
 using WSantosDev.EventSourcing.Orders.Queries;
 using WSantosDev.EventSourcing.WebApi.Orders.Actions;
-using WSantosDev.EventSourcing.WebApi.Orders.ExternalEvents;
+using WSantosDev.EventSourcing.WebApi.Orders.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Orders
 {
@@ -19,7 +19,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
                     .AddTransient<OrdersByAccountQuery>()
                     .AddSingleton<OrderPlacedHandler>()
                     .AddSingleton<OrderExecutedHandler>()
-                    .AddSingleton<ExchangeExecutedHandler>();
+                    .AddSingleton<ExchangeOrderExecutedHandler>();
         }
     }
 }
