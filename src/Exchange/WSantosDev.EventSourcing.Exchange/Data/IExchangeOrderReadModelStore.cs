@@ -1,6 +1,6 @@
 ﻿namespace WSantosDev.EventSourcing.Exchange
 {
-    public interface IOrderReadModelStore
+    public interface IExchangeOrderReadModelStore
     {
         public IEnumerable<OrderReadModel> GetAll();
 

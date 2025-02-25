@@ -2,11 +2,11 @@
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
-using WSantosDev.EventSourcing.Exchange.ExternalEvents;
+using WSantosDev.EventSourcing.Exchange.DomainEvents;
 
 namespace WSantosDev.EventSourcing.Exchange.Actions
 {
-    public class ExecuteAction(IOrderStore store, IMessageBus messageBus)
+    public class ExecuteAction(IExchangeOrderStore store, IMessageBus messageBus)
     {
         public Result<IError> Execute(ExecuteActionParams command)
         {

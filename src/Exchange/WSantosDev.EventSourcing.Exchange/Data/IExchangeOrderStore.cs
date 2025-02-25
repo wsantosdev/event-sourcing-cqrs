@@ -4,7 +4,7 @@ using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.Exchange
 {
-    public interface IOrderStore
+    public interface IExchangeOrderStore
     {
         Option<ExchangeOrder> GetById(OrderId orderId);
         

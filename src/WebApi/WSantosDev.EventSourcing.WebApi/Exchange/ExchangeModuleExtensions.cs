@@ -1,8 +1,8 @@
 ﻿using WSantosDev.EventSourcing.Exchange;
 using WSantosDev.EventSourcing.Exchange.Actions;
-using WSantosDev.EventSourcing.Exchange.ExternalEvents;
+using WSantosDev.EventSourcing.Exchange.DomainEvents;
 using WSantosDev.EventSourcing.Exchange.Queries;
-using WSantosDev.EventSourcing.WebApi.Exchange.ExternalEvents;
+using WSantosDev.EventSourcing.WebApi.Exchange.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Exchange
 {
@@ -10,8 +10,8 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
     {
         public static IServiceCollection AddExchangeModule(this IServiceCollection services) 
         {
-            return services.AddSingleton<IOrderStore, ExchangeOrderStore>()
-                           .AddSingleton<IOrderReadModelStore, ExchangeOrderReadModelStore>()
+            return services.AddSingleton<IExchangeOrderStore, ExchangeOrderStore>()
+                           .AddSingleton<IExchangeOrderReadModelStore, ExchangeOrderReadModelStore>()
                            .AddTransient<CreateAction>()
                            .AddTransient<ExecuteAction>()
                            .AddTransient<ExchangeOrdersQuery>()

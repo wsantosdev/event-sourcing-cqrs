@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Commons\WSantosDev.EventSourcing.Commons.csproj" />
+    <ProjectReference Include="..\..\EventStore\WSantosDev.EventSourcing.EventStore.csproj" />
   </ItemGroup>
 
 </Project>

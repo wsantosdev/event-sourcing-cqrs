@@ -1,8 +1,8 @@
 ﻿using WSantosDev.EventSourcing.Commons.Messaging;
 
-namespace WSantosDev.EventSourcing.Exchange.ExternalEvents
+namespace WSantosDev.EventSourcing.Exchange.DomainEvents
 {
-    public class ExchangeCreatedHandler(IOrderReadModelStore readModelStore) : IMessageHandler<ExchangeCreated>
+    public class ExchangeCreatedHandler(IExchangeOrderReadModelStore readModelStore) : IMessageHandler<ExchangeCreated>
     {
         public void Handle(ExchangeCreated @event)
         {

@@ -3,7 +3,7 @@ using WSantosDev.EventSourcing.Exchange;
 
 namespace WSantosDev.EventSourcing.WebApi.Exchange
 {
-    public class ExchangeOrderReadModelStore(ExchangeOrderReadModelDbContext context) : IOrderReadModelStore
+    public class ExchangeOrderReadModelStore(ExchangeOrderReadModelDbContext context) : IExchangeOrderReadModelStore
     {
         public IEnumerable<OrderReadModel> GetAll() =>
             context.ExchangeOrders;

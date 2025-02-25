@@ -1,11 +1,10 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
-using WSantosDev.EventSourcing.Exchange;
 
-namespace WSantosDev.EventSourcing.WebApi.Exchange
+namespace WSantosDev.EventSourcing.Exchange
 {
-    public sealed class ExchangeOrderStore(EventStore eventStore) : IOrderStore
+    public sealed class ExchangeOrderStore(EventStore eventStore) : IExchangeOrderStore
     {
             public Option<ExchangeOrder> GetById(OrderId orderId)
             {
@@ -15,7 +14,7 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
                     ? ExchangeOrder.Restore(stream)
                     : Option.None<ExchangeOrder>();
             }
-
+            
             public Result<IError> Store(ExchangeOrder order) =>
                 eventStore.Append(StreamId(order.OrderId), order.UncommittedEvents);
                 

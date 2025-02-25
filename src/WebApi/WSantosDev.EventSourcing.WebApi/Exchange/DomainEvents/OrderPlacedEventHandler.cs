@@ -3,7 +3,7 @@ using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Exchange.Actions;
 using WSantosDev.EventSourcing.Orders.ExternalEvents;
 
-namespace WSantosDev.EventSourcing.WebApi.Exchange.ExternalEvents
+namespace WSantosDev.EventSourcing.WebApi.Exchange.DomainEvents
 {
     public class OrderPlacedEventHandler(CreateAction action) : IMessageHandler<OrderPlaced>
     {
