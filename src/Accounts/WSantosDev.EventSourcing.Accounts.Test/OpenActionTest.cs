@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NSubstitute;
+﻿using NSubstitute;
 using WSantosDev.EventSourcing.Accounts.Actions;
 using WSantosDev.EventSourcing.Accounts.ExternalEvents;
 using WSantosDev.EventSourcing.Commons;
@@ -9,17 +8,19 @@ namespace WSantosDev.EventSourcing.Accounts.Test
 {
     public sealed class OpenActionTest : IDisposable
     {
+        private readonly DatabaseSetup _databaseSetup;
+
         private readonly IAccountReadModelStore _accountReadModelStore;
         private readonly IAccountStore _accountStore;
+        
         private readonly IMessageBus _messageBus;
-
-        private readonly EventDbContext _eventDbContext;
-        private readonly AccountReadModelDbContext _accountReadModelDbContext;
 
         public OpenActionTest()
         {
-            (_accountStore, _eventDbContext, _accountReadModelStore, _accountReadModelDbContext) 
-                = CreateAccountStore();
+            _databaseSetup = DatabaseSetupFactory.Create();
+
+            _accountReadModelStore = _databaseSetup.AccountReadModelStore;
+            _accountStore = _databaseSetup.AccountStore;
 
             _messageBus = Substitute.For<IMessageBus>();
         }
@@ -28,14 +29,15 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         public void Success()
         {
             //Arrange
+            AccountId accountId = Guid.NewGuid();
             var action = new OpenAction(_accountReadModelStore, _accountStore, _messageBus);
 
             //Act
-            var opened = action.Execute(new OpenActionParams(Guid.NewGuid(), 1_000_000m));
+            var opened = action.Execute(new OpenActionParams(accountId, 1_000_000m));
 
             //Asset
             Assert.True(opened);
-            Assert.NotEmpty(_eventDbContext.Events);
+            Assert.True(_accountStore.GetById(accountId));
             _messageBus.Received(1).Publish(Arg.Any<AccountOpened>());
         }
 
@@ -60,9 +62,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             //Arrange
             var accountId = Guid.NewGuid();
-            var balance = 1m;
-            _accountReadModelDbContext.Accounts.Add(new AccountReadModel(accountId, balance));
-            _accountReadModelDbContext.SaveChanges();
+            _accountReadModelStore.Store(new AccountReadModel(Guid.NewGuid(), 1m));
             
             var action = new OpenAction(_accountReadModelStore, _accountStore, _messageBus);
 
@@ -75,29 +75,11 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             _messageBus.Received(0).Publish(Arg.Any<AccountOpened>());
         }
 
-        #region setup
+        #region dispose
 
         public void Dispose()
         {
-            _eventDbContext.Events.RemoveRange(_eventDbContext.Events);
-            _eventDbContext.SaveChanges();
-            _eventDbContext.Dispose();
-
-            _accountReadModelDbContext.Accounts.RemoveRange(_accountReadModelDbContext.Accounts);
-            _accountReadModelDbContext.SaveChanges();
-            _accountReadModelDbContext.Dispose();
-        }
-
-        private static (AccountStore, EventDbContext, AccountReadModelStore, AccountReadModelDbContext) CreateAccountStore()
-        {
-            var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), "Data Source=./Sqlite/EventStore.sqlite").Options;
-            var dbContext = new EventDbContext(options);
-            var eventStore = new EventStore(dbContext);
-
-            var readModelOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<AccountReadModelDbContext>(), "Data Source=./Sqlite/ReadModelStore.sqlite").Options;
-            var readModelDbContext = new AccountReadModelDbContext(readModelOptions);
-            
-            return (new AccountStore(eventStore), dbContext, new AccountReadModelStore(readModelDbContext), readModelDbContext);
+            DatabaseSetupDisposer.Dispose(_databaseSetup);
         }
 
         #endregion
