@@ -24,11 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sqlite\EventStore.sqlite">
+    <None Update="Sqlite\EventStoreTest.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Sqlite\ReadModelStore.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Sqlite\ReadModelStoreTest.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
