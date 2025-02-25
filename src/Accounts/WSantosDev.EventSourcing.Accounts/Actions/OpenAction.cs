@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
             if (opened)
             {
                 store.Store(opened);
-                messageBus.Publish(new ExternalEvents.AccountOpened(command.AccountId, command.InitialDeposit));
+                messageBus.Publish(new DomainEvents.AccountOpened(command.AccountId, command.InitialDeposit));
                 return Result<IError>.Ok();
             }
 

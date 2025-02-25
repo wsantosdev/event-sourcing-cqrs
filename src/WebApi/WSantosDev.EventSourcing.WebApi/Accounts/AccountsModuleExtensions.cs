@@ -1,6 +1,6 @@
 ﻿using WSantosDev.EventSourcing.Accounts;
 using WSantosDev.EventSourcing.Accounts.Actions;
-using WSantosDev.EventSourcing.Accounts.ExternalEvents;
+using WSantosDev.EventSourcing.Accounts.DomainEvents;
 using WSantosDev.EventSourcing.Accounts.Queries;
 using WSantosDev.EventSourcing.WebApi.Accounts.ExternalEvents;
 

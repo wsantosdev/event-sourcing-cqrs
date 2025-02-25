@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
                 if (debited)
                 {
                     store.Store(account);
-                    messageBus.Publish(new ExternalEvents.AccountUpdated(account.AccountId, account.Balance));
+                    messageBus.Publish(new DomainEvents.AccountUpdated(account.AccountId, account.Balance));
                     return Result<IError>.Ok();
                 }
 
