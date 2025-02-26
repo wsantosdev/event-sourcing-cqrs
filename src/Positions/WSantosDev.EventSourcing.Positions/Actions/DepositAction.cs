@@ -32,7 +32,7 @@ namespace WSantosDev.EventSourcing.Positions.Actions
                 store.Store(opened);
                 messageBus.Publish(new PositionOpened(command.AccountId, command.Symbol, command.Quantity));
 
-                return Result<IError>.Ok();
+                return true;
             }
 
             return Result<IError>.Error(opened.ErrorValue);

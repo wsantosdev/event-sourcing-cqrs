@@ -2,9 +2,9 @@
 {
     public interface IExchangeOrderReadModelStore
     {
-        public IEnumerable<OrderReadModel> GetAll();
+        public IEnumerable<ExchangeOrderReadModel> GetAll();
 
-        public void Store(OrderReadModel order);
-        public void Update(OrderReadModel order);
+        public void Store(ExchangeOrderReadModel order);
+        public void Update(ExchangeOrderReadModel order);
     }
 }

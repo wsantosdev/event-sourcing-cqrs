@@ -43,7 +43,7 @@ namespace WSantosDev.EventSourcing.Positions
                 return Result<IError>.Error(Errors.QuantityZero);
 
             RaiseEvent(new SharesDeposited(quantity));
-            return Result<IError>.Ok();
+            return true;
         }
 
         private void Apply(SharesDeposited @event) =>
@@ -61,7 +61,7 @@ namespace WSantosDev.EventSourcing.Positions
             else
                 RaiseEvent(new PositionClosed(quantity));
 
-            return Result<IError>.Ok();
+            return true;
         }
 
         private void Apply(SharesWithdrawn @event) =>

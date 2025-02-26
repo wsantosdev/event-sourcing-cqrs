@@ -64,7 +64,7 @@ namespace WSantosDev.EventSourcing.Orders
             
             RaiseEvent(new OrderExecuted(AccountId, OrderId, Side, Quantity, Symbol, Price));
             
-            return Result<IError>.Ok();
+            return true;
         }
 
         private void Apply(OrderExecuted @event) =>

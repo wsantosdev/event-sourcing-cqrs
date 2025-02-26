@@ -7,18 +7,18 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
 {
     public class CreditAction(IAccountStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(CreditActionParams command)
+        public Result<IError> Execute(CreditActionParams @params)
         {
-            var stored = store.GetById(command.AccountId);
+            var stored = store.GetById(@params.AccountId);
             if (stored)
             {
                 var account = stored.Get();
-                var credited = account.Credit(command.Amount);
+                var credited = account.Credit(@params.Amount);
                 if (credited)
                 {
                     store.Store(account);
                     messageBus.Publish(new DomainEvents.AccountUpdated(account.AccountId, account.Balance));
-                    return Result<IError>.Ok();
+                    return true;
                 }
 
                 return Result<IError>.Error(credited.ErrorValue);

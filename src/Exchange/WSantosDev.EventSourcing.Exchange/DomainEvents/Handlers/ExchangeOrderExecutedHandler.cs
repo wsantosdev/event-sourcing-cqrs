@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.Exchange.DomainEvents
     {
         public void Handle(ExchangeOrderExecuted @event)
         {
-            readModelStore.Update(new OrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
+            readModelStore.Update(new ExchangeOrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
                                                      @event.Quantity, @event.Symbol, @event.Price, @event.Status));
         }
     }

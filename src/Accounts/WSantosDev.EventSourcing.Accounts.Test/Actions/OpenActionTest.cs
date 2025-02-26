@@ -9,20 +9,20 @@ namespace WSantosDev.EventSourcing.Accounts.Test
     {
         private readonly DatabaseSetup _databaseSetup;
 
-        private readonly IAccountReadModelStore _accountReadModelStore;
-        private readonly IAccountStore _accountStore;
+        private readonly AccountReadModelStore _readModelStore;
+        private readonly AccountStore _store;
         
-        private readonly IMessageBus _messageBus;
+        private readonly InMemoryMessageBus _messageBus;
 
         public OpenActionTest()
         {
             _databaseSetup = DatabaseSetupFactory.Create();
 
-            _accountReadModelStore = _databaseSetup.AccountReadModelStore;
-            _accountStore = _databaseSetup.AccountStore;
+            _readModelStore = _databaseSetup.ReadModelStore;
+            _store = _databaseSetup.Store;
 
             _messageBus = new InMemoryMessageBus();
-            _messageBus.Subscribe(new AccountOpenedHandler(_accountReadModelStore));
+            _messageBus.Subscribe(new AccountOpenedHandler(_readModelStore));
         }
 
         [Fact]
@@ -30,15 +30,15 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
-            var sut = new OpenAction(_accountReadModelStore, _accountStore, _messageBus);
+            var sut = new OpenAction(_store, _messageBus);
 
             //Act
             var opened = sut.Execute(new OpenActionParams(accountId, 1_000_000m));
 
             //Assert
             Assert.True(opened);
-            Assert.True(_accountStore.GetById(accountId));
-            Assert.True(_accountReadModelStore.GetById(accountId));
+            Assert.True(_store.GetById(accountId));
+            Assert.True(_readModelStore.GetById(accountId));
         }
 
         [Fact]
@@ -46,17 +46,17 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
-            var sut = new OpenAction(_accountReadModelStore, _accountStore, _messageBus);
+            var sut = new OpenAction(_store, _messageBus);
 
             //Act
             var opened = sut.Execute(new OpenActionParams(accountId, 0m));
             
             //Assert
             Assert.True(opened);
-            var account = _accountStore.GetById(accountId);
+            var account = _store.GetById(accountId);
             Assert.True(account);
             Assert.Equal<decimal>(0m, account.Get().Balance);
-            var accountReadModel = _accountReadModelStore.GetById(accountId);
+            var accountReadModel = _readModelStore.GetById(accountId);
             Assert.True(accountReadModel);
             Assert.Equal(0m, accountReadModel.Get().Balance);
         }
@@ -66,7 +66,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             //Arrange
             var accountId = AccountId.Empty;
-            var sut = new OpenAction(_accountReadModelStore, _accountStore, _messageBus);
+            var sut = new OpenAction(_store, _messageBus);
 
             //Act
             var opened = sut.Execute(new OpenActionParams(accountId, 1_000_000m));
@@ -74,7 +74,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(opened);
             Assert.Equal(Errors.EmptyAccountId, opened.ErrorValue);
-            Assert.False(_accountReadModelStore.GetById(accountId));
+            Assert.False(_readModelStore.GetById(accountId));
         }
 
         [Fact]
@@ -82,9 +82,9 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
-            _accountReadModelStore.Store(new AccountReadModel(accountId, 1m));
+            _readModelStore.Store(new AccountReadModel(accountId, 1m));
             
-            var sut = new OpenAction(_accountReadModelStore, _accountStore, _messageBus);
+            var sut = new OpenAction(_store, _messageBus);
 
             //Act
             var opened = sut.Execute(new OpenActionParams(accountId, 1_000_000m));
@@ -92,7 +92,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(opened);
             Assert.Equal(ActionErrors.AccountAlreadyExists, opened.ErrorValue);
-            Assert.True(_accountReadModelStore.GetById(accountId));
+            Assert.True(_readModelStore.GetById(accountId));
         }
 
         public void Dispose() =>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WSantosDev.EventSourcing.WebApi.Exchange;
 
 namespace WSantosDev.EventSourcing.Exchange.Test
 {

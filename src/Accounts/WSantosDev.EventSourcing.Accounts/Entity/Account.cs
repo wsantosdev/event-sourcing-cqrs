@@ -45,7 +45,7 @@ namespace WSantosDev.EventSourcing.Accounts
 
             RaiseEvent(new AmountCredited(amount));
 
-            return Result<IError>.Ok();
+            return true;
         }
 
         private void Apply(AmountCredited amountCredited) =>
@@ -60,7 +60,7 @@ namespace WSantosDev.EventSourcing.Accounts
 
             RaiseEvent(new AmountDebited(amount));
 
-            return Result<IError>.Ok();
+            return true;
         }
 
         private void Apply(AmountDebited amountDebited) =>

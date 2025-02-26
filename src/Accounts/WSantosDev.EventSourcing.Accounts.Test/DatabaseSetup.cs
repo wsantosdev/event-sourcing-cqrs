@@ -4,11 +4,11 @@ namespace WSantosDev.EventSourcing.Accounts.Test
 {
     public class DatabaseSetup
     {
-        public required AccountStore AccountStore { get; init; }
-        public required AccountReadModelStore AccountReadModelStore { get; init; }
+        public required AccountStore Store { get; init; }
+        public required AccountReadModelStore ReadModelStore { get; init; }
         
         public required EventDbContext EventDbContext { get; init; }
-        public required AccountReadModelDbContext AccountReadModelDbContext { get; init; }
+        public required AccountReadModelDbContext ReadModelDbContext { get; init; }
     }
 
     public static class DatabaseSetupFactory
@@ -25,9 +25,9 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             return new DatabaseSetup
             {
                 EventDbContext = dbContext,
-                AccountStore = new AccountStore(eventStore),
-                AccountReadModelDbContext = readModelDbContext,
-                AccountReadModelStore = new AccountReadModelStore(readModelDbContext)
+                Store = new AccountStore(eventStore),
+                ReadModelDbContext = readModelDbContext,
+                ReadModelStore = new AccountReadModelStore(readModelDbContext)
             };
         }
     }
@@ -40,9 +40,9 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             setup.EventDbContext.SaveChanges();
             setup.EventDbContext.Dispose();
 
-            setup.AccountReadModelDbContext.Accounts.RemoveRange(setup.AccountReadModelDbContext.Accounts);
-            setup.AccountReadModelDbContext.SaveChanges();
-            setup.AccountReadModelDbContext.Dispose();
+            setup.ReadModelDbContext.Accounts.RemoveRange(setup.ReadModelDbContext.Accounts);
+            setup.ReadModelDbContext.SaveChanges();
+            setup.ReadModelDbContext.Dispose();
         }
     }
 }

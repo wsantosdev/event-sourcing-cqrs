@@ -5,20 +5,20 @@ using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.Accounts.Actions
 {
-    public class OpenAction(IAccountReadModelStore readModelStore, IAccountStore store, IMessageBus messageBus)
+    public class OpenAction(IAccountStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(OpenActionParams command)
+        public Result<IError> Execute(OpenActionParams @params)
         {
-            var stored = readModelStore.GetById(command.AccountId);
+            var stored = store.GetById(@params.AccountId);
             if (stored)
                 return ActionErrors.AccountAlreadyExists;
             
-            var opened = Account.Open(command.AccountId, command.InitialDeposit);
+            var opened = Account.Open(@params.AccountId, @params.InitialDeposit);
             if (opened)
             {
                 store.Store(opened);
-                messageBus.Publish(new DomainEvents.AccountOpened(command.AccountId, command.InitialDeposit));
-                return Result<IError>.Ok();
+                messageBus.Publish(new DomainEvents.AccountOpened(@params.AccountId, @params.InitialDeposit));
+                return true;
             }
 
             return Result<IError>.Error(opened.ErrorValue);

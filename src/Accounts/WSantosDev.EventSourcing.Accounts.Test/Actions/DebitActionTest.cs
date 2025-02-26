@@ -18,8 +18,8 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             _databaseSetup = DatabaseSetupFactory.Create();
 
-            _accountReadModelStore = _databaseSetup.AccountReadModelStore;
-            _accountStore = _databaseSetup.AccountStore;
+            _accountReadModelStore = _databaseSetup.ReadModelStore;
+            _accountStore = _databaseSetup.Store;
 
             _messageBus = new InMemoryMessageBus();
             _messageBus.Subscribe(new AccountUpdatedHandler(_accountReadModelStore));

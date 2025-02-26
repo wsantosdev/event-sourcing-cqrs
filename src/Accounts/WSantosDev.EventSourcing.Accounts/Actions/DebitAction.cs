@@ -7,18 +7,18 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
 {
     public class DebitAction(IAccountStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(DebitActionParams command)
+        public Result<IError> Execute(DebitActionParams @params)
         {
-            var stored = store.GetById(command.AccountId);
+            var stored = store.GetById(@params.AccountId);
             if (stored)
             {
                 var account = stored.Get();
-                var debited = account.Debit(command.Amount);
+                var debited = account.Debit(@params.Amount);
                 if (debited)
                 {
                     store.Store(account);
                     messageBus.Publish(new DomainEvents.AccountUpdated(account.AccountId, account.Balance));
-                    return Result<IError>.Ok();
+                    return true;
                 }
 
                 return Result<IError>.Error(debited.ErrorValue);

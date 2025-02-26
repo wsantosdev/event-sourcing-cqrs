@@ -12,7 +12,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test.Queries
         public AccountQueryTest()
         {
             _databaseSetup = DatabaseSetupFactory.Create();
-            _accountReadModelStore = _databaseSetup.AccountReadModelStore;
+            _accountReadModelStore = _databaseSetup.ReadModelStore;
         }
 
         [Fact]

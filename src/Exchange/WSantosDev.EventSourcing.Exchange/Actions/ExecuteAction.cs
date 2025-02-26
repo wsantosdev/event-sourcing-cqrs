@@ -21,7 +21,7 @@ namespace WSantosDev.EventSourcing.Exchange.Actions
                     messageBus.Publish(new ExchangeOrderExecuted(order.AccountId, order.OrderId, order.Side,
                                                             order.Quantity, order.Symbol, order.Price, order.Status));
 
-                    return Result<IError>.Ok();
+                    return true;
                 }
 
                 return Result<IError>.Error(executed.ErrorValue);

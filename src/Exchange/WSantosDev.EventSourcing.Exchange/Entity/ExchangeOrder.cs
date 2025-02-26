@@ -45,7 +45,7 @@ namespace WSantosDev.EventSourcing.Exchange
                 return Errors.AlreadyFilled;
 
             RaiseEvent(new OrderExecuted());
-            return Result<IError>.Ok();
+            return true;
         }
 
         private void Apply(OrderExecuted @event) =>

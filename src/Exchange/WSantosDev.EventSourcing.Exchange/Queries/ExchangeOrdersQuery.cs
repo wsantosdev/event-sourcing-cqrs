@@ -2,7 +2,7 @@
 {
     public class ExchangeOrdersQuery(IExchangeOrderReadModelStore readModelStore)
     {
-        public IEnumerable<OrderReadModel> Execute() =>
+        public IEnumerable<ExchangeOrderReadModel> Execute() =>
             readModelStore.GetAll();
     }
 }

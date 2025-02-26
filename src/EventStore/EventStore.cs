@@ -26,7 +26,7 @@ namespace WSantosDev.EventSourcing
                 _context.Events.AddRange(toAppend);
                 _context.SaveChanges();
 
-                return Result<IError>.Ok();
+                return true;
             }
             catch
             {
