@@ -23,7 +23,6 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
             {
                 OrderNotFoundError => NotFound("Order not found."),
                 AlreadyFilledError => Conflict("Order already executed."),
-                AlreadyCanceledError => Conflict("Order already cancelled."),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, "Unspecified error.")
             };
         }

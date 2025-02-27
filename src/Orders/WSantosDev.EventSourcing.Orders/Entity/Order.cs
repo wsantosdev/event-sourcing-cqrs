@@ -41,17 +41,17 @@ namespace WSantosDev.EventSourcing.Orders
         public static Result<Order, IError> New(AccountId accountId, OrderId orderId, OrderSide side,
                                                 Quantity quantity, Symbol symbol, Money price)
         {
-            if(accountId == AccountId.Empty)
+            if(AccountId.Empty == accountId)
                 return Errors.EmptyAccountId;
-            if (orderId == OrderId.Empty)
+            if (OrderId.Empty == orderId)
                 return Errors.EmptyOrderId;
-            if (side == OrderSide.None)
+            if (OrderSide.None == side)
                 return Errors.InvalidSide;
-            if (quantity == Quantity.Zero)
+            if (Quantity.Zero >= quantity)
                 return Errors.InvalidQuantity;
-            if (symbol == Symbol.Empty)
+            if (Symbol.Empty == symbol)
                 return Errors.InvalidSymbol;
-            if (price == Money.Zero)
+            if (Money.Zero >= price)
                 return Errors.InvalidPrice;
 
             return new Order(accountId, orderId, side, quantity, symbol, price);

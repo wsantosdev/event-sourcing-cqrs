@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Commons;
-using WSantosDev.EventSourcing.Orders;
 
-namespace WSantosDev.EventSourcing.WebApi.Orders
+namespace WSantosDev.EventSourcing.Orders
 {
     public class OrderReadModelStore(OrderReadModelDbContext context) : IOrderReadModelStore
     {

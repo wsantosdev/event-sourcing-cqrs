@@ -2,7 +2,6 @@
 using WSantosDev.EventSourcing.Orders.Actions;
 using WSantosDev.EventSourcing.Orders.DomainEvents;
 using WSantosDev.EventSourcing.Orders.Queries;
-using WSantosDev.EventSourcing.WebApi.Orders.Actions;
 using WSantosDev.EventSourcing.WebApi.Orders.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Orders

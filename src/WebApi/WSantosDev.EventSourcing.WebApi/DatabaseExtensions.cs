@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Accounts;
 using WSantosDev.EventSourcing.Exchange;
-using WSantosDev.EventSourcing.WebApi.Orders;
+using WSantosDev.EventSourcing.Orders;
 using WSantosDev.EventSourcing.WebApi.Positions;
 
 namespace WSantosDev.EventSourcing.WebApi

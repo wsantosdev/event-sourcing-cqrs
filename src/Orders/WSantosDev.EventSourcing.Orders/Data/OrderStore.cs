@@ -1,13 +1,13 @@
-﻿using Moonad;
+﻿using System.Linq;
+using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
-using WSantosDev.EventSourcing.Orders;
 
-namespace WSantosDev.EventSourcing.WebApi.Orders
+namespace WSantosDev.EventSourcing.Orders
 {
     public sealed class OrderStore(EventStore eventStore) : IOrderStore
     {
-        Option<Order> IOrderStore.GetById(OrderId orderId)
+        public Option<Order> GetById(OrderId orderId)
         {
             var stream = eventStore.Load(StreamId(orderId));
 
