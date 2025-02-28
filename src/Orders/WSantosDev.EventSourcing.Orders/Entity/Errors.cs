@@ -11,7 +11,6 @@ namespace WSantosDev.EventSourcing.Orders
         public static readonly InvalidSymbolError InvalidSymbol;
         public static readonly InvalidPriceError InvalidPrice;
 
-        public static readonly AlreadyCanceledError AlreadyCanceled;
         public static readonly AlreadyFilledError AlreadyFilled;
     }
 
@@ -23,6 +22,5 @@ namespace WSantosDev.EventSourcing.Orders
     public readonly struct InvalidSymbolError : IError { }
     public readonly struct InvalidPriceError : IError { }
 
-    public readonly struct AlreadyCanceledError : IError { }
     public readonly struct AlreadyFilledError : IError { }
 }
