@@ -6,14 +6,15 @@ namespace WSantosDev.EventSourcing.Accounts
 {
     public class AccountReadModelStore(AccountReadModelDbContext context) : IAccountReadModelStore
     {
-        public Option<AccountReadModel> GetById(AccountId accountId) =>
-            context.Accounts.Where(a => a.AccountId == accountId)
-                            .FirstOrDefault()
-                            .ToOption();
-
-        public void Store(AccountReadModel account)
+        public async Task<Option<AccountReadModel>> GetByIdAsync(AccountId accountId)
         {
-            var stored = context.Accounts.FirstOrDefault(a => a.AccountId == account.AccountId).ToOption();
+            var stored = await context.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId);
+            return stored.ToOption();
+        }
+
+        public async Task StoreAsync(AccountReadModel account)
+        {
+            var stored = (await context.Accounts.FirstOrDefaultAsync(a => a.AccountId == account.AccountId)).ToOption();
             if (stored)
             {
                 context.ChangeTracker.Clear();

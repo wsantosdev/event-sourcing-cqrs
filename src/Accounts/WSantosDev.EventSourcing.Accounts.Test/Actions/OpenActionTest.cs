@@ -38,7 +38,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.True(opened);
             Assert.True(await _store.GetByIdAsync(accountId));
-            Assert.True(_readModelStore.GetById(accountId));
+            Assert.True(await _readModelStore.GetByIdAsync(accountId));
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             var account = await _store.GetByIdAsync(accountId);
             Assert.True(account);
             Assert.Equal<decimal>(0m, account.Get().Balance);
-            var accountReadModel = _readModelStore.GetById(accountId);
+            var accountReadModel = await _readModelStore.GetByIdAsync(accountId);
             Assert.True(accountReadModel);
             Assert.Equal(0m, accountReadModel.Get().Balance);
         }
@@ -74,7 +74,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(opened);
             Assert.Equal(Errors.EmptyAccountId, opened.ErrorValue);
-            Assert.False(_readModelStore.GetById(accountId));
+            Assert.False(await _readModelStore.GetByIdAsync(accountId));
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
-            _readModelStore.Store(new AccountReadModel(accountId, 1m));
+            await _readModelStore.StoreAsync(new AccountReadModel(accountId, 1m));
             
             var sut = new OpenAction(_store, _messageBus);
 
@@ -92,7 +92,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(opened);
             Assert.Equal(ActionErrors.AccountAlreadyExists, opened.ErrorValue);
-            Assert.True(_readModelStore.GetById(accountId));
+            Assert.True(await _readModelStore.GetByIdAsync(accountId));
         }
 
         public void Dispose() =>

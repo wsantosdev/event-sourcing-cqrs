@@ -16,17 +16,17 @@ namespace WSantosDev.EventSourcing.Positions.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             var accountId = Guid.NewGuid();
             var symbol = "APPL";
             var available = 10;
-            _readModelStore.Store(new PositionReadModel(accountId, symbol, available));
+            await _readModelStore.StoreAsync(new PositionReadModel(accountId, symbol, available));
             var sut = new PositionsByAccountQuery(_readModelStore);
 
             //Act
-            var stored = sut.Execute(new PositionsByAccountQueryParams(accountId));
+            var stored = await sut.ExecuteAsync(new PositionsByAccountQueryParams(accountId));
 
             //Assert
             Assert.NotEmpty(stored);
@@ -35,14 +35,14 @@ namespace WSantosDev.EventSourcing.Positions.Test
         }
 
         [Fact]
-        public void SuccessButNotFound()
+        public async Task SuccessButNotFound()
         {
             //Arrange
             var accountId = Guid.NewGuid();
             var sut = new PositionsByAccountQuery(_readModelStore);
 
             //Act
-            var stored = sut.Execute(new PositionsByAccountQueryParams(accountId));
+            var stored = await sut.ExecuteAsync(new PositionsByAccountQueryParams(accountId));
 
             //Assert
             Assert.Empty(stored);

@@ -32,7 +32,7 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Actions
             var orderId = Guid.NewGuid();
             var order = ExchangeOrder.Create(Guid.NewGuid(), orderId, OrderSide.Buy, 100, "MSFT", 10m);
             await _store.StoreAsync(order);
-            _readModelStore.Store(new ExchangeOrderReadModel(order.AccountId, order.OrderId, order.Side, order.Quantity, 
+            await _readModelStore.StoreAsync(new ExchangeOrderReadModel(order.AccountId, order.OrderId, order.Side, order.Quantity, 
                                                              order.Symbol, order.Price, order.Status));
             
             var sut = new ExecuteAction(_store, _messageBus);
@@ -42,7 +42,7 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Actions
 
             //Assert
             Assert.True(executed);
-            Assert.Equal(OrderStatus.Filled, _readModelStore.GetAll().First(o => o.OrderId == orderId).Status);
+            Assert.Equal(OrderStatus.Filled, (await _readModelStore.GetAllAsync()).First(o => o.OrderId == orderId).Status);
         }
 
         [Fact]

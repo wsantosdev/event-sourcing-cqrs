@@ -38,7 +38,7 @@ namespace WSantosDev.EventSourcing.Exchange.Test
             //Assert
             Assert.True(created);
             Assert.True(await _store.GetByIdAsync(orderId));
-            Assert.NotEmpty(_readModelStore.GetAll().Select(o => o.OrderId == orderId));
+            Assert.NotEmpty((await _readModelStore.GetAllAsync()).Select(o => o.OrderId == orderId));
         }
 
         public void Dispose() =>

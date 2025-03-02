@@ -32,8 +32,8 @@ namespace WSantosDev.EventSourcing.Orders.Test
             var orderId = Guid.NewGuid();
             Order order = Order.New(Guid.NewGuid(), orderId, OrderSide.Sell, 1, "NVDA", 1m);
             await _store.StoreAsync(order);
-            _readModelStore.Store(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity, 
-                                                     order.Symbol, order.Price, OrderStatus.New));
+            await _readModelStore.StoreAsync(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity, 
+                                                                order.Symbol, order.Price, OrderStatus.New));
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
@@ -65,7 +65,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             var orderId = Guid.NewGuid();
             Order order = Order.New(Guid.NewGuid(), orderId, OrderSide.Sell, 1, "NVDA", 1m);
             await _store.StoreAsync(order);
-            _readModelStore.Store(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity,
+            await _readModelStore.StoreAsync(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity,
                                                      order.Symbol, order.Price, OrderStatus.New));
             var sut = new ExecuteAction(_store, _messageBus);
 

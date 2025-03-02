@@ -15,28 +15,28 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Queries
         }
 
         [Fact]
-        public void Success() 
+        public async Task Success() 
         {
             //Arrange
-            _readModelStore.Store(new ExchangeOrderReadModel(Guid.NewGuid(), Guid.NewGuid(), OrderSide.Sell, 100, 
+            await _readModelStore.StoreAsync(new ExchangeOrderReadModel(Guid.NewGuid(), Guid.NewGuid(), OrderSide.Sell, 100, 
                                                              "MNST", 10m, OrderStatus.Filled));
             var sut = new ExchangeOrdersQuery(_readModelStore);
 
             //Act
-            var orders = sut.Execute();
+            var orders = await sut.ExecuteAsync();
 
             //Assert
             Assert.NotEmpty(orders);
         }
 
         [Fact]
-        public void SuccessButNotFound()
+        public async Task SuccessButNotFound()
         {
             //Arrange
             var sut = new ExchangeOrdersQuery(_readModelStore);
 
             //Act
-            var orders = sut.Execute();
+            var orders = await sut.ExecuteAsync();
 
             //Assert
             Assert.Empty(orders);

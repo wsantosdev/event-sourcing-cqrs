@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
@@ -9,22 +10,23 @@ namespace WSantosDev.EventSourcing.Orders
 {
     public class OrderReadModelStore(OrderReadModelDbContext context) : IOrderReadModelStore
     {
-        public IEnumerable<OrderReadModel> GetByAccount(AccountId accountId) =>
-            context.Orders.Where(o => o.AccountId == accountId);
+        public async Task<IEnumerable<OrderReadModel>> GetByAccountAsync(AccountId accountId) =>
+            await context.Orders
+                         .Where(o => o.AccountId == accountId).ToListAsync();
 
-        public void Store(OrderReadModel order)
+        public async Task StoreAsync(OrderReadModel order)
         {
             var stored = context.Orders.FirstOrDefault(o => o.OrderId == order.OrderId).ToOption();
             if (stored)
             {
                 context.ChangeTracker.Clear();
                 context.Update(order);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return;
             }
 
             context.Add(order);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 

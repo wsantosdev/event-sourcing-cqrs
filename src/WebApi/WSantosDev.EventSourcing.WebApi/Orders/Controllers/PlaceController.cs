@@ -27,7 +27,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
         {
             if (request.Side == OrderSide.Buy)
             {
-                var account = accountQuery.Execute(new AccountQueryParams(Constants.DefaultAccountId));
+                var account = await accountQuery.ExecuteAsync(new AccountQueryParams(Constants.DefaultAccountId));
                 if (!account)
                     return NotFound();
 
@@ -37,7 +37,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
             
             if(request.Side == OrderSide.Sell)
             {
-                var position = positionBySymbolQuery.Execute(new PositionBySymbolQueryParams(Constants.DefaultAccountId, request.Symbol));
+                var position = await positionBySymbolQuery.ExecuteAsync(new PositionBySymbolQueryParams(Constants.DefaultAccountId, request.Symbol));
                 if(!position || position.Get().Available < request.Quantity)
                     return Conflict("Insuficient shares.");
             }

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WSantosDev.EventSourcing.Commons;
 
 namespace WSantosDev.EventSourcing.Orders.Queries
 {
     public class OrdersByAccountQuery(IOrderReadModelStore readModelStore)
     {
-        public IEnumerable<OrderReadModel> Execute(OrdersByAccountQueryParams queryParams) =>
-            readModelStore.GetByAccount(queryParams.AccountId);
+        public async Task<IEnumerable<OrderReadModel>> ExecuteAsync(OrdersByAccountQueryParams queryParams) =>
+            await readModelStore.GetByAccountAsync(queryParams.AccountId);
         
     }
     

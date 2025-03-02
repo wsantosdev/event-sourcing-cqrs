@@ -32,7 +32,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 0m).ResultValue;
             await _accountStore.StoreAsync(account);
-            _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
+            await _accountReadModelStore.StoreAsync(new AccountReadModel(accountId, account.Balance));
             var sut = new CreditAction(_accountStore, _messageBus);
 
             //Act
@@ -40,7 +40,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
 
             //Assert
             Assert.True(credited);
-            Assert.Equal(10m, _accountReadModelStore.GetById(accountId).Get().Balance);
+            Assert.Equal(10m, (await _accountReadModelStore.GetByIdAsync(accountId)).Get().Balance);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 1m).ResultValue;
             await _accountStore.StoreAsync(account);
-            _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
+            await _accountReadModelStore.StoreAsync(new AccountReadModel(accountId, account.Balance));
             var sut = new CreditAction(_accountStore, _messageBus);
 
             //Act
@@ -59,7 +59,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(credited);
             Assert.Equal(Errors.InvalidAmount, credited.ErrorValue);
-            Assert.Equal(1m, _accountReadModelStore.GetById(accountId).Get().Balance);
+            Assert.Equal(1m, (await _accountReadModelStore.GetByIdAsync(accountId)).Get().Balance);
         }
 
         public void Dispose() =>

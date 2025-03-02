@@ -5,11 +5,11 @@ namespace WSantosDev.EventSourcing.Positions
 {
     public interface IPositionReadModelStore
     {
-        IEnumerable<PositionReadModel> GetByAccount(AccountId accountId);
-        Option<PositionReadModel> GetBySymbol(AccountId accountId, Symbol symbol);
+        Task<IEnumerable<PositionReadModel>> GetByAccountAsync(AccountId accountId);
+        Task<Option<PositionReadModel>> GetBySymbolAsync(AccountId accountId, Symbol symbol);
 
-        void Store(PositionReadModel position);
+        Task StoreAsync(PositionReadModel position);
 
-        void Remove(PositionReadModel position);
+        Task RemoveAsync(PositionReadModel position);
     }
 }

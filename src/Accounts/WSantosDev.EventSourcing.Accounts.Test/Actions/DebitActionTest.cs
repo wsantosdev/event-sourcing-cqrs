@@ -32,7 +32,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
             await _accountStore.StoreAsync(account);
-            _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
+            await _accountReadModelStore.StoreAsync(new AccountReadModel(accountId, account.Balance));
             var sut = new DebitAction(_accountStore, _messageBus);
 
             //Act
@@ -41,7 +41,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.True(debited);
             Assert.Equal<decimal>(90m, (await _accountStore.GetByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(90m, _accountReadModelStore.GetById(accountId).Get().Balance);
+            Assert.Equal(90m, (await _accountReadModelStore.GetByIdAsync(accountId)).Get().Balance);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
             await _accountStore.StoreAsync(account);
-            _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
+            await _accountReadModelStore.StoreAsync(new AccountReadModel(accountId, account.Balance));
             var sut = new DebitAction(_accountStore, _messageBus);
 
             //Act
@@ -61,7 +61,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             Assert.False(debited);
             Assert.Equal(Errors.InvalidAmount, debited.ErrorValue);
             Assert.Equal<decimal>(100m, (await _accountStore.GetByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(100m, _accountReadModelStore.GetById(accountId).Get().Balance);
+            Assert.Equal(100m, (await _accountReadModelStore.GetByIdAsync(accountId)).Get().Balance);
         }
                 
         [Fact]
@@ -71,7 +71,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
             await _accountStore.StoreAsync(account);
-            _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
+            await _accountReadModelStore.StoreAsync(new AccountReadModel(accountId, account.Balance));
             var sut = new DebitAction(_accountStore, _messageBus);
 
             //Act
@@ -81,7 +81,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             Assert.False(debited);
             Assert.Equal(Errors.InsufficientFunds, debited.ErrorValue);
             Assert.Equal<decimal>(100m, (await _accountStore.GetByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(100m, _accountReadModelStore.GetById(accountId).Get().Balance);
+            Assert.Equal(100m, (await _accountReadModelStore.GetByIdAsync(accountId)).Get().Balance);
         }
 
         public void Dispose() =>

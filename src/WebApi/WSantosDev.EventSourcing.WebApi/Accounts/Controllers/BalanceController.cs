@@ -12,9 +12,9 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Balance()
+        public async Task<IActionResult> Balance()
         {
-            var account = query.Execute(new AccountQueryParams(Constants.DefaultAccountId));
+            var account = await query.ExecuteAsync(new AccountQueryParams(Constants.DefaultAccountId));
             return account
                     ? Ok(account.Get().Balance)
                     : NotFound();

@@ -5,22 +5,22 @@ namespace WSantosDev.EventSourcing.Exchange
 {
     public class ExchangeOrderReadModelStore(ExchangeOrderReadModelDbContext context) : IExchangeOrderReadModelStore
     {
-        public IEnumerable<ExchangeOrderReadModel> GetAll() =>
-            context.ExchangeOrders;
+        public async Task<IEnumerable<ExchangeOrderReadModel>> GetAllAsync() =>
+            await context.ExchangeOrders.ToListAsync();
 
-        public void Store(ExchangeOrderReadModel order)
+        public async Task StoreAsync(ExchangeOrderReadModel order)
         {
             var stored = context.ExchangeOrders.FirstOrDefault(o => o.OrderId == order.OrderId).ToOption();
             if (stored)
             {
                 context.ChangeTracker.Clear();
                 context.Update(order);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return;
             }
 
             context.Add(order);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 

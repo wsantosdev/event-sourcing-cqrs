@@ -11,10 +11,7 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
         [HttpGet("Orders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Get()
-        {
-            var orders = query.Execute();
-            return Ok(orders);
-        }
+        public async Task<IActionResult> Get() =>
+            Ok(await query.ExecuteAsync());
     }
 }

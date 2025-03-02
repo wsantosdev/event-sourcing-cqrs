@@ -10,10 +10,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders.Actions
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByAccount()
-        {
-            var orders = query.Execute(new OrdersByAccountQueryParams(Constants.DefaultAccountId));
-            return Ok(orders);
-        }
+        public async Task<IActionResult> GetByAccount() =>
+            Ok(await query.ExecuteAsync(new OrdersByAccountQueryParams(Constants.DefaultAccountId)));
     }
 }

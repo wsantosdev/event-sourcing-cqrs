@@ -16,16 +16,16 @@ namespace WSantosDev.EventSourcing.Accounts.Test.Queries
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
-            _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
+            await _accountReadModelStore.StoreAsync(new AccountReadModel(accountId, account.Balance));
             var sut = new AccountQuery(_accountReadModelStore);
 
             //Act
-            var stored = sut.Execute(new AccountQueryParams(accountId));
+            var stored = await sut.ExecuteAsync(new AccountQueryParams(accountId));
 
             //Assert
             Assert.True(stored);
@@ -33,13 +33,13 @@ namespace WSantosDev.EventSourcing.Accounts.Test.Queries
         }
 
         [Fact]
-        public void SuccessButNotFound()
+        public async Task SuccessButNotFound()
         {
             //Arrange
             var sut = new AccountQuery(_accountReadModelStore);
 
             //Act
-            var stored = sut.Execute(new AccountQueryParams(Guid.NewGuid()));
+            var stored = await sut.ExecuteAsync(new AccountQueryParams(Guid.NewGuid()));
 
             //Assert
             Assert.False(stored);

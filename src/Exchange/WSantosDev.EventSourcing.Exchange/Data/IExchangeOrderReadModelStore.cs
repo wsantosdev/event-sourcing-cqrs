@@ -2,8 +2,8 @@
 {
     public interface IExchangeOrderReadModelStore
     {
-        public IEnumerable<ExchangeOrderReadModel> GetAll();
+        Task<IEnumerable<ExchangeOrderReadModel>> GetAllAsync();
 
-        public void Store(ExchangeOrderReadModel order);
+        Task StoreAsync(ExchangeOrderReadModel order);
     }
 }

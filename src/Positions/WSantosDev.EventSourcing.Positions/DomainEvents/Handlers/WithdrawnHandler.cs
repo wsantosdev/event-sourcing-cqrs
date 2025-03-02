@@ -9,10 +9,10 @@ namespace WSantosDev.EventSourcing.Positions.DomainEvents
             var position = new PositionReadModel(@event.AccountId, @event.Symbol, @event.Available);
 
             if(position.Available > 0)
-                store.Store(position);
+                store.StoreAsync(position);
 
             if(position.Available == 0)
-                store.Remove(position);
+                store.RemoveAsync(position);
         }
     }
 }

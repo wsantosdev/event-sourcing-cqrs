@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WSantosDev.EventSourcing.Commons;
 
 namespace WSantosDev.EventSourcing.Orders
 {
     public interface IOrderReadModelStore
     {
-        IEnumerable<OrderReadModel> GetByAccount(AccountId accountId);
+        Task<IEnumerable<OrderReadModel>> GetByAccountAsync(AccountId accountId);
 
-        void Store(OrderReadModel order);
+        Task StoreAsync(OrderReadModel order);
     }
 }

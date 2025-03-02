@@ -9,10 +9,7 @@ namespace WSantosDev.EventSourcing.WebApi.Positions
     public class PositionsController(PositionsByAccountQuery query) : ControllerBase
     {
         [HttpGet]
-        public IActionResult List()
-        {
-            var positions = query.Execute(new PositionsByAccountQueryParams(Constants.DefaultAccountId));
-            return Ok(positions);
-        }
+        public async Task<IActionResult> List() =>
+            Ok(await query.ExecuteAsync(new PositionsByAccountQueryParams(Constants.DefaultAccountId)));
     }
 }

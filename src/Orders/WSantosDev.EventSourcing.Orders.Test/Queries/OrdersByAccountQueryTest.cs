@@ -17,15 +17,15 @@ namespace WSantosDev.EventSourcing.Orders.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             var accountId = Guid.NewGuid();
-            _readModelStore.Store(new OrderReadModel(accountId, Guid.NewGuid(), OrderSide.Buy, 10, "CSCO", 10m, OrderStatus.Filled));
+            await _readModelStore.StoreAsync(new OrderReadModel(accountId, Guid.NewGuid(), OrderSide.Buy, 10, "CSCO", 10m, OrderStatus.Filled));
             var sut = new OrdersByAccountQuery(_readModelStore);
 
             //Act
-            var orders = sut.Execute(new OrdersByAccountQueryParams(accountId));
+            var orders = await sut.ExecuteAsync(new OrdersByAccountQueryParams(accountId));
 
             //Assert
             Assert.NotEmpty(orders);
@@ -33,13 +33,13 @@ namespace WSantosDev.EventSourcing.Orders.Test
         }
 
         [Fact]
-        public void SuccessButNotFound()
+        public async Task SuccessButNotFound()
         {
             //Arrange
             var sut = new OrdersByAccountQuery(_readModelStore);
 
             //Act
-            var orders = sut.Execute(new OrdersByAccountQueryParams(Guid.NewGuid()));
+            var orders = await sut.ExecuteAsync(new OrdersByAccountQueryParams(Guid.NewGuid()));
 
             //Assert
             Assert.Empty(orders);

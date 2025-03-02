@@ -5,8 +5,8 @@ namespace WSantosDev.EventSourcing.Accounts
 {
     public interface IAccountReadModelStore
     {
-        Option<AccountReadModel> GetById(AccountId accountId);
+        Task<Option<AccountReadModel>> GetByIdAsync(AccountId accountId);
         
-        void Store(AccountReadModel account);
+        Task StoreAsync(AccountReadModel account);
     }
 }
