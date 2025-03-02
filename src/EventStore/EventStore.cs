@@ -67,7 +67,7 @@ namespace WSantosDev.EventSourcing
         {
             return new(eventId,
                        streamId,
-                       DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss"),
+                       DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
                        string.Empty,
                        @event.GetType().FullName!,
                        JsonSerializer.Serialize(@event, @event.GetType()));
