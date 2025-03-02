@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Moonad;
 using WSantosDev.EventSourcing.Commons;
 
 namespace WSantosDev.EventSourcing.Orders
@@ -13,14 +14,16 @@ namespace WSantosDev.EventSourcing.Orders
 
         public void Store(OrderReadModel order)
         {
-            context.Add(order);
-            context.SaveChanges();
-        }
+            var stored = context.Orders.FirstOrDefault(o => o.OrderId == order.OrderId).ToOption();
+            if (stored)
+            {
+                context.ChangeTracker.Clear();
+                context.Update(order);
+                context.SaveChanges();
+                return;
+            }
 
-        public void Update(OrderReadModel order)
-        {
-            context.ChangeTracker.Clear();
-            context.Update(order);
+            context.Add(order);
             context.SaveChanges();
         }
     }

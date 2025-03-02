@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moonad;
 
 namespace WSantosDev.EventSourcing.Exchange
 {
@@ -9,14 +10,16 @@ namespace WSantosDev.EventSourcing.Exchange
 
         public void Store(ExchangeOrderReadModel order)
         {
-            context.Add(order);
-            context.SaveChanges();
-        }
+            var stored = context.ExchangeOrders.FirstOrDefault(o => o.OrderId == order.OrderId).ToOption();
+            if (stored)
+            {
+                context.ChangeTracker.Clear();
+                context.Update(order);
+                context.SaveChanges();
+                return;
+            }
 
-        public void Update(ExchangeOrderReadModel order)
-        {
-            context.ChangeTracker.Clear();
-            context.Update(order);
+            context.Add(order);
             context.SaveChanges();
         }
     }

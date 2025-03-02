@@ -8,7 +8,5 @@ namespace WSantosDev.EventSourcing.Orders
         IEnumerable<OrderReadModel> GetByAccount(AccountId accountId);
 
         void Store(OrderReadModel order);
-
-        void Update(OrderReadModel order);
     }
 }

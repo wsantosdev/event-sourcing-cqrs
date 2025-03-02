@@ -2,7 +2,7 @@
 using WSantosDev.EventSourcing.Accounts;
 using WSantosDev.EventSourcing.Exchange;
 using WSantosDev.EventSourcing.Orders;
-using WSantosDev.EventSourcing.WebApi.Positions;
+using WSantosDev.EventSourcing.Positions;
 
 namespace WSantosDev.EventSourcing.WebApi
 {

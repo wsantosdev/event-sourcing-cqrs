@@ -6,8 +6,8 @@ namespace WSantosDev.EventSourcing.Orders.DomainEvents
     {
         public void Handle(OrderExecuted @event)
         {
-            store.Update(new OrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
-                                            @event.Quantity, @event.Symbol, @event.Price, @event.Status));
+            store.Store(new OrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
+                                           @event.Quantity, @event.Symbol, @event.Price, @event.Status));
         }
     }
 }

@@ -15,14 +15,19 @@ namespace WSantosDev.EventSourcing.Positions
 
         public void Store(PositionReadModel position)
         {
-            context.Add(position);
-            context.SaveChanges();
-        }
+            var stored = context.Positions
+                                .FirstOrDefault(p => p.AccountId == position.AccountId && p.Symbol == position.Symbol)
+                                .ToOption();
 
-        public void Update(PositionReadModel position)
-        {
-            context.ChangeTracker.Clear();
-            context.Update(position);
+            if (stored)
+            {
+                context.ChangeTracker.Clear();
+                context.Update(position);
+                context.SaveChanges();
+                return;
+            }
+
+            context.Add(position);
             context.SaveChanges();
         }
 

@@ -13,14 +13,16 @@ namespace WSantosDev.EventSourcing.Accounts
 
         public void Store(AccountReadModel account)
         {
-            context.Add(account);
-            context.SaveChanges();
-        }
+            var stored = context.Accounts.FirstOrDefault(a => a.AccountId == account.AccountId).ToOption();
+            if (stored)
+            {
+                context.ChangeTracker.Clear();
+                context.Update(account);
+                context.SaveChanges();
+                return;
+            }
 
-        public void Update(AccountReadModel account)
-        {
-            context.ChangeTracker.Clear();
-            context.Update(account);
+            context.Add(account);
             context.SaveChanges();
         }
     }

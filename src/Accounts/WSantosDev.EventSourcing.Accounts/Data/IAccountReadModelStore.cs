@@ -8,6 +8,5 @@ namespace WSantosDev.EventSourcing.Accounts
         Option<AccountReadModel> GetById(AccountId accountId);
         
         void Store(AccountReadModel account);
-        void Update(AccountReadModel account);
     }
 }

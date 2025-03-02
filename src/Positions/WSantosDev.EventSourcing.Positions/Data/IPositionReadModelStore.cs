@@ -10,8 +10,6 @@ namespace WSantosDev.EventSourcing.Positions
 
         void Store(PositionReadModel position);
 
-        void Update(PositionReadModel position);
-
         void Remove(PositionReadModel position);
     }
 }
