@@ -8,7 +8,7 @@ namespace WSantosDev.EventSourcing.Exchange.Actions
 {
     public class ExecuteAction(IExchangeOrderStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(ExecuteActionParams command)
+        public async Task<Result<IError>> ExecuteAsync(ExecuteActionParams command)
         {
             var stored = store.GetById(command.OrderId);
             if (stored)
@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.Exchange.Actions
                 var executed = order.Execute();
                 if (executed)
                 {
-                    store.Store(order);
+                    await store.StoreAsync(order);
                     messageBus.Publish(new ExchangeOrderExecuted(order.AccountId, order.OrderId, order.Side,
                                                             order.Quantity, order.Symbol, order.Price, order.Status));
 

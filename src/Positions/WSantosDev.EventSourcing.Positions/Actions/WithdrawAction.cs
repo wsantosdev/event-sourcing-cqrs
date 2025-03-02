@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.Positions.Actions
                 var withdrawn = position.Withdraw(command.Quantity);
                 if (withdrawn)
                 {
-                    store.Store(position);
+                    store.StoreAsync(position);
                     messageBus.Publish(new PositionModified(command.AccountId, command.Symbol, position.Available));
                 }
 

@@ -1,7 +1,6 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
-using WSantosDev.EventSourcing.Positions;
 
 namespace WSantosDev.EventSourcing.Positions
 {
@@ -16,8 +15,8 @@ namespace WSantosDev.EventSourcing.Positions
                 : Option.None<Position>();
         }
 
-        public Result<IError> Store(Position position) =>
-            eventStore.Append(StreamId(position.AccountId, position.Symbol), position.UncommittedEvents);
+        public async Task<Result<IError>> StoreAsync(Position position) =>
+            await eventStore.AppendAsync(StreamId(position.AccountId, position.Symbol), position.UncommittedEvents);
             
         private static string StreamId(AccountId accountId, Symbol symbol) =>
             $"Position_{accountId}_{symbol}";

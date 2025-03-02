@@ -7,7 +7,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
 {
     public class DebitAction(IAccountStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(DebitActionParams @params)
+        public async Task<Result<IError>> ExecuteAsync(DebitActionParams @params)
         {
             var stored = store.GetById(@params.AccountId);
             if (stored)
@@ -16,7 +16,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
                 var debited = account.Debit(@params.Amount);
                 if (debited)
                 {
-                    store.Store(account);
+                    await store.StoreAsync(account);
                     messageBus.Publish(new DomainEvents.AccountUpdated(account.AccountId, account.Balance));
                     return true;
                 }

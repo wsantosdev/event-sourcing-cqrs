@@ -7,7 +7,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
 {
     public class CreditAction(IAccountStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(CreditActionParams @params)
+        public async Task<Result<IError>> ExecuteAsync(CreditActionParams @params)
         {
             var stored = store.GetById(@params.AccountId);
             if (stored)
@@ -16,7 +16,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
                 var credited = account.Credit(@params.Amount);
                 if (credited)
                 {
-                    store.Store(account);
+                    await store.StoreAsync(account);
                     messageBus.Publish(new DomainEvents.AccountUpdated(account.AccountId, account.Balance));
                     return true;
                 }

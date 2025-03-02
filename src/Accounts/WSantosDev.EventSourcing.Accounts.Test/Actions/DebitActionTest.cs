@@ -26,17 +26,17 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
-            _accountStore.Store(account);
+            await _accountStore.StoreAsync(account);
             _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
             var sut = new DebitAction(_accountStore, _messageBus);
 
             //Act
-            var debited = sut.Execute(new DebitActionParams(accountId, 10m));
+            var debited = await sut.ExecuteAsync(new DebitActionParams(accountId, 10m));
 
             //Assert
             Assert.True(debited);
@@ -45,17 +45,17 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void FailureInvalidAmount()
+        public async Task FailureInvalidAmount()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
-            _accountStore.Store(account);
+            await _accountStore.StoreAsync(account);
             _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
             var sut = new DebitAction(_accountStore, _messageBus);
 
             //Act
-            var debited = sut.Execute(new DebitActionParams(accountId, 0m));
+            var debited = await sut.ExecuteAsync(new DebitActionParams(accountId, 0m));
 
             //Assert
             Assert.False(debited);
@@ -65,17 +65,17 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
                 
         [Fact]
-        public void FailureInsuficientFunds()
+        public async Task FailureInsuficientFunds()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
-            _accountStore.Store(account);
+            await _accountStore.StoreAsync(account);
             _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
             var sut = new DebitAction(_accountStore, _messageBus);
 
             //Act
-            var debited = sut.Execute(new DebitActionParams(accountId, 200m));
+            var debited = await sut.ExecuteAsync(new DebitActionParams(accountId, 200m));
 
             //Assert
             Assert.False(debited);

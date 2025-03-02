@@ -26,17 +26,17 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 0m).ResultValue;
-            _accountStore.Store(account);
+            await _accountStore.StoreAsync(account);
             _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
             var sut = new CreditAction(_accountStore, _messageBus);
 
             //Act
-            var credited = sut.Execute(new CreditActionParams(accountId, 10m));
+            var credited = await sut.ExecuteAsync(new CreditActionParams(accountId, 10m));
 
             //Assert
             Assert.True(credited);
@@ -44,17 +44,17 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void FailureInvalidAmount()
+        public async Task FailureInvalidAmount()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 1m).ResultValue;
-            _accountStore.Store(account);
+            await _accountStore.StoreAsync(account);
             _accountReadModelStore.Store(new AccountReadModel(accountId, account.Balance));
             var sut = new CreditAction(_accountStore, _messageBus);
 
             //Act
-            var credited = sut.Execute(new CreditActionParams(accountId, 0m));
+            var credited = await sut.ExecuteAsync(new CreditActionParams(accountId, 0m));
 
             //Assert
             Assert.False(credited);

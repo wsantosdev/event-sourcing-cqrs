@@ -23,7 +23,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Place(PlaceOrderRequest request)
+        public async Task<IActionResult> Place(PlaceOrderRequest request)
         {
             if (request.Side == OrderSide.Buy)
             {
@@ -42,7 +42,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
                     return Conflict("Insuficient shares.");
             }
 
-            var created = action.Execute(new PlaceActionParams(Constants.DefaultAccountId, OrderId.New(), request.Side, 
+            var created = await action.ExecuteAsync(new PlaceActionParams(Constants.DefaultAccountId, OrderId.New(), request.Side, 
                                                         request.Quantity, request.Symbol, request.Price));
             if (created)
                 return Created(created.ResultValue.OrderId.ToString(), created.ResultValue.OrderId);

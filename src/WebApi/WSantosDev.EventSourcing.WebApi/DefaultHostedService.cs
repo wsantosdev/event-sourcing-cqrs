@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.WebApi
     {
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            action.Execute(new OpenActionParams(Constants.DefaultAccountId, 1_000_000));
+            action.ExecuteAsync(new OpenActionParams(Constants.DefaultAccountId, 1_000_000));
 
             return Task.CompletedTask;
         }

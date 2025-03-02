@@ -13,9 +13,9 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Execute(ExecuteRequest command)
+        public async Task<IActionResult> Execute(ExecuteRequest command)
         {
-            var executed = action.Execute(new ExecuteActionParams(command.OrderId));
+            var executed = await action.ExecuteAsync(new ExecuteActionParams(command.OrderId));
             if (executed)
                 return Ok();
             

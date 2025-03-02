@@ -8,6 +8,6 @@ namespace WSantosDev.EventSourcing.Accounts
     {
         Option<Account> GetById(AccountId accountId);
         
-        Result<IError> Store(Account account);
+        Task<Result<IError>> StoreAsync(Account account);
     }
 }

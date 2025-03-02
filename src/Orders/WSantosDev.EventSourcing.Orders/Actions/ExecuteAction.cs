@@ -1,4 +1,5 @@
-﻿using Moonad;
+﻿using System.Threading.Tasks;
+using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
@@ -8,7 +9,7 @@ namespace WSantosDev.EventSourcing.Orders.Actions
 {
     public class ExecuteAction(IOrderStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(ExecuteActionParams command)
+        public async Task<Result<IError>> ExecuteAsync(ExecuteActionParams command)
         {
             var stored = store.GetById(command.OrderId);
             if (stored)
@@ -17,7 +18,7 @@ namespace WSantosDev.EventSourcing.Orders.Actions
                 var executed = order.Execute();
                 if (executed)
                 {
-                    store.Store(order);
+                    await store.StoreAsync(order);
                     messageBus.Publish(new OrderExecuted(order.AccountId, order.OrderId, order.Side,
                                                          order.Quantity, order.Symbol, order.Price, OrderStatus.Filled));
                 }

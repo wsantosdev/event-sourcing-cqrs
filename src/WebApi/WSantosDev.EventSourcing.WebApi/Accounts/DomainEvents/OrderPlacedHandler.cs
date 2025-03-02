@@ -14,7 +14,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents
             if (@event.Side == OrderSide.Sell || _handledOrderIds.Contains(@event.OrderId))
                 return;
 
-            action.Execute(new DebitActionParams(@event.AccountId, @event.Quantity * @event.Price));
+            action.ExecuteAsync(new DebitActionParams(@event.AccountId, @event.Quantity * @event.Price));
             _handledOrderIds.Add(@event.OrderId);
         }
     }

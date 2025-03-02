@@ -8,11 +8,11 @@ namespace WSantosDev.EventSourcing.Exchange.Actions
 {
     public class CreateAction(IExchangeOrderStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(CreateActionParams @params)
+        public async Task<Result<IError>> ExecuteAsync(CreateActionParams @params)
         {
             var order = ExchangeOrder.Create(@params.AccountId, @params.OrderId, @params.Side,
                                              @params.Quantity, @params.Symbol, @params.Price);
-            store.Store(order);
+            await store.StoreAsync(order);
             messageBus.Publish(new ExchangeOrderCreated(order.AccountId, order.OrderId, order.Side,
                                                         order.Quantity, order.Symbol, order.Price, order.Status));
 

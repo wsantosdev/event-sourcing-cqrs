@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing
             EventIndex.Seed(_context.Events.Count());
         }
 
-        public Result<IError> Append(string streamId, IEnumerable<IEvent> events)
+        public async Task<Result<IError>> AppendAsync(string streamId, IEnumerable<IEvent> events)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace WSantosDev.EventSourcing
                                                                               @event));
 
                 _context.Events.AddRange(toAppend);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }

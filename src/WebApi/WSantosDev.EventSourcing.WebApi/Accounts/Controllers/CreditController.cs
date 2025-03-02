@@ -13,9 +13,9 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Credit(CreditRequest request)
+        public async Task<IActionResult> Credit(CreditRequest request)
         {
-            var credited = action.Execute(new CreditActionParams(Constants.DefaultAccountId, request.Amount));
+            var credited = await action.ExecuteAsync(new CreditActionParams(Constants.DefaultAccountId, request.Amount));
             if (credited)
                 return Ok();
 

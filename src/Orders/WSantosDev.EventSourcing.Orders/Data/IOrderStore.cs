@@ -1,4 +1,5 @@
-﻿using Moonad;
+﻿using System.Threading.Tasks;
+using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
@@ -8,6 +9,6 @@ namespace WSantosDev.EventSourcing.Orders
     {
         Option<Order> GetById(OrderId orderId);
 
-        Result<IError> Store(Order order);
+        Task<Result<IError>> StoreAsync(Order order);
     }
 }

@@ -26,14 +26,14 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var sut = new OpenAction(_store, _messageBus);
 
             //Act
-            var opened = sut.Execute(new OpenActionParams(accountId, 1_000_000m));
+            var opened = await sut.ExecuteAsync(new OpenActionParams(accountId, 1_000_000m));
 
             //Assert
             Assert.True(opened);
@@ -42,14 +42,14 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void SuccessWithNoInitialDeposit()
+        public async Task SuccessWithNoInitialDeposit()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var sut = new OpenAction(_store, _messageBus);
 
             //Act
-            var opened = sut.Execute(new OpenActionParams(accountId, 0m));
+            var opened = await sut.ExecuteAsync(new OpenActionParams(accountId, 0m));
             
             //Assert
             Assert.True(opened);
@@ -62,14 +62,14 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void FailureEmptyAccountId()
+        public async Task FailureEmptyAccountId()
         {
             //Arrange
             var accountId = AccountId.Empty;
             var sut = new OpenAction(_store, _messageBus);
 
             //Act
-            var opened = sut.Execute(new OpenActionParams(accountId, 1_000_000m));
+            var opened = await sut.ExecuteAsync(new OpenActionParams(accountId, 1_000_000m));
 
             //Assert
             Assert.False(opened);
@@ -78,7 +78,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         }
 
         [Fact]
-        public void FailureAccountAlreadyExists()
+        public async Task FailureAccountAlreadyExists()
         {
             //Arrange
             AccountId accountId = Guid.NewGuid();
@@ -87,7 +87,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             var sut = new OpenAction(_store, _messageBus);
 
             //Act
-            var opened = sut.Execute(new OpenActionParams(accountId, 1_000_000m));
+            var opened = await sut.ExecuteAsync(new OpenActionParams(accountId, 1_000_000m));
 
             //Assert
             Assert.False(opened);

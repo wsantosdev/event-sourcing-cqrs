@@ -27,7 +27,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             var accountId = Guid.NewGuid();
@@ -35,7 +35,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             var sut = new PlaceAction(_store, _messageBus);
 
             //Act
-            var placed = sut.Execute(new PlaceActionParams(accountId, orderId, OrderSide.Buy, 100, "CSCO", 10m));
+            var placed = await sut.ExecuteAsync(new PlaceActionParams(accountId, orderId, OrderSide.Buy, 100, "CSCO", 10m));
 
             //Assert
             Assert.True(placed);
@@ -45,13 +45,13 @@ namespace WSantosDev.EventSourcing.Orders.Test
 
         [Theory]
         [MemberData(nameof(FailureTestData))]
-        public void Failure(AccountId accountId, OrderId orderId, OrderSide orderSide, Quantity quantity, Symbol symbol, Money price, IError expectedError)
+        public async Task Failure(AccountId accountId, OrderId orderId, OrderSide orderSide, Quantity quantity, Symbol symbol, Money price, IError expectedError)
         {
             //Arrange
             var sut = new PlaceAction(_store, _messageBus);
 
             //Act
-            var placed = sut.Execute(new PlaceActionParams(accountId, orderId, orderSide, quantity, symbol, price));
+            var placed = await sut.ExecuteAsync(new PlaceActionParams(accountId, orderId, orderSide, quantity, symbol, price));
 
             //Assert
             Assert.False(placed);

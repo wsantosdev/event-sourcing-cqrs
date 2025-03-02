@@ -10,7 +10,7 @@ namespace WSantosDev.EventSourcing.Positions.Actions
 {
     public class DepositAction(IPositionStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(DepositActionParams command)
+        public async Task<Result<IError>> ExecuteAsync(DepositActionParams command)
         {
             var stored = store.GetBySymbol(command.AccountId, command.Symbol);
             if (stored)
@@ -19,7 +19,7 @@ namespace WSantosDev.EventSourcing.Positions.Actions
                 var deposited = position.Deposit(command.Quantity);
                 if (deposited)
                 {
-                    store.Store(position);
+                    await store.StoreAsync(position);
                     messageBus.Publish(new PositionModified(command.AccountId, command.Symbol, position.Available));
                 }
 
@@ -29,7 +29,7 @@ namespace WSantosDev.EventSourcing.Positions.Actions
             var opened = Position.Open(command.AccountId, command.Symbol, command.Quantity);
             if (opened)
             {
-                store.Store(opened);
+                await store.StoreAsync(opened);
                 messageBus.Publish(new PositionOpened(command.AccountId, command.Symbol, command.Quantity));
 
                 return true;

@@ -14,7 +14,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders.DomainEvents
             if (_handledOrderIds.Contains(@event.OrderId))
                 return;
 
-            action.Execute(new ExecuteActionParams(@event.OrderId));
+            action.ExecuteAsync(new ExecuteActionParams(@event.OrderId));
 
             _handledOrderIds.Add(@event.OrderId);
         }

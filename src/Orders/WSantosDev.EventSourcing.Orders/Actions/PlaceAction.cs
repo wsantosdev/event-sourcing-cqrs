@@ -1,4 +1,5 @@
-﻿using Moonad;
+﻿using System.Threading.Tasks;
+using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
@@ -8,13 +9,13 @@ namespace WSantosDev.EventSourcing.Orders.Actions
 {
     public class PlaceAction(IOrderStore store, IMessageBus messageBus)
     {
-        public Result<Order, IError> Execute(PlaceActionParams command)
+        public async Task<Result<Order, IError>> ExecuteAsync(PlaceActionParams command)
         {
             var created = Order.New(command.AccountId, command.OrderId, command.Side, command.Quantity, command.Symbol, command.Price);
             if (created)
             {
                 var order = created.ResultValue;
-                store.Store(order);
+                await store.StoreAsync(order);
                 messageBus.Publish(new OrderPlaced(order.AccountId, order.OrderId, order.Side,
                                                    order.Quantity, order.Symbol, order.Price,
                                                    order.Status));

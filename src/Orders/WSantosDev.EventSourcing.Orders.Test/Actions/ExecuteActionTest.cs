@@ -26,18 +26,18 @@ namespace WSantosDev.EventSourcing.Orders.Test
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             var orderId = Guid.NewGuid();
             Order order = Order.New(Guid.NewGuid(), orderId, OrderSide.Sell, 1, "NVDA", 1m);
-            _store.Store(order);
+            await _store.StoreAsync(order);
             _readModelStore.Store(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity, 
                                                      order.Symbol, order.Price, OrderStatus.New));
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
-            var executed = sut.Execute(new ExecuteActionParams(orderId));
+            var executed = await sut.ExecuteAsync(new ExecuteActionParams(orderId));
 
             //Assert
             Assert.True(executed);
@@ -45,13 +45,13 @@ namespace WSantosDev.EventSourcing.Orders.Test
         }
 
         [Fact]
-        public void FailureOrderNotFound()
+        public async Task FailureOrderNotFound()
         {
             //Arrange
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
-            var executed = sut.Execute(new ExecuteActionParams(Guid.NewGuid()));
+            var executed = await sut.ExecuteAsync(new ExecuteActionParams(Guid.NewGuid()));
 
             //Assert
             Assert.False(executed);
@@ -59,19 +59,19 @@ namespace WSantosDev.EventSourcing.Orders.Test
         }
 
         [Fact]
-        public void FailureAlreadyExecuted()
+        public async Task FailureAlreadyExecuted()
         {
             //Arrange
             var orderId = Guid.NewGuid();
             Order order = Order.New(Guid.NewGuid(), orderId, OrderSide.Sell, 1, "NVDA", 1m);
-            _store.Store(order);
+            await _store.StoreAsync(order);
             _readModelStore.Store(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity,
                                                      order.Symbol, order.Price, OrderStatus.New));
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
-            sut.Execute(new ExecuteActionParams(orderId));
-            var executed = sut.Execute(new ExecuteActionParams(orderId));
+            await sut.ExecuteAsync(new ExecuteActionParams(orderId));
+            var executed = await sut.ExecuteAsync(new ExecuteActionParams(orderId));
 
             //Assert
             Assert.False(executed);

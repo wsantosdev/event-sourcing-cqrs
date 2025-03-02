@@ -8,6 +8,6 @@ namespace WSantosDev.EventSourcing.Exchange
     {
         Option<ExchangeOrder> GetById(OrderId orderId);
         
-        Result<IError> Store(ExchangeOrder order);
+        Task<Result<IError>> StoreAsync(ExchangeOrder order);
     }
 }

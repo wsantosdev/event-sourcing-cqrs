@@ -7,7 +7,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
 {
     public class OpenAction(IAccountStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(OpenActionParams @params)
+        public async Task<Result<IError>> ExecuteAsync(OpenActionParams @params)
         {
             var stored = store.GetById(@params.AccountId);
             if (stored)
@@ -16,7 +16,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
             var opened = Account.Open(@params.AccountId, @params.InitialDeposit);
             if (opened)
             {
-                store.Store(opened);
+                await store.StoreAsync(opened);
                 messageBus.Publish(new DomainEvents.AccountOpened(@params.AccountId, @params.InitialDeposit));
                 return true;
             }

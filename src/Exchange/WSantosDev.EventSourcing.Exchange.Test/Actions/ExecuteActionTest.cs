@@ -26,19 +26,19 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Actions
         }
 
         [Fact]
-        public void Success()
+        public async Task Success()
         {
             //Arrange
             var orderId = Guid.NewGuid();
             var order = ExchangeOrder.Create(Guid.NewGuid(), orderId, OrderSide.Buy, 100, "MSFT", 10m);
-            _store.Store(order);
+            await _store.StoreAsync(order);
             _readModelStore.Store(new ExchangeOrderReadModel(order.AccountId, order.OrderId, order.Side, order.Quantity, 
                                                              order.Symbol, order.Price, order.Status));
             
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
-            var executed = sut.Execute(new ExecuteActionParams(orderId));
+            var executed = await sut.ExecuteAsync(new ExecuteActionParams(orderId));
 
             //Assert
             Assert.True(executed);
@@ -46,18 +46,18 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Actions
         }
 
         [Fact]
-        public void FailureAlreadyFilled()
+        public async Task FailureAlreadyFilled()
         {
             //Arrange
             var orderId = Guid.NewGuid();
             var order = ExchangeOrder.Create(Guid.NewGuid(), orderId, OrderSide.Buy, 100, "MSFT", 10m);
             order.Execute();
-            _store.Store(order);
+            await _store.StoreAsync(order);
 
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
-            var executed = sut.Execute(new ExecuteActionParams(orderId));
+            var executed = await sut.ExecuteAsync(new ExecuteActionParams(orderId));
 
             //Assert
             Assert.False(executed);
@@ -65,13 +65,13 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Actions
         }
 
         [Fact]
-        public void FailureOrderNotFound()
+        public async Task FailureOrderNotFound()
         {
             //Arrange
             var sut = new ExecuteAction(_store, _messageBus);
 
             //Act
-            var executed = sut.Execute(new ExecuteActionParams(Guid.NewGuid()));
+            var executed = await sut.ExecuteAsync(new ExecuteActionParams(Guid.NewGuid()));
 
             //Assert
             Assert.False(executed);

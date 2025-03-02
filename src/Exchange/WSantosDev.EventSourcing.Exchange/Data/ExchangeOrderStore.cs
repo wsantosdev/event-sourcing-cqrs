@@ -15,8 +15,8 @@ namespace WSantosDev.EventSourcing.Exchange
                     : Option.None<ExchangeOrder>();
             }
             
-            public Result<IError> Store(ExchangeOrder order) =>
-                eventStore.Append(StreamId(order.OrderId), order.UncommittedEvents);
+            public async Task<Result<IError>> StoreAsync(ExchangeOrder order) =>
+                await eventStore.AppendAsync(StreamId(order.OrderId), order.UncommittedEvents);
                 
 
             private static string StreamId(OrderId orderId) =>

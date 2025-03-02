@@ -26,14 +26,14 @@ namespace WSantosDev.EventSourcing.Exchange.Test
         }
 
         [Fact]
-        public void Success() 
+        public async Task Success() 
         {
             //Arrange
             var orderId = Guid.NewGuid();
             var sut = new CreateAction(_store, _messageBus);
 
             //Act
-            var created = sut.Execute(new CreateActionParams(Guid.NewGuid(), orderId, OrderSide.Buy, 10, "NVDA", 10m));
+            var created = await sut.ExecuteAsync(new CreateActionParams(Guid.NewGuid(), orderId, OrderSide.Buy, 10, "NVDA", 10m));
 
             //Assert
             Assert.True(created);

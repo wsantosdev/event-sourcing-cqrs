@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
                 return;
 
             if (@event.Side == OrderSide.Buy)
-                depositAction.Execute(new DepositActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
+                depositAction.ExecuteAsync(new DepositActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
 
             _handledOrderIds.Add(@event.OrderId);
         }

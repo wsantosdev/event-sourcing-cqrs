@@ -15,8 +15,8 @@ namespace WSantosDev.EventSourcing.Accounts
                 : Option.None<Account>();
         }
 
-        public Result<IError> Store(Account account) =>
-            eventStore.Append(StreamId(account.AccountId), account.UncommittedEvents);
+        public async Task<Result<IError>> StoreAsync(Account account) =>
+            await eventStore.AppendAsync(StreamId(account.AccountId), account.UncommittedEvents);
             
 
         private static string StreamId(AccountId accountId) =>
