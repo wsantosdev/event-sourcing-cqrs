@@ -9,7 +9,7 @@ namespace WSantosDev.EventSourcing.Accounts.Actions
     {
         public async Task<Result<IError>> ExecuteAsync(OpenActionParams @params)
         {
-            var stored = store.GetById(@params.AccountId);
+            var stored = await store.GetByIdAsync(@params.AccountId);
             if (stored)
                 return ActionErrors.AccountAlreadyExists;
             

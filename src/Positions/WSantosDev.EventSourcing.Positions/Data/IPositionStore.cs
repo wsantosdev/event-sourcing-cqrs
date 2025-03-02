@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.Positions
 {
     public interface IPositionStore
     {
-        Option<Position> GetBySymbol(AccountId accountId, Symbol symbol);
+        Task<Option<Position>> GetBySymbolAsync(AccountId accountId, Symbol symbol);
         Task<Result<IError>> StoreAsync(Position position);
     }
 }

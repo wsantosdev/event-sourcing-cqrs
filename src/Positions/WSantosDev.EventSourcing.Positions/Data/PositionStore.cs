@@ -6,9 +6,9 @@ namespace WSantosDev.EventSourcing.Positions
 {
     public class PositionStore(EventStore eventStore) : IPositionStore
     {
-        public Option<Position> GetBySymbol(AccountId accountId, Symbol symbol)
+        public async Task<Option<Position>> GetBySymbolAsync(AccountId accountId, Symbol symbol)
         {
-            var stream = eventStore.Load(StreamId(accountId, symbol));
+            var stream = await eventStore.ReadAsync(StreamId(accountId, symbol));
 
             return stream.Any()
                 ? Position.Restore(stream)

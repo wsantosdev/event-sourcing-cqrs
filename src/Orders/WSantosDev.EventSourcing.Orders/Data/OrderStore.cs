@@ -8,9 +8,9 @@ namespace WSantosDev.EventSourcing.Orders
 {
     public sealed class OrderStore(EventStore eventStore) : IOrderStore
     {
-        public Option<Order> GetById(OrderId orderId)
+        public async Task<Option<Order>> GetByIdAsync(OrderId orderId)
         {
-            var stream = eventStore.Load(StreamId(orderId));
+            var stream = await eventStore.ReadAsync(StreamId(orderId));
 
             return stream.Any()
                 ? Order.Restore(stream)

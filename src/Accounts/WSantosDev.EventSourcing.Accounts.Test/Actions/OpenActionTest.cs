@@ -37,7 +37,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
 
             //Assert
             Assert.True(opened);
-            Assert.True(_store.GetById(accountId));
+            Assert.True(await _store.GetByIdAsync(accountId));
             Assert.True(_readModelStore.GetById(accountId));
         }
 
@@ -53,7 +53,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             
             //Assert
             Assert.True(opened);
-            var account = _store.GetById(accountId);
+            var account = await _store.GetByIdAsync(accountId);
             Assert.True(account);
             Assert.Equal<decimal>(0m, account.Get().Balance);
             var accountReadModel = _readModelStore.GetById(accountId);

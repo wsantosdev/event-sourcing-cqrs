@@ -12,7 +12,7 @@ namespace WSantosDev.EventSourcing.Positions.Actions
     {
         public async Task<Result<IError>> ExecuteAsync(DepositActionParams command)
         {
-            var stored = store.GetBySymbol(command.AccountId, command.Symbol);
+            var stored = await store.GetBySymbolAsync(command.AccountId, command.Symbol);
             if (stored)
             {
                 var position = stored.Get();

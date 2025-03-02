@@ -34,11 +34,14 @@ namespace WSantosDev.EventSourcing
             }
         }
 
-        public IEnumerable<IEvent> Load(string streamId) =>
-            _context.Events
-                    .Where(e => e.StreamId == streamId)
-                    .OrderBy(e => e.Id)
-                    .Select(EventSerializer.Desserialize);
+        public async Task<IEnumerable<IEvent>> ReadAsync(string streamId)
+        {
+            var events = await _context.Events.Where(e => e.StreamId == streamId)
+                                              .ToListAsync();
+            return events.OrderBy(e => e.Id)
+                         .Select(EventSerializer.Desserialize);
+        }
+                    
     }
 
     public static class EventStoreErrors

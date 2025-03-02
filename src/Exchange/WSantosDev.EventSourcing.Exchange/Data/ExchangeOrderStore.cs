@@ -6,10 +6,10 @@ namespace WSantosDev.EventSourcing.Exchange
 {
     public sealed class ExchangeOrderStore(EventStore eventStore) : IExchangeOrderStore
     {
-            public Option<ExchangeOrder> GetById(OrderId orderId)
+            public async Task<Option<ExchangeOrder>> GetByIdAsync(OrderId orderId)
             {
-                var stream = eventStore.Load(StreamId(orderId));
-
+                var stream = await eventStore.ReadAsync(StreamId(orderId));
+                
                 return stream.Any()
                     ? ExchangeOrder.Restore(stream)
                     : Option.None<ExchangeOrder>();

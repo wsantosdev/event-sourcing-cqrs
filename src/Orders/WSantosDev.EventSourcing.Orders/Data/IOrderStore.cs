@@ -7,7 +7,7 @@ namespace WSantosDev.EventSourcing.Orders
 {
     public interface IOrderStore
     {
-        Option<Order> GetById(OrderId orderId);
+        Task<Option<Order>> GetByIdAsync(OrderId orderId);
 
         Task<Result<IError>> StoreAsync(Order order);
     }

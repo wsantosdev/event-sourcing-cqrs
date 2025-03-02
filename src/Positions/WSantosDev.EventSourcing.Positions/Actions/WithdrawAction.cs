@@ -8,16 +8,16 @@ namespace WSantosDev.EventSourcing.Positions.Actions
 {
     public class WithdrawAction(IPositionStore store, IMessageBus messageBus)
     {
-        public Result<IError> Execute(WithdrawActionParams command)
+        public async Task<Result<IError>> ExecuteAsync(WithdrawActionParams command)
         {
-            var stored = store.GetBySymbol(command.AccountId, command.Symbol);
+            var stored = await store.GetBySymbolAsync(command.AccountId, command.Symbol);
             if (stored)
             {
                 var position = stored.Get();
                 var withdrawn = position.Withdraw(command.Quantity);
                 if (withdrawn)
                 {
-                    store.StoreAsync(position);
+                    await store.StoreAsync(position);
                     messageBus.Publish(new PositionModified(command.AccountId, command.Symbol, position.Available));
                 }
 

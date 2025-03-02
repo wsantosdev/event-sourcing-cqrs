@@ -14,7 +14,7 @@ namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
             if (@event.Side == OrderSide.Buy || _handledOrderIds.Contains(@event.OrderId))
                 return;
 
-            action.Execute(new WithdrawActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
+            action.ExecuteAsync(new WithdrawActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
             _handledOrderIds.Add(@event.OrderId);
         }
     }

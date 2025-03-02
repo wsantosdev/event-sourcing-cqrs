@@ -41,7 +41,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
 
             //Assert
             Assert.True(executed);
-            Assert.Equal(OrderStatus.Filled, _store.GetById(orderId).Get().Status);
+            Assert.Equal(OrderStatus.Filled, (await _store.GetByIdAsync(orderId)).Get().Status);
         }
 
         [Fact]

@@ -6,9 +6,9 @@ namespace WSantosDev.EventSourcing.Accounts
 {
     public sealed class AccountStore(EventStore eventStore) : IAccountStore
     {
-        public Option<Account> GetById(AccountId accountId)
+        public async Task<Option<Account>> GetByIdAsync(AccountId accountId)
         {
-            var stream = eventStore.Load(StreamId(accountId));
+            var stream = await eventStore.ReadAsync(StreamId(accountId));
             
             return stream.Any()
                 ? Account.Restore(stream)

@@ -39,7 +39,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
 
             //Assert
             Assert.True(placed);
-            Assert.True(_store.GetById(orderId));
+            Assert.True(await _store.GetByIdAsync(orderId));
             Assert.NotEmpty(_readModelStore.GetByAccount(accountId));
         }
 
@@ -56,7 +56,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             //Assert
             Assert.False(placed);
             Assert.Equal(expectedError, placed.ErrorValue);
-            Assert.False(_store.GetById(orderId));
+            Assert.False(await _store.GetByIdAsync(orderId));
             Assert.Empty(_readModelStore.GetByAccount(accountId));
         }
 

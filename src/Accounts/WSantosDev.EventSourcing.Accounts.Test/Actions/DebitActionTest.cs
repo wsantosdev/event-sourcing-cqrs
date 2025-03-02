@@ -40,7 +40,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
 
             //Assert
             Assert.True(debited);
-            Assert.Equal<decimal>(90m, _accountStore.GetById(accountId).Get().Balance);
+            Assert.Equal<decimal>(90m, (await _accountStore.GetByIdAsync(accountId)).Get().Balance);
             Assert.Equal(90m, _accountReadModelStore.GetById(accountId).Get().Balance);
         }
 
@@ -60,7 +60,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(debited);
             Assert.Equal(Errors.InvalidAmount, debited.ErrorValue);
-            Assert.Equal<decimal>(100m, _accountStore.GetById(accountId).Get().Balance);
+            Assert.Equal<decimal>(100m, (await _accountStore.GetByIdAsync(accountId)).Get().Balance);
             Assert.Equal(100m, _accountReadModelStore.GetById(accountId).Get().Balance);
         }
                 
@@ -80,7 +80,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(debited);
             Assert.Equal(Errors.InsufficientFunds, debited.ErrorValue);
-            Assert.Equal<decimal>(100m, _accountStore.GetById(accountId).Get().Balance);
+            Assert.Equal<decimal>(100m, (await _accountStore.GetByIdAsync(accountId)).Get().Balance);
             Assert.Equal(100m, _accountReadModelStore.GetById(accountId).Get().Balance);
         }
 

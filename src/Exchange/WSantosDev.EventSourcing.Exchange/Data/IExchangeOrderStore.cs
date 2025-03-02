@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.Exchange
 {
     public interface IExchangeOrderStore
     {
-        Option<ExchangeOrder> GetById(OrderId orderId);
+        Task<Option<ExchangeOrder>> GetByIdAsync(OrderId orderId);
         
         Task<Result<IError>> StoreAsync(ExchangeOrder order);
     }
