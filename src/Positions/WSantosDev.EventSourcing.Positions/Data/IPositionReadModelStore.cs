@@ -8,7 +8,7 @@ namespace WSantosDev.EventSourcing.Positions
         IEnumerable<PositionReadModel> GetByAccount(AccountId accountId);
         Option<PositionReadModel> GetBySymbol(AccountId accountId, Symbol symbol);
 
-        void Add(PositionReadModel position);
+        void Store(PositionReadModel position);
 
         void Update(PositionReadModel position);
 

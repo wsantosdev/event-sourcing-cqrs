@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSantosDev.EventSourcing.Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSantosDev.EventSourcing.Orders.Test", "Orders\WSantosDev.EventSourcing.Orders.Test\WSantosDev.EventSourcing.Orders.Test.csproj", "{097BCEC9-64B8-4CE3-9BB9-89F7C8D1D6BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSantosDev.EventSourcing.Positions.Test", "Positions\WSantosDev.EventSourcing.Positions.Test\WSantosDev.EventSourcing.Positions.Test.csproj", "{42D075DC-F2CE-4EE8-AE0C-8EF27C37BFD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{097BCEC9-64B8-4CE3-9BB9-89F7C8D1D6BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{097BCEC9-64B8-4CE3-9BB9-89F7C8D1D6BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{097BCEC9-64B8-4CE3-9BB9-89F7C8D1D6BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42D075DC-F2CE-4EE8-AE0C-8EF27C37BFD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D075DC-F2CE-4EE8-AE0C-8EF27C37BFD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D075DC-F2CE-4EE8-AE0C-8EF27C37BFD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D075DC-F2CE-4EE8-AE0C-8EF27C37BFD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{7BE1950F-6176-410C-81B3-E530300F94BE} = {AEEC4F84-EB2D-496D-8AA4-E30BA7FB79CC}
 		{B17AACD6-54B0-4E5F-99C5-FB212EAD9B74} = {C5642D49-BD1B-4B2B-8A44-C4E1BEB2D4F2}
 		{097BCEC9-64B8-4CE3-9BB9-89F7C8D1D6BD} = {91615CC6-83A2-47BC-8470-C2C0FD854288}
+		{42D075DC-F2CE-4EE8-AE0C-8EF27C37BFD9} = {998F9DB4-F44F-4B75-A023-4C34D226F2A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C120EAB0-505A-4A0B-A339-5B6B71FEDD07}

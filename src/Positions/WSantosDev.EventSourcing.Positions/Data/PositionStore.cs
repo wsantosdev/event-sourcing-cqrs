@@ -3,7 +3,7 @@ using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
 using WSantosDev.EventSourcing.Positions;
 
-namespace WSantosDev.EventSourcing.WebApi.Positions
+namespace WSantosDev.EventSourcing.Positions
 {
     public class PositionStore(EventStore eventStore) : IPositionStore
     {

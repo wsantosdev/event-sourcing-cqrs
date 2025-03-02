@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing.Positions.DomainEvents
                 return;
             }
 
-            store.Add(position);
+            store.Store(position);
         }   
     }
 }

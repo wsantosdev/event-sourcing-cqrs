@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
-using WSantosDev.EventSourcing.Positions;
 
-namespace WSantosDev.EventSourcing.WebApi.Positions
+namespace WSantosDev.EventSourcing.Positions
 {
     public class PositionReadModelStore(PositionReadModelDbContext context) : IPositionReadModelStore
     {
@@ -14,7 +13,7 @@ namespace WSantosDev.EventSourcing.WebApi.Positions
             context.Positions.SingleOrDefault(p => p.AccountId == accountId && p.Symbol == symbol.Value)
                              .ToOption();
 
-        public void Add(PositionReadModel position)
+        public void Store(PositionReadModel position)
         {
             context.Add(position);
             context.SaveChanges();
