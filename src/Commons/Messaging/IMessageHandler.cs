@@ -4,6 +4,6 @@
 
     public interface IMessageHandler<TMessage> : IMessageHandler where TMessage : IMessage
     {
-        void Handle(TMessage @event);
+        Task HandleAsync(TMessage message);
     }
 }

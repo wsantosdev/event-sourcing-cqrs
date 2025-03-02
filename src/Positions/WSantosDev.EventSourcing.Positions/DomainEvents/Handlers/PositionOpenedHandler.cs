@@ -4,7 +4,7 @@ namespace WSantosDev.EventSourcing.Positions.DomainEvents
 {
     public class PositionOpenedHandler(IPositionReadModelStore store) : IMessageHandler<PositionOpened>
     {
-        public void Handle(PositionOpened @event) =>
-            store.StoreAsync(new PositionReadModel(@event.AccountId, @event.Symbol, @event.Available));
+        public async Task HandleAsync(PositionOpened @event) =>
+            await store.StoreAsync(new PositionReadModel(@event.AccountId, @event.Symbol, @event.Available));
     }
 }

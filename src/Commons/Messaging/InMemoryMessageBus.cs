@@ -23,7 +23,7 @@
                 return;
 
             for (var i = 0; i < handlersList.Count; i++)
-                ((IMessageHandler<TMessage>)handlersList[i]).Handle(message);
+                ((IMessageHandler<TMessage>)handlersList[i]).HandleAsync(message);
         }
 
         private static Type GetEventType(object eventHandler)

@@ -4,7 +4,7 @@ namespace WSantosDev.EventSourcing.Accounts.DomainEvents
 {
     public class AccountUpdatedHandler(IAccountReadModelStore store) : IMessageHandler<AccountUpdated>
     {
-        public void Handle(AccountUpdated @event) =>
-            store.StoreAsync(new AccountReadModel(@event.AccountId, @event.Balance));
+        public async Task HandleAsync(AccountUpdated @event) =>
+            await store.StoreAsync(new AccountReadModel(@event.AccountId, @event.Balance));
     }
 }

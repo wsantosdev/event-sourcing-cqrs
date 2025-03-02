@@ -4,10 +4,10 @@ namespace WSantosDev.EventSourcing.Exchange.DomainEvents
 {
     public class ExchangeOrderExecutedHandler(IExchangeOrderReadModelStore readModelStore) : IMessageHandler<ExchangeOrderExecuted>
     {
-        public void Handle(ExchangeOrderExecuted @event)
+        public async Task HandleAsync(ExchangeOrderExecuted @event)
         {
-            readModelStore.StoreAsync(new ExchangeOrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
-                                                            @event.Quantity, @event.Symbol, @event.Price, @event.Status));
+            await readModelStore.StoreAsync(new ExchangeOrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
+                                                                       @event.Quantity, @event.Symbol, @event.Price, @event.Status));
         }
     }
 }

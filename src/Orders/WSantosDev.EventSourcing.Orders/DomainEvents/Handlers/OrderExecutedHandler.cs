@@ -1,12 +1,13 @@
-﻿using WSantosDev.EventSourcing.Commons.Messaging;
+﻿using System.Threading.Tasks;
+using WSantosDev.EventSourcing.Commons.Messaging;
 
 namespace WSantosDev.EventSourcing.Orders.DomainEvents
 {
     public class OrderExecutedHandler(IOrderReadModelStore store) : IMessageHandler<OrderExecuted>
     {
-        public void Handle(OrderExecuted @event)
+        public async Task HandleAsync(OrderExecuted @event)
         {
-            store.StoreAsync(new OrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
+            await store.StoreAsync(new OrderReadModel(@event.AccountId, @event.OrderId, @event.Side,
                                            @event.Quantity, @event.Symbol, @event.Price, @event.Status));
         }
     }

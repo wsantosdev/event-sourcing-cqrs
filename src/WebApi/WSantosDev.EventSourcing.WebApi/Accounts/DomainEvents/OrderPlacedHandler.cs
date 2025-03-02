@@ -9,12 +9,12 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
-        public void Handle(OrderPlaced @event)
+        public async Task HandleAsync(OrderPlaced @event)
         {
             if (@event.Side == OrderSide.Sell || _handledOrderIds.Contains(@event.OrderId))
                 return;
 
-            action.ExecuteAsync(new DebitActionParams(@event.AccountId, @event.Quantity * @event.Price));
+            await action.ExecuteAsync(new DebitActionParams(@event.AccountId, @event.Quantity * @event.Price));
             _handledOrderIds.Add(@event.OrderId);
         }
     }

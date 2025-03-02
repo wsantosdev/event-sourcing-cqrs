@@ -9,13 +9,13 @@ namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
-        public void Handle(ExchangeOrderExecuted @event)
+        public async Task HandleAsync(ExchangeOrderExecuted @event)
         {
             if (@event.Side == OrderSide.Sell || _handledOrderIds.Contains(@event.OrderId))
                 return;
 
             if (@event.Side == OrderSide.Buy)
-                depositAction.ExecuteAsync(new DepositActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
+                await depositAction.ExecuteAsync(new DepositActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
 
             _handledOrderIds.Add(@event.OrderId);
         }

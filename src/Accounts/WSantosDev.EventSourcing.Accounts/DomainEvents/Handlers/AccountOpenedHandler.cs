@@ -4,7 +4,7 @@ namespace WSantosDev.EventSourcing.Accounts.DomainEvents
 {
     public class AccountOpenedHandler(IAccountReadModelStore store) : IMessageHandler<AccountOpened>
     {
-        public void Handle(AccountOpened @event) =>
-            store.StoreAsync(new AccountReadModel(@event.AccountId, @event.InitialDeposit));
+        public async Task HandleAsync(AccountOpened @event) =>
+            await store.StoreAsync(new AccountReadModel(@event.AccountId, @event.InitialDeposit));
     }
 }
