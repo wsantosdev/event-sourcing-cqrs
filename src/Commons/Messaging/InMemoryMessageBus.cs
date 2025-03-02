@@ -4,26 +4,26 @@
     {
         private readonly Dictionary<Type, IList<IMessageHandler>> _subscribedHandlers = new();
 
-        public void Subscribe(IMessageHandler eventHandler)
+        public void Subscribe(IMessageHandler messageHandler)
         {
-            var eventType = GetEventType(eventHandler);
-            if (_subscribedHandlers.TryGetValue(eventType, out var handlersList))
+            var messageType = GetEventType(messageHandler);
+            if (_subscribedHandlers.TryGetValue(messageType, out var handlersList))
             {
-                handlersList.Add(eventHandler);
+                handlersList.Add(messageHandler);
                 return;
             }
 
-            handlersList = new List<IMessageHandler>() { eventHandler };
-            _subscribedHandlers.Add(eventType, handlersList);
+            handlersList = new List<IMessageHandler>() { messageHandler };
+            _subscribedHandlers.Add(messageType, handlersList);
         }
 
-        public void Publish<TEvent>(TEvent @event) where TEvent : IMessage
+        public void Publish<TMessage>(TMessage message) where TMessage : IMessage
         {
-            if (!_subscribedHandlers.TryGetValue(typeof(TEvent), out var handlersList))
+            if (!_subscribedHandlers.TryGetValue(typeof(TMessage), out var handlersList))
                 return;
 
             for (var i = 0; i < handlersList.Count; i++)
-                ((IMessageHandler<TEvent>)handlersList[i]).Handle(@event);
+                ((IMessageHandler<TMessage>)handlersList[i]).Handle(message);
         }
 
         private static Type GetEventType(object eventHandler)
