@@ -35,7 +35,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             var sut = new Place(_store, _messageBus);
 
             //Act
-            var placed = await sut.ExecuteAsync(new PlaceActionParams(accountId, orderId, OrderSide.Buy, 100, "CSCO", 10m));
+            var placed = await sut.ExecuteAsync(new PlaceParams(accountId, orderId, OrderSide.Buy, 100, "CSCO", 10m));
 
             //Assert
             Assert.True(placed);
@@ -51,7 +51,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             var sut = new Place(_store, _messageBus);
 
             //Act
-            var placed = await sut.ExecuteAsync(new PlaceActionParams(accountId, orderId, orderSide, quantity, symbol, price));
+            var placed = await sut.ExecuteAsync(new PlaceParams(accountId, orderId, orderSide, quantity, symbol, price));
 
             //Assert
             Assert.False(placed);

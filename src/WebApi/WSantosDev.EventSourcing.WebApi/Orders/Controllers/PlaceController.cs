@@ -42,8 +42,8 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
                     return Conflict("Insuficient shares.");
             }
 
-            var created = await action.ExecuteAsync(new PlaceActionParams(Constants.DefaultAccountId, OrderId.New(), request.Side, 
-                                                        request.Quantity, request.Symbol, request.Price));
+            var created = await action.ExecuteAsync(new PlaceParams(Constants.DefaultAccountId, OrderId.New(), request.Side, 
+                                                                    request.Quantity, request.Symbol, request.Price));
             if (created)
                 return Created(created.ResultValue.OrderId.ToString(), created.ResultValue.OrderId);
 

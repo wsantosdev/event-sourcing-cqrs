@@ -9,9 +9,10 @@ namespace WSantosDev.EventSourcing.Orders.Actions
 {
     public class Place(IOrderStore store, IMessageBus messageBus)
     {
-        public async Task<Result<Order, IError>> ExecuteAsync(PlaceActionParams command)
+        public async Task<Result<Order, IError>> ExecuteAsync(PlaceParams command)
         {
-            var created = Order.New(command.AccountId, command.OrderId, command.Side, command.Quantity, command.Symbol, command.Price);
+            var created = Order.New(command.AccountId, command.OrderId, command.Side, 
+                                    command.Quantity, command.Symbol, command.Price);
             if (created)
             {
                 var order = created.ResultValue;
@@ -25,6 +26,6 @@ namespace WSantosDev.EventSourcing.Orders.Actions
         }
     }
 
-    public record PlaceActionParams(AccountId AccountId, OrderId OrderId, OrderSide Side, 
+    public record PlaceParams(AccountId AccountId, OrderId OrderId, OrderSide Side, 
                                     Quantity Quantity, Symbol Symbol, Money Price);
 }
