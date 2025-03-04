@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WSantosDev.EventSourcing.Accounts;
-using WSantosDev.EventSourcing.Accounts.Actions;
+using WSantosDev.EventSourcing.Accounts.Commands;
 
 namespace WSantosDev.EventSourcing.WebApi.Accounts
 {
     [Tags("Account")]
     [Route("api/Account")]
     [ApiController]
-    public class CreditController(CreditAction action) : ControllerBase
+    public class CreditController(Credit action) : ControllerBase
     {
         [HttpPost("Credit")]
         [ProducesResponseType(StatusCodes.Status200OK)]

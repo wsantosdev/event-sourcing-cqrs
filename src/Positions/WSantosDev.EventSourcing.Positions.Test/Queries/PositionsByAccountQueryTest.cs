@@ -23,10 +23,10 @@ namespace WSantosDev.EventSourcing.Positions.Test
             var symbol = "APPL";
             var available = 10;
             await _readModelStore.StoreAsync(new PositionReadModel(accountId, symbol, available));
-            var sut = new PositionsByAccountQuery(_readModelStore);
+            var sut = new PositionsByAccount(_readModelStore);
 
             //Act
-            var stored = await sut.ExecuteAsync(new PositionsByAccountQueryParams(accountId));
+            var stored = await sut.ExecuteAsync(new PositionsByAccountParams(accountId));
 
             //Assert
             Assert.NotEmpty(stored);
@@ -39,10 +39,10 @@ namespace WSantosDev.EventSourcing.Positions.Test
         {
             //Arrange
             var accountId = Guid.NewGuid();
-            var sut = new PositionsByAccountQuery(_readModelStore);
+            var sut = new PositionsByAccount(_readModelStore);
 
             //Act
-            var stored = await sut.ExecuteAsync(new PositionsByAccountQueryParams(accountId));
+            var stored = await sut.ExecuteAsync(new PositionsByAccountParams(accountId));
 
             //Assert
             Assert.Empty(stored);

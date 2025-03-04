@@ -2,9 +2,9 @@
 
 namespace WSantosDev.EventSourcing.Positions.DomainEvents
 {
-    public class WithdrawnHandler(IPositionReadModelStore store) : IMessageHandler<PositionModified>
+    public class WithdrawnHandler(IPositionReadModelStore store) : IMessageHandler<Withdrawn>
     {
-        public async Task HandleAsync(PositionModified @event)
+        public async Task HandleAsync(Withdrawn @event)
         {
             var position = new PositionReadModel(@event.AccountId, @event.Symbol, @event.Available);
 

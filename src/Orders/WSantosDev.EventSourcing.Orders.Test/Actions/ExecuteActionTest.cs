@@ -34,7 +34,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             await _store.StoreAsync(order);
             await _readModelStore.StoreAsync(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity, 
                                                                 order.Symbol, order.Price, OrderStatus.New));
-            var sut = new ExecuteAction(_store, _messageBus);
+            var sut = new Execute(_store, _messageBus);
 
             //Act
             var executed = await sut.ExecuteAsync(new ExecuteActionParams(orderId));
@@ -48,14 +48,14 @@ namespace WSantosDev.EventSourcing.Orders.Test
         public async Task FailureOrderNotFound()
         {
             //Arrange
-            var sut = new ExecuteAction(_store, _messageBus);
+            var sut = new Execute(_store, _messageBus);
 
             //Act
             var executed = await sut.ExecuteAsync(new ExecuteActionParams(Guid.NewGuid()));
 
             //Assert
             Assert.False(executed);
-            Assert.Equal(ActionErrors.OrderNotFound, executed.ErrorValue);
+            Assert.Equal(CommandErrors.OrderNotFound, executed.ErrorValue);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             await _store.StoreAsync(order);
             await _readModelStore.StoreAsync(new OrderReadModel(order.AccountId, orderId, order.Side, order.Quantity,
                                                      order.Symbol, order.Price, OrderStatus.New));
-            var sut = new ExecuteAction(_store, _messageBus);
+            var sut = new Execute(_store, _messageBus);
 
             //Act
             await sut.ExecuteAsync(new ExecuteActionParams(orderId));

@@ -32,7 +32,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             //Arrange
             var accountId = Guid.NewGuid();
             var orderId = Guid.NewGuid();
-            var sut = new PlaceAction(_store, _messageBus);
+            var sut = new Place(_store, _messageBus);
 
             //Act
             var placed = await sut.ExecuteAsync(new PlaceActionParams(accountId, orderId, OrderSide.Buy, 100, "CSCO", 10m));
@@ -48,7 +48,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
         public async Task Failure(AccountId accountId, OrderId orderId, OrderSide orderSide, Quantity quantity, Symbol symbol, Money price, IError expectedError)
         {
             //Arrange
-            var sut = new PlaceAction(_store, _messageBus);
+            var sut = new Place(_store, _messageBus);
 
             //Act
             var placed = await sut.ExecuteAsync(new PlaceActionParams(accountId, orderId, orderSide, quantity, symbol, price));

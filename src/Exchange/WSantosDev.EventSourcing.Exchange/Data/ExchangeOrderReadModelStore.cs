@@ -5,7 +5,7 @@ namespace WSantosDev.EventSourcing.Exchange
 {
     public class ExchangeOrderReadModelStore(ExchangeOrderReadModelDbContext context) : IExchangeOrderReadModelStore
     {
-        public async Task<IEnumerable<ExchangeOrderReadModel>> GetAllAsync() =>
+        public async Task<IEnumerable<ExchangeOrderReadModel>> AllAsync() =>
             await context.ExchangeOrders.ToListAsync();
 
         public async Task StoreAsync(ExchangeOrderReadModel order)

@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.Accounts
 {
     public class AccountReadModelStore(AccountReadModelDbContext context) : IAccountReadModelStore
     {
-        public async Task<Option<AccountReadModel>> GetByIdAsync(AccountId accountId)
+        public async Task<Option<AccountReadModel>> ByIdAsync(AccountId accountId)
         {
             var stored = await context.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId);
             return stored.ToOption();

@@ -6,10 +6,10 @@ namespace WSantosDev.EventSourcing.WebApi.Positions
     [Tags("Positions")]
     [Route("api/[controller]")]
     [ApiController]
-    public class PositionsController(PositionsByAccountQuery query) : ControllerBase
+    public class PositionsController(PositionsByAccount query) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> List() =>
-            Ok(await query.ExecuteAsync(new PositionsByAccountQueryParams(Constants.DefaultAccountId)));
+            Ok(await query.ExecuteAsync(new PositionsByAccountParams(Constants.DefaultAccountId)));
     }
 }

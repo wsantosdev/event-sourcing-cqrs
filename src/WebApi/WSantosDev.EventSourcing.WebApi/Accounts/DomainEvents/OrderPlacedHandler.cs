@@ -1,11 +1,11 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Orders.DomainEvents;
-using WSantosDev.EventSourcing.Accounts.Actions;
+using WSantosDev.EventSourcing.Accounts.Commands;
 
 namespace WSantosDev.EventSourcing.WebApi.Accounts.DomainEvents
 {
-    public sealed class OrderPlacedHandler(DebitAction action) : IMessageHandler<OrderPlaced>
+    public sealed class OrderPlacedHandler(Debit action) : IMessageHandler<OrderPlaced>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 

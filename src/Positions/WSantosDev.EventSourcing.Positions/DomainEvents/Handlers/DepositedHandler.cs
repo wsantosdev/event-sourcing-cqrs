@@ -2,9 +2,9 @@
 
 namespace WSantosDev.EventSourcing.Positions.DomainEvents
 {
-    public class DepositedHandler(IPositionReadModelStore store) : IMessageHandler<PositionModified>
+    public class DepositedHandler(IPositionReadModelStore store) : IMessageHandler<Deposited>
     {
-        public async Task HandleAsync(PositionModified @event) =>
+        public async Task HandleAsync(Deposited @event) =>
             await store.StoreAsync(new PositionReadModel(@event.AccountId, @event.Symbol, @event.Available));
     }
 }

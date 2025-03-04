@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
     [Tags("Account")]
     [Route("api/Account")]
     [ApiController]
-    public class BalanceController(AccountQuery query) : ControllerBase
+    public class BalanceController(AccountById query) : ControllerBase
     {
         [HttpGet("Balance")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -14,7 +14,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Balance()
         {
-            var account = await query.ExecuteAsync(new AccountQueryParams(Constants.DefaultAccountId));
+            var account = await query.ExecuteAsync(new AccountByIdParams(Constants.DefaultAccountId));
             return account
                     ? Ok(account.Get().Balance)
                     : NotFound();

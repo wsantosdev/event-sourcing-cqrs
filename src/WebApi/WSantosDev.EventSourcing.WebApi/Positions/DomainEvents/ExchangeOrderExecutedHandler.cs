@@ -1,11 +1,11 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Exchange.DomainEvents;
-using WSantosDev.EventSourcing.Positions.Actions;
+using WSantosDev.EventSourcing.Positions.Commands;
 
 namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
 {
-    public class ExchangeOrderExecutedHandler(DepositAction depositAction) : IMessageHandler<ExchangeOrderExecuted>
+    public class ExchangeOrderExecutedHandler(Deposit depositAction) : IMessageHandler<ExchangeOrderExecuted>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing.WebApi.Positions.DomainEvents
                 return;
 
             if (@event.Side == OrderSide.Buy)
-                await depositAction.ExecuteAsync(new DepositActionParams(@event.AccountId, @event.Symbol, @event.Quantity));
+                await depositAction.ExecuteAsync(new DepositParams(@event.AccountId, @event.Symbol, @event.Quantity));
 
             _handledOrderIds.Add(@event.OrderId);
         }

@@ -13,9 +13,9 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
             return 
             services.AddSingleton<IOrderStore, OrderStore>()
                     .AddSingleton<IOrderReadModelStore, OrderReadModelStore>()
-                    .AddTransient<PlaceAction>()
-                    .AddTransient<ExecuteAction>()
-                    .AddTransient<OrdersByAccountQuery>()
+                    .AddTransient<Place>()
+                    .AddTransient<Execute>()
+                    .AddTransient<OrdersByAccount>()
                     .AddSingleton<OrderPlacedHandler>()
                     .AddSingleton<OrderExecutedHandler>()
                     .AddSingleton<ExchangeOrderExecutedHandler>();

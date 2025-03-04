@@ -6,7 +6,7 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
     [Tags("Exchange")]
     [Route("api/Exchange")]
     [ApiController]
-    public class ExchangeOrdersController(ExchangeOrdersQuery query) : ControllerBase
+    public class ExchangeOrdersController(AllExchangeOrders query) : ControllerBase
     {
         [HttpGet("Orders")]
         [ProducesResponseType(StatusCodes.Status200OK)]

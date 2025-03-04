@@ -1,11 +1,11 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
-using WSantosDev.EventSourcing.Exchange.Actions;
+using WSantosDev.EventSourcing.Exchange.Commands;
 using WSantosDev.EventSourcing.Orders.DomainEvents;
 
 namespace WSantosDev.EventSourcing.WebApi.Exchange.DomainEvents
 {
-    public class OrderPlacedEventHandler(CreateAction action) : IMessageHandler<OrderPlaced>
+    public class OrderPlacedEventHandler(Create action) : IMessageHandler<OrderPlaced>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 

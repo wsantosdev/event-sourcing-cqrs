@@ -1,8 +1,8 @@
-﻿using WSantosDev.EventSourcing.Accounts.Actions;
+﻿using WSantosDev.EventSourcing.Accounts.Commands;
 
 namespace WSantosDev.EventSourcing.WebApi
 {
-    public sealed class DefaultHostedService(OpenAction action) : IHostedService
+    public sealed class DefaultHostedService(Open action) : IHostedService
     {
         public Task StartAsync(CancellationToken cancellationToken)
         {

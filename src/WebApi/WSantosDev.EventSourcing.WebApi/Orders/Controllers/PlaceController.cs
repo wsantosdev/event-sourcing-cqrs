@@ -14,9 +14,9 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
     [Tags("Orders")]
     [Route("api/Orders")]
     [ApiController]
-    public class PlaceController(AccountQuery accountQuery,
-                                 PositionBySymbolQuery positionBySymbolQuery,
-                                 PlaceAction action) : ControllerBase
+    public class PlaceController(AccountById accountQuery,
+                                 PositionBySymbol positionBySymbolQuery,
+                                 Place action) : ControllerBase
     {
         [HttpPost("Place")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -27,7 +27,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
         {
             if (request.Side == OrderSide.Buy)
             {
-                var account = await accountQuery.ExecuteAsync(new AccountQueryParams(Constants.DefaultAccountId));
+                var account = await accountQuery.ExecuteAsync(new AccountByIdParams(Constants.DefaultAccountId));
                 if (!account)
                     return NotFound();
 
@@ -37,7 +37,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
             
             if(request.Side == OrderSide.Sell)
             {
-                var position = await positionBySymbolQuery.ExecuteAsync(new PositionBySymbolQueryParams(Constants.DefaultAccountId, request.Symbol));
+                var position = await positionBySymbolQuery.ExecuteAsync(new PositionBySymbolParams(Constants.DefaultAccountId, request.Symbol));
                 if(!position || position.Get().Available < request.Quantity)
                     return Conflict("Insuficient shares.");
             }

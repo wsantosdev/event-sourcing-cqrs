@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WSantosDev.EventSourcing.Exchange;
-using WSantosDev.EventSourcing.Exchange.Actions;
+using WSantosDev.EventSourcing.Exchange.Commands;
 
 namespace WSantosDev.EventSourcing.WebApi.Exchange
 {
     [Tags("Exchange")]
     [Route("api/Exchange")]
     [ApiController]
-    public class ExecuteController(ExecuteAction action) : ControllerBase
+    public class ExecuteController(Execute action) : ControllerBase
     {
         [HttpPost("Execute")]
         [ProducesResponseType(StatusCodes.Status200OK)]

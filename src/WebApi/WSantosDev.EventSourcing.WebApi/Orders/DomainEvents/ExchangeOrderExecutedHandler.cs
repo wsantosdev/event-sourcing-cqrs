@@ -5,7 +5,7 @@ using WSantosDev.EventSourcing.Orders.Actions;
 
 namespace WSantosDev.EventSourcing.WebApi.Orders.DomainEvents
 {
-    public class ExchangeOrderExecutedHandler(ExecuteAction action) : IMessageHandler<ExchangeOrderExecuted>
+    public class ExchangeOrderExecutedHandler(Execute action) : IMessageHandler<ExchangeOrderExecuted>
     {
         private readonly IList<OrderId> _handledOrderIds = [];
 
