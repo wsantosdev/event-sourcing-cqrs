@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WSantosDev.EventSourcing.Orders.Queries;
 
-namespace WSantosDev.EventSourcing.WebApi.Orders.Actions
+namespace WSantosDev.EventSourcing.WebApi.Orders
 {
     [Route("api/[controller]")]
     [ApiController]

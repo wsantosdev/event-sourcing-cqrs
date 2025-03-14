@@ -1,6 +1,6 @@
 ﻿using WSantosDev.EventSourcing.Commons.Modeling;
 
-namespace WSantosDev.EventSourcing.Orders.Actions
+namespace WSantosDev.EventSourcing.Orders.Commands
 {
     public static class CommandErrors
     {

@@ -1,6 +1,6 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Messaging;
-using WSantosDev.EventSourcing.Orders.Actions;
+using WSantosDev.EventSourcing.Orders.Commands;
 
 namespace WSantosDev.EventSourcing.Orders.Test
 {

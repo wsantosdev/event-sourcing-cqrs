@@ -5,7 +5,7 @@ using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
 using WSantosDev.EventSourcing.Orders.DomainEvents;
 
-namespace WSantosDev.EventSourcing.Orders.Actions
+namespace WSantosDev.EventSourcing.Orders.Commands
 {
     public class Place(OrderStore store, IMessageBus messageBus)
     {

@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using WSantosDev.EventSourcing.Accounts;
 using WSantosDev.EventSourcing.Accounts.Queries;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Orders;
-using WSantosDev.EventSourcing.Orders.Actions;
-using WSantosDev.EventSourcing.Positions;
+using WSantosDev.EventSourcing.Orders.Commands;
 using WSantosDev.EventSourcing.Positions.Queries;
 
 namespace WSantosDev.EventSourcing.WebApi.Orders
@@ -52,6 +50,7 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
                 InvalidSideError => BadRequest("Invalid side. Side allowed: 'Buy' ou 'Sell'."),
                 InvalidQuantityError => BadRequest("Invalid quantity. Quantity should be greater than zero."),
                 InvalidSymbolError => BadRequest("Invalid symbol. Symbol cannot be empty."),
+                StorageUnavailableError => StatusCode(StatusCodes.Status500InternalServerError, "Storage unavailable"),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, "Unspecified error.")
             };
         }

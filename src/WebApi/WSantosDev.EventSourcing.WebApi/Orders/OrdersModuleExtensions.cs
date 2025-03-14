@@ -1,5 +1,5 @@
 ﻿using WSantosDev.EventSourcing.Orders;
-using WSantosDev.EventSourcing.Orders.Actions;
+using WSantosDev.EventSourcing.Orders.Commands;
 using WSantosDev.EventSourcing.Orders.Queries;
 using WSantosDev.EventSourcing.WebApi.Orders.DomainEvents;
 
