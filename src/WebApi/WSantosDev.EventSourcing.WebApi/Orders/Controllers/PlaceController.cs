@@ -50,7 +50,6 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
                 InvalidSideError => BadRequest("Invalid side. Side allowed: 'Buy' ou 'Sell'."),
                 InvalidQuantityError => BadRequest("Invalid quantity. Quantity should be greater than zero."),
                 InvalidSymbolError => BadRequest("Invalid symbol. Symbol cannot be empty."),
-                StorageUnavailableError => StatusCode(StatusCodes.Status500InternalServerError, "Storage unavailable"),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, "Unspecified error.")
             };
         }
