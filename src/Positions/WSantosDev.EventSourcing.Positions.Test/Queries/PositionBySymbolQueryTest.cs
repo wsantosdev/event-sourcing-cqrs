@@ -6,13 +6,9 @@ namespace WSantosDev.EventSourcing.Positions.Test
     {
         private readonly Database _database;
 
-        private readonly PositionViewStore _readModelStore;
-
         public PositionBySymbolQueryTest()
         {
             _database = DatabaseSetupFactory.Create();
-
-            _readModelStore = _database.ViewStore;
         }
 
         [Fact]
