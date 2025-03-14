@@ -8,12 +8,11 @@ using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Exchange
 {
-    public sealed class ExchangeOrderStore(SqliteConfig config)
+    public sealed class ExchangeOrderStore(EventDbContext eventDbContext, ExchangeOrderViewDbContext viewDbContext)
     {
         public async Task<Option<ExchangeOrder>> ByIdAsync(OrderId orderId, CancellationToken cancellationToken = default)
         {
-            var dbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
-            var stream = await dbContext.ReadStreamAsync(StreamId(orderId), cancellationToken);
+            var stream = await eventDbContext.ReadStreamAsync(StreamId(orderId), cancellationToken);
                 
             return stream.Any()
                 ? ExchangeOrder.Restore(stream)
@@ -22,9 +21,7 @@ namespace WSantosDev.EventSourcing.Exchange
 
         public async Task<Result<IError>> StoreAsync(ExchangeOrder exchangeOrder, CancellationToken cancellationToken = default)
         {
-            using var sqliteConnection = new SqliteConnection(config.ConnectionString);
-
-            EventDbContext eventDbContext = new (new DbContextOptionsBuilder<EventDbContext>().UseSqlite(sqliteConnection).Options);
+            
             using var transaction = await eventDbContext.Database.BeginTransactionAsync(cancellationToken);
 
             try
@@ -32,7 +29,7 @@ namespace WSantosDev.EventSourcing.Exchange
                 eventDbContext.AppendToStream(StreamId(exchangeOrder.OrderId), exchangeOrder.UncommittedEvents);
                 await eventDbContext.SaveChangesAsync(cancellationToken);
 
-                ExchangeOrderViewDbContext viewDbContext = new (new DbContextOptionsBuilder<ExchangeOrderViewDbContext>().UseSqlite(sqliteConnection).Options);
+                viewDbContext.Database.SetDbConnection(eventDbContext.Database.GetDbConnection());
                 await viewDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
                                 
                 var stored = await viewDbContext.ByOrderIdAsync(exchangeOrder.OrderId, cancellationToken);

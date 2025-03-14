@@ -13,20 +13,19 @@ namespace WSantosDev.EventSourcing.WebApi
         {
             var connectionString = configuration["ConnectionStrings:EventStore"]!;
 
-            return services.AddSingleton(new SqliteConfig(connectionString))
-                           .AddDbContext<EventDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
+            return services.AddDbContext<EventDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
                            .AddDbContext<AccountViewDbContext>(options => 
-                                        options.UseSqlite(configuration["ConnectionStrings:EventStore"]),
-                                        ServiceLifetime.Scoped)
+                                        options.UseSqlite(connectionString),
+                                        ServiceLifetime.Singleton)
                            .AddDbContext<PositionViewDbContext>(options => 
-                                        options.UseSqlite(configuration["ConnectionStrings:EventStore"]), 
-                                        ServiceLifetime.Scoped)
+                                        options.UseSqlite(connectionString), 
+                                        ServiceLifetime.Singleton)
                            .AddDbContext<ExchangeOrderViewDbContext>(options => 
-                                        options.UseSqlite(configuration["ConnectionStrings:EventStore"]),
-                                        ServiceLifetime.Scoped)
+                                        options.UseSqlite(connectionString),
+                                        ServiceLifetime.Singleton)
                            .AddDbContext<OrderViewDbContext>(options =>
-                                        options.UseSqlite(configuration["ConnectionStrings:EventStore"]),
-                                        ServiceLifetime.Scoped);
+                                        options.UseSqlite(connectionString),
+                                        ServiceLifetime.Singleton);
         }
     }
 }

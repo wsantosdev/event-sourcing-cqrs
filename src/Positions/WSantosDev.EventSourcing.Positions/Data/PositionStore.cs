@@ -8,11 +8,10 @@ using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Positions
 {
-    public class PositionStore(SqliteConfig config)
+    public class PositionStore(EventDbContext eventDbContext, PositionViewDbContext viewDbContext)
     {
         public async Task<Option<Position>> BySymbolAsync(AccountId accountId, Symbol symbol, CancellationToken cancellationToken = default)
         {
-            var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
             var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId, symbol), cancellationToken);
 
             return stream.Any()
@@ -22,9 +21,6 @@ namespace WSantosDev.EventSourcing.Positions
 
         public async Task<Result<IError>> StoreAsync(Position position, CancellationToken cancellationToken = default)
         {
-            using var sqliteConnection = new SqliteConnection(config.ConnectionString);
-
-            EventDbContext eventDbContext = new(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(sqliteConnection).Options);
             using var transaction = await eventDbContext.Database.BeginTransactionAsync(cancellationToken);
             
             try
@@ -32,8 +28,9 @@ namespace WSantosDev.EventSourcing.Positions
                 eventDbContext.AppendToStream(StreamId(position.AccountId, position.Symbol), position.UncommittedEvents);
                 await eventDbContext.SaveChangesAsync(cancellationToken);
                 
-                PositionViewDbContext viewDbContext = new (new DbContextOptionsBuilder<PositionViewDbContext>().UseSqlite(sqliteConnection).Options);
+                viewDbContext.Database.SetDbConnection(eventDbContext.Database.GetDbConnection());
                 await viewDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
+                
                 var stored = await viewDbContext.BySymbolAsync(position.AccountId, position.Symbol, cancellationToken);
                 if (stored)
                 {

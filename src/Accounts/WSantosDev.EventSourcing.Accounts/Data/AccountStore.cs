@@ -8,11 +8,10 @@ using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
-    public sealed class AccountStore(SqliteConfig config)
+    public sealed class AccountStore(EventDbContext eventDbContext, AccountViewDbContext viewDbContext)
     {
         public async Task<Option<Account>> ByIdAsync(AccountId accountId, CancellationToken cancellationToken = default)
         {
-            var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
             var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId), cancellationToken);
             
             return stream.Any()
@@ -22,9 +21,6 @@ namespace WSantosDev.EventSourcing.Accounts
 
         public async Task<Result<IError>> StoreAsync(Account account, CancellationToken cancellationToken = default)
         {
-            using var sqliteConnection = new SqliteConnection(config.ConnectionString);
-
-            EventDbContext eventDbContext = new (new DbContextOptionsBuilder<EventDbContext>().UseSqlite(sqliteConnection).Options);
             using var transaction = await eventDbContext.Database.BeginTransactionAsync(cancellationToken);
 
             try
@@ -32,7 +28,7 @@ namespace WSantosDev.EventSourcing.Accounts
                 eventDbContext.AppendToStream(StreamId(account.AccountId), account.UncommittedEvents);
                 await eventDbContext.SaveChangesAsync(cancellationToken);
 
-                AccountViewDbContext viewDbContext = new (new DbContextOptionsBuilder<AccountViewDbContext>().UseSqlite(sqliteConnection).Options);
+                viewDbContext.Database.SetDbConnection(eventDbContext.Database.GetDbConnection());
                 await viewDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
                 
                 var stored = await viewDbContext.ByAccountIdAsync(account.AccountId, cancellationToken);
