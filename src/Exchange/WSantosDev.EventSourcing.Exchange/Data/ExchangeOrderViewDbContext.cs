@@ -8,10 +8,10 @@ namespace WSantosDev.EventSourcing.Exchange
         private DbSet<ExchangeOrderView> ExchangeOrders { get; set; }
 
         public async Task<IEnumerable<ExchangeOrderView>> ListAsync(CancellationToken cancellationToken = default) =>
-            await ExchangeOrders.ToListAsync(cancellationToken);
+            await ExchangeOrders.AsNoTracking().ToListAsync(cancellationToken);
 
         public async Task<Option<ExchangeOrderView>> ByOrderIdAsync(Guid orderId, CancellationToken cancellationToken = default) =>
-            await ExchangeOrders.FirstOrDefaultAsync(e => e.OrderId == orderId, cancellationToken);
+            await ExchangeOrders.AsNoTracking().FirstOrDefaultAsync(e => e.OrderId == orderId, cancellationToken);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

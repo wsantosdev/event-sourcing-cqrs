@@ -8,10 +8,10 @@ namespace WSantosDev.EventSourcing.Positions
         private DbSet<PositionView> Positions { get; set; }
 
         public async Task<IEnumerable<PositionView>> ByAccountIdAsync(Guid accountId, CancellationToken cancellationToken = default) =>
-            await Positions.Where(p => p.AccountId == accountId && p.Available > 0).ToListAsync(cancellationToken);
+            await Positions.AsNoTracking().Where(p => p.AccountId == accountId && p.Available > 0).ToListAsync(cancellationToken);
 
         public async Task<Option<PositionView>> BySymbolAsync(Guid accountId, string symbol, CancellationToken cancellationToken = default) =>
-            (await Positions.SingleOrDefaultAsync(p => p.AccountId == accountId && p.Symbol == symbol, cancellationToken)).ToOption();
+            (await Positions.AsNoTracking().SingleOrDefaultAsync(p => p.AccountId == accountId && p.Symbol == symbol, cancellationToken)).ToOption();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

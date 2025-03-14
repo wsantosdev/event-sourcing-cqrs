@@ -18,7 +18,7 @@ namespace WSantosDev.EventSourcing.Orders
                         .ToListAsync(cancellationToken);
 
         public async Task<Option<OrderView>> ByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default) =>
-            (await Orders.FirstOrDefaultAsync(o => o.OrderId == orderId, cancellationToken)).ToOption();
+            (await Orders.AsNoTracking().FirstOrDefaultAsync(o => o.OrderId == orderId, cancellationToken)).ToOption();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
