@@ -25,7 +25,7 @@ namespace WSantosDev.EventSourcing.Exchange.Test
             //Assert
             Assert.True(created);
             Assert.True(await _database.Store.ByIdAsync(orderId));
-            Assert.NotEmpty((await _database.ViewStore.AllAsync()).Select(o => o.OrderId == orderId));
+            Assert.NotEmpty((await _database.ViewStore.ListAsync()).Select(o => o.OrderId == orderId));
         }
 
         public void Dispose() =>

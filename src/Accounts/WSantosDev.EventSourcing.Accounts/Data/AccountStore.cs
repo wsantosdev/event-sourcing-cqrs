@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
@@ -34,17 +35,17 @@ namespace WSantosDev.EventSourcing.Accounts
                 AccountViewDbContext viewDbContext = new (new DbContextOptionsBuilder<AccountViewDbContext>().UseSqlite(sqliteConnection).Options);
                 await viewDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
                 
-                var stored = await viewDbContext.ByIdAsync(account.AccountId, cancellationToken);
+                var stored = await viewDbContext.ByAccountIdAsync(account.AccountId, cancellationToken);
                 if (stored)
                 {
-                    var readModel = stored.Get();
-                    readModel.UpdateFrom(account);
-                    viewDbContext.Update(readModel);
+                    var view = stored.Get();
+                    view.UpdateFrom(account);
+                    viewDbContext.Update(view);
                 }
                 else
                 {
-                    var readModel = AccountView.CreateFrom(account);
-                    await viewDbContext.AddAsync(readModel, cancellationToken);
+                    var view = AccountView.CreateFrom(account);
+                    await viewDbContext.AddAsync(view, cancellationToken);
                 }
                 
                 await viewDbContext.SaveChangesAsync(cancellationToken);

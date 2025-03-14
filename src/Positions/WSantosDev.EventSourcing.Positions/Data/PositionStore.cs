@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Positions
 {

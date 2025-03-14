@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
-namespace WSantosDev.EventSourcing
+namespace WSantosDev.EventSourcing.EventStore
 {
     public sealed class EventDbContext(DbContextOptions<EventDbContext> options) : DbContext(options)
     {

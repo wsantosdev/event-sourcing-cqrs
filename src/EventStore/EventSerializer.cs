@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
-namespace WSantosDev.EventSourcing
+namespace WSantosDev.EventSourcing.EventStore
 {
     internal sealed class EventSerializer
     {

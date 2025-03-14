@@ -7,11 +7,11 @@ namespace WSantosDev.EventSourcing.Accounts.Test
     public class AccountViewStore(AccountViewDbContext dbContext)
     {
         public async Task<Option<AccountView>> ByIdAsync(AccountId accountId) =>
-            await dbContext.ByIdAsync(accountId);
+            await dbContext.ByAccountIdAsync(accountId);
 
         public async Task StoreAsync(AccountView account)
         {
-            var stored = await dbContext.ByIdAsync(account.AccountId);
+            var stored = await dbContext.ByAccountIdAsync(account.AccountId);
             if (stored)
             {
                 dbContext.Entry(stored.Get()).State = EntityState.Detached;

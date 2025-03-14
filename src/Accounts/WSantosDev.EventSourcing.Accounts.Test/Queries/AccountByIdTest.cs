@@ -1,7 +1,7 @@
 ﻿using WSantosDev.EventSourcing.Accounts.Queries;
 using WSantosDev.EventSourcing.Commons;
 
-namespace WSantosDev.EventSourcing.Accounts.Test.Queries
+namespace WSantosDev.EventSourcing.Accounts.Test
 {
     public sealed class AccountByIdTest :IDisposable
     {

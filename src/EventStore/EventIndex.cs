@@ -1,4 +1,4 @@
-﻿namespace WSantosDev.EventSourcing
+﻿namespace WSantosDev.EventSourcing.EventStore
 {
     public static class EventIndex
     {

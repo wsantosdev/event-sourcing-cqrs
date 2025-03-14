@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WSantosDev.EventSourcing.Commons;
+﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Orders.Queries;
 
 namespace WSantosDev.EventSourcing.Orders.Test

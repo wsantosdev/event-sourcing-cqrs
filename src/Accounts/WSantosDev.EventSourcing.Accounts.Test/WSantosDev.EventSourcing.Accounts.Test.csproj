@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sqlite\EventSourcingTest.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Sqlite\EventSourcing.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

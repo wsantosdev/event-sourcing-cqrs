@@ -7,12 +7,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Orders
 {
     public sealed class OrderStore(SqliteConfig config)
     {
-        public async Task<Option<Order>> GetByIdAsync(OrderId orderId, CancellationToken cancellationToken = default)
+        public async Task<Option<Order>> ByIdAsync(OrderId orderId, CancellationToken cancellationToken = default)
         {
             var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
             var stream = await eventDbContext.ReadStreamAsync(StreamId(orderId), cancellationToken);

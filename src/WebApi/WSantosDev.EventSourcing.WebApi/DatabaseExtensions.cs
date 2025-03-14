@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Accounts;
+using WSantosDev.EventSourcing.EventStore;
 using WSantosDev.EventSourcing.Exchange;
 using WSantosDev.EventSourcing.Orders;
 using WSantosDev.EventSourcing.Positions;
@@ -14,7 +15,6 @@ namespace WSantosDev.EventSourcing.WebApi
 
             return services.AddSingleton(new SqliteConfig(connectionString))
                            .AddDbContext<EventDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
-                           .AddSingleton<EventStore>()
                            .AddDbContext<AccountViewDbContext>(options => 
                                         options.UseSqlite(configuration["ConnectionStrings:EventStore"]),
                                         ServiceLifetime.Scoped)

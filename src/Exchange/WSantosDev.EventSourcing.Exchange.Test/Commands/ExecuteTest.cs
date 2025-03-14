@@ -22,8 +22,7 @@ namespace WSantosDev.EventSourcing.Exchange.Test
             var orderId = Guid.NewGuid();
             var order = ExchangeOrder.Create(Guid.NewGuid(), orderId, OrderSide.Buy, 100, "MSFT", 10m);
             await _database.Store.StoreAsync(order);
-            await _database.ViewStore.StoreAsync(new ExchangeOrderView(order.AccountId, order.OrderId, order.Side, order.Quantity, 
-                                                                        order.Symbol, order.Price, order.Status));
+            await _database.ViewStore.StoreAsync(ExchangeOrderView.CreateFrom(order));
             
             var sut = new Execute(_database.Store, _messageBus);
 
@@ -32,7 +31,7 @@ namespace WSantosDev.EventSourcing.Exchange.Test
 
             //Assert
             Assert.True(executed);
-            Assert.Equal(OrderStatus.Filled, (await _database.ViewStore.AllAsync()).First(o => o.OrderId == orderId).Status);
+            Assert.Equal(OrderStatus.Filled, (await _database.ViewDbContext.ByOrderIdAsync(orderId)).Get().Status);
         }
 
         [Fact]

@@ -13,13 +13,13 @@ namespace WSantosDev.EventSourcing.Exchange.Commands
             var stored = await store.ByIdAsync(command.OrderId);
             if (stored)
             {
-                var order = stored.Get();
-                var executed = order.Execute();
+                var exchangeOrder = stored.Get();
+                var executed = exchangeOrder.Execute();
                 if (executed)
                 {
-                    await store.StoreAsync(order);
-                    messageBus.Publish(new ExchangeOrderExecuted(order.AccountId, order.OrderId, order.Side, 
-                                                                 order.Quantity, order.Symbol, order.Price, order.Status));
+                    await store.StoreAsync(exchangeOrder);
+                    messageBus.Publish(new ExchangeOrderExecuted(exchangeOrder.AccountId, exchangeOrder.OrderId, exchangeOrder.Side, 
+                                                                 exchangeOrder.Quantity, exchangeOrder.Symbol, exchangeOrder.Price, exchangeOrder.Status));
                 }
 
                 return executed;

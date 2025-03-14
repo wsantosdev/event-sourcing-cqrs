@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Orders.Test
 {
@@ -15,12 +16,11 @@ namespace WSantosDev.EventSourcing.Orders.Test
     {
         public static Database Create()
         {
-            var config = new SqliteConfig("Data Source=./Sqlite/EventStoreTest.sqlite");
+            var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
 
             var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), config.ConnectionString).Options;
             var dbContext = new EventDbContext(options);
-            var eventStore = new EventStore(dbContext);
-
+            
             var viewOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<OrderViewDbContext>(), config.ConnectionString).Options;
             var viewDbContext = new OrderViewDbContext(viewOptions);
             var viewStore = new OrderViewStore(viewDbContext);
@@ -39,11 +39,11 @@ namespace WSantosDev.EventSourcing.Orders.Test
     {
         public static void Dispose(Database setup)
         {
-            setup.EventDbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE Events");
+            setup.EventDbContext.Database.ExecuteSqlRaw("DELETE FROM Events");
             setup.EventDbContext.SaveChanges();
             setup.EventDbContext.Dispose();
 
-            setup.ViewDbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE Accounts");
+            setup.ViewDbContext.Database.ExecuteSqlRaw("DELETE FROM Accounts");
             setup.ViewDbContext.SaveChanges();
             setup.ViewDbContext.Dispose();
         }

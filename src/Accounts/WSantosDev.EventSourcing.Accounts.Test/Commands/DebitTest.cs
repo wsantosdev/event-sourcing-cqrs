@@ -5,17 +5,11 @@ namespace WSantosDev.EventSourcing.Accounts.Test
 {
     public sealed class DebitTest : IDisposable
     {
-        private readonly Database _databaseSetup;
-
-        private readonly AccountViewStore _accountReadModelStore;
-        private readonly AccountStore _accountStore;
+        private readonly Database _database;
 
         public DebitTest()
         {
-            _databaseSetup = DatabaseFactory.Create();
-
-            _accountReadModelStore = _databaseSetup.ViewStore;
-            _accountStore = _databaseSetup.Store;
+            _database = DatabaseFactory.Create();
         }
 
         [Fact]
@@ -24,16 +18,16 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
-            await _accountStore.StoreAsync(account);
-            var sut = new Debit(_accountStore);
+            await _database.Store.StoreAsync(account);
+            var sut = new Debit(_database.Store);
 
             //Act
             var debited = await sut.ExecuteAsync(new DebitParams(accountId, 10m));
 
             //Assert
             Assert.True(debited);
-            Assert.Equal<decimal>(90m, (await _accountStore.ByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(90m, (await _accountReadModelStore.ByIdAsync(accountId)).Get().Balance);
+            Assert.Equal<decimal>(90m, (await _database.Store.ByIdAsync(accountId)).Get().Balance);
+            Assert.Equal(90m, (await _database.ViewDbContext.ByAccountIdAsync(accountId)).Get().Balance);
         }
 
         [Fact]
@@ -43,9 +37,9 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var initialDeposit = 100m;
             var account = Account.Open(accountId, initialDeposit).ResultValue;
-            await _accountStore.StoreAsync(account);
-            await _accountReadModelStore.StoreAsync(new AccountView(accountId, account.Balance));
-            var sut = new Debit(_accountStore);
+            await _database.Store.StoreAsync(account);
+            await _database.ViewStore.StoreAsync(new AccountView(accountId, account.Balance));
+            var sut = new Debit(_database.Store);
 
             //Act
             var debited = await sut.ExecuteAsync(new DebitParams(accountId, 0m));
@@ -53,8 +47,8 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(debited);
             Assert.Equal(Errors.InvalidAmount, debited.ErrorValue);
-            Assert.Equal<decimal>(initialDeposit, (await _accountStore.ByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(initialDeposit, (await _accountReadModelStore.ByIdAsync(accountId)).Get().Balance);
+            Assert.Equal<decimal>(initialDeposit, (await _database.Store.ByIdAsync(accountId)).Get().Balance);
+            Assert.Equal(initialDeposit, (await _database.ViewDbContext.ByAccountIdAsync(accountId)).Get().Balance);
         }
                 
         [Fact]
@@ -63,9 +57,9 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Arrange
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
-            await _accountStore.StoreAsync(account);
-            await _accountReadModelStore.StoreAsync(new AccountView(accountId, account.Balance));
-            var sut = new Debit(_accountStore);
+            await _database.Store.StoreAsync(account);
+            await _database.ViewStore.StoreAsync(new AccountView(accountId, account.Balance));
+            var sut = new Debit(_database.Store);
 
             //Act
             var debited = await sut.ExecuteAsync(new DebitParams(accountId, 200m));
@@ -73,11 +67,11 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.False(debited);
             Assert.Equal(Errors.InsufficientFunds, debited.ErrorValue);
-            Assert.Equal<decimal>(100m, (await _accountStore.ByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(100m, (await _accountReadModelStore.ByIdAsync(accountId)).Get().Balance);
+            Assert.Equal<decimal>(100m, (await _database.Store.ByIdAsync(accountId)).Get().Balance);
+            Assert.Equal(100m, (await _database.ViewDbContext.ByAccountIdAsync(accountId)).Get().Balance);
         }
 
         public void Dispose() =>
-            DatabaseDisposer.Dispose(_databaseSetup);
+            DatabaseDisposer.Dispose(_database);
     }
 }

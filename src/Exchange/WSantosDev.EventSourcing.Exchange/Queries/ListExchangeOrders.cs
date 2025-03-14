@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace WSantosDev.EventSourcing.Exchange.Queries
+﻿namespace WSantosDev.EventSourcing.Exchange.Queries
 {
     public class ListExchangeOrders(ExchangeOrderViewDbContext dbContext)
     {
-        public async Task<IEnumerable<ExchangeOrderView>> ExecuteAsync() =>
-            await dbContext.ExchangeOrders.ToListAsync();
+        public async Task<IEnumerable<ExchangeOrderView>> ExecuteAsync(CancellationToken cancellationToken = default) =>
+            await dbContext.ListAsync(cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using WSantosDev.EventSourcing.Accounts.Commands;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.WebApi
 {

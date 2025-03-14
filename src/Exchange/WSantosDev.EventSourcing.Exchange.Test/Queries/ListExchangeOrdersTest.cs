@@ -1,7 +1,7 @@
 ﻿using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Exchange.Queries;
 
-namespace WSantosDev.EventSourcing.Exchange.Test.Queries
+namespace WSantosDev.EventSourcing.Exchange.Test
 {
     public sealed class ListExchangeOrdersTest : IDisposable
     {
@@ -16,8 +16,8 @@ namespace WSantosDev.EventSourcing.Exchange.Test.Queries
         public async Task Success() 
         {
             //Arrange
-            await _database.ViewStore.StoreAsync(new ExchangeOrderView(Guid.NewGuid(), Guid.NewGuid(), OrderSide.Sell, 100, 
-                                                                       "MNST", 10m, OrderStatus.Filled));
+            var order = ExchangeOrder.Create(Guid.NewGuid(), Guid.NewGuid(), OrderSide.Sell, 100, "MNST", 10m);
+            await _database.ViewStore.StoreAsync(ExchangeOrderView.CreateFrom(order));
             var sut = new ListExchangeOrders(_database.ViewDbContext);
 
             //Act

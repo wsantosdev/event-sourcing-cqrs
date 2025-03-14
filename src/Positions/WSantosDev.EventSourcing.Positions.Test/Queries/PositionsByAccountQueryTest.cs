@@ -8,7 +8,7 @@ namespace WSantosDev.EventSourcing.Positions.Test
 
         public PositionsByAccountQueryTest()
         {
-            _database = DatabaseSetupFactory.Create();
+            _database = DatabaseFactory.Create();
         }
 
         [Fact]
@@ -45,6 +45,6 @@ namespace WSantosDev.EventSourcing.Positions.Test
         }
 
         public void Dispose() =>
-            DatabaseSetupDisposer.Dispose(_database);
+            DatabaseDisposer.Dispose(_database);
     }
 }

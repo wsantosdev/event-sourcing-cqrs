@@ -1,10 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moonad;
 
 namespace WSantosDev.EventSourcing.Exchange
 {
     public class ExchangeOrderViewDbContext(DbContextOptions<ExchangeOrderViewDbContext> options) : DbContext(options)
     {
-        public DbSet<ExchangeOrderView> ExchangeOrders { get; set; }
+        private DbSet<ExchangeOrderView> ExchangeOrders { get; set; }
+
+        public async Task<IEnumerable<ExchangeOrderView>> ListAsync(CancellationToken cancellationToken = default) =>
+            await ExchangeOrders.ToListAsync(cancellationToken);
+
+        public async Task<Option<ExchangeOrderView>> ByOrderIdAsync(Guid orderId, CancellationToken cancellationToken = default) =>
+            await ExchangeOrders.FirstOrDefaultAsync(e => e.OrderId == orderId, cancellationToken);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

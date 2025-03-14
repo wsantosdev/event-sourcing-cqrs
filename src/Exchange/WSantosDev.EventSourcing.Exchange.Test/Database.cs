@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Exchange.Test
 {
@@ -15,13 +16,13 @@ namespace WSantosDev.EventSourcing.Exchange.Test
     {
         public static Database Create()
         {
-            var config = new SqliteConfig("Data Source=./Sqlite/ReadModelStoreTest.sqlite");
+            var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
 
-            var options = new DbContextOptionsBuilder().UseSqlite(config.ConnectionString).Options;
-            var dbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
-            var eventStore = new EventStore(dbContext);
-
-            var viewDbContext = new ExchangeOrderViewDbContext(new DbContextOptionsBuilder<ExchangeOrderViewDbContext>().UseSqlite(config.ConnectionString).Options);
+            var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), config.ConnectionString).Options;
+            var dbContext = new EventDbContext(options);
+            
+            var viewOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<ExchangeOrderViewDbContext>(), config.ConnectionString).Options;
+            var viewDbContext = new ExchangeOrderViewDbContext(viewOptions);
             var viewStore = new ExchangeOrderViewStore(viewDbContext);
 
             return new Database

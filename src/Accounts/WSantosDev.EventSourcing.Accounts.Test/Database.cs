@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Accounts.Test
 {
@@ -15,9 +16,8 @@ namespace WSantosDev.EventSourcing.Accounts.Test
     {
         public static Database Create()
         {
-            var config = new SqliteConfig("Data Source=./Sqlite/EventSourcingTest.sqlite");
-            var options = new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options;
-            var eventDbContext = new EventDbContext(options);
+            var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
+            var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
             var viewDbContext = new AccountViewDbContext(new DbContextOptionsBuilder<AccountViewDbContext>().UseSqlite(config.ConnectionString).Options);
             var viewStore = new AccountViewStore(viewDbContext);
 
@@ -26,7 +26,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
                 ViewDbContext = viewDbContext,
                 ViewStore = viewStore,
                 EventDbContext = eventDbContext,
-                Store = new AccountStore(new SqliteConfig(config.ConnectionString)),
+                Store = new AccountStore(config),
             };
         }
     }

@@ -11,7 +11,7 @@ namespace WSantosDev.EventSourcing.Orders.Actions
     {
         public async Task<Result<IError>> ExecuteAsync(ExecuteActionParams command)
         {
-            var stored = await store.GetByIdAsync(command.OrderId);
+            var stored = await store.ByIdAsync(command.OrderId);
             if (stored)
             {
                 var order = stored.Get();

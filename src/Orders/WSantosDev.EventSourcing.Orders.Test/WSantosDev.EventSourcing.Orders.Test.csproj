@@ -19,17 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sqlite\EventStoreTest.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Sqlite\ReadModelStoreTest.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\EventStore\WSantosDev.EventSourcing.EventStore.csproj" />
+    <ProjectReference Include="..\WSantosDev.EventSourcing.Orders\WSantosDev.EventSourcing.Orders.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\EventStore\WSantosDev.EventSourcing.EventStore.csproj" />
-    <ProjectReference Include="..\WSantosDev.EventSourcing.Orders\WSantosDev.EventSourcing.Orders.csproj" />
+    <None Update="Sqlite\EventSourcing.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

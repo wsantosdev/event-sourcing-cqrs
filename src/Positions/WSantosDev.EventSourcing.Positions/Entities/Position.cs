@@ -47,7 +47,7 @@ namespace WSantosDev.EventSourcing.Positions
         }
 
         private void Apply(SharesDeposited @event) =>
-            Available += @event.Quantity;
+            Available = Available + @event.Quantity;
                 
         public Result<IError> Withdraw(Quantity quantity)
         {

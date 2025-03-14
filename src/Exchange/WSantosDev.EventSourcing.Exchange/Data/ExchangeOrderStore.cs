@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
+using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Exchange
 {
@@ -31,25 +32,23 @@ namespace WSantosDev.EventSourcing.Exchange
                 eventDbContext.AppendToStream(StreamId(exchangeOrder.OrderId), exchangeOrder.UncommittedEvents);
                 await eventDbContext.SaveChangesAsync(cancellationToken);
 
-                ExchangeOrderViewDbContext readModelDbContext = new (new DbContextOptionsBuilder<ExchangeOrderViewDbContext>().UseSqlite(sqliteConnection).Options);
-                await readModelDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
-
-                var view = new ExchangeOrderView(exchangeOrder.AccountId, exchangeOrder.OrderId, exchangeOrder.Side,
-                                                 exchangeOrder.Quantity, exchangeOrder.Symbol, exchangeOrder.Price,
-                                                 exchangeOrder.Status);
-
-                var stored = (await readModelDbContext.ExchangeOrders.FirstOrDefaultAsync(o => o.OrderId == exchangeOrder.OrderId, cancellationToken)).ToOption();
+                ExchangeOrderViewDbContext viewDbContext = new (new DbContextOptionsBuilder<ExchangeOrderViewDbContext>().UseSqlite(sqliteConnection).Options);
+                await viewDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
+                                
+                var stored = await viewDbContext.ByOrderIdAsync(exchangeOrder.OrderId, cancellationToken);
                 if (stored)
                 {
-                    readModelDbContext.Entry(stored.Get()).State = EntityState.Detached;
-                    readModelDbContext.Entry(view).State = EntityState.Modified;
+                    var view = stored.Get();
+                    view.UpdateFrom(exchangeOrder);
+                    viewDbContext.Update(view);
                 }
                 else
                 {
-                    await readModelDbContext.AddAsync(view, cancellationToken);
+                    var view = ExchangeOrderView.CreateFrom(exchangeOrder);
+                    await viewDbContext.AddAsync(view, cancellationToken);
                 }
                 
-                await readModelDbContext.SaveChangesAsync(cancellationToken);
+                await viewDbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
                 return true;

@@ -3,24 +3,24 @@ using Moonad;
 
 namespace WSantosDev.EventSourcing.Exchange
 {
-    public class ExchangeOrderViewStore(ExchangeOrderViewDbContext context)
+    public class ExchangeOrderViewStore(ExchangeOrderViewDbContext dbContext)
     {
-        public async Task<IEnumerable<ExchangeOrderView>> AllAsync() =>
-            await context.ExchangeOrders.ToListAsync();
+        public async Task<IEnumerable<ExchangeOrderView>> ListAsync(CancellationToken cancellationToken = default) =>
+            await dbContext.ListAsync(cancellationToken);
 
         public async Task StoreAsync(ExchangeOrderView order)
         {
-            var stored = (await context.ExchangeOrders.FirstOrDefaultAsync(o => o.OrderId == order.OrderId)).ToOption();
+            var stored = await dbContext.ByOrderIdAsync(order.OrderId);
             if (stored)
             {
-                context.ExchangeOrders.Entry(stored.Get()).State = EntityState.Detached;
-                context.ExchangeOrders.Entry(order).State = EntityState.Modified;
-                await context.SaveChangesAsync();
+                dbContext.Entry(stored.Get()).State = EntityState.Detached;
+                dbContext.Entry(order).State = EntityState.Modified;
+                await dbContext.SaveChangesAsync();
                 return;
             }
 
-            context.Add(order);
-            await context.SaveChangesAsync();
+            dbContext.Add(order);
+            await dbContext.SaveChangesAsync();
         }
     }
 }
