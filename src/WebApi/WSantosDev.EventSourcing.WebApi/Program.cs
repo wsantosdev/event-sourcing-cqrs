@@ -6,12 +6,13 @@ using WSantosDev.EventSourcing.WebApi.Positions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDatabases(builder.Configuration);
-builder.Services.AddAccountsModule();
-builder.Services.AddPositionsModule();
-builder.Services.AddOrdersModule();
-builder.Services.AddExchangeModule();
 builder.Services.AddEventBus();
+
+builder.Services.AddEventStore(builder.Configuration);
+builder.Services.AddAccountsModule(builder.Configuration);
+builder.Services.AddPositionsModule(builder.Configuration);
+builder.Services.AddOrdersModule(builder.Configuration);
+builder.Services.AddExchangeModule(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
