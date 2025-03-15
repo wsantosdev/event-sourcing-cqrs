@@ -19,7 +19,7 @@ namespace WSantosDev.EventSourcing.Orders.Test
             var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
 
             var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), config.ConnectionString).Options;
-            var dbContext = new EventDbContext(options);
+            var eventDbContext = new EventDbContext(options);
             
             var viewOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<OrderViewDbContext>(), config.ConnectionString).Options;
             var viewDbContext = new OrderViewDbContext(viewOptions);
@@ -29,8 +29,8 @@ namespace WSantosDev.EventSourcing.Orders.Test
             {
                 ViewDbContext = viewDbContext,
                 ViewStore = viewStore,
-                EventDbContext = dbContext,
-                Store = new OrderStore(config),
+                EventDbContext = eventDbContext,
+                Store = new OrderStore(eventDbContext, viewDbContext),
             };
         }
     }
@@ -40,12 +40,9 @@ namespace WSantosDev.EventSourcing.Orders.Test
         public static void Dispose(Database setup)
         {
             setup.EventDbContext.Database.ExecuteSqlRaw("DELETE FROM Events");
+            setup.EventDbContext.Database.ExecuteSqlRaw("DELETE FROM Accounts");
             setup.EventDbContext.SaveChanges();
             setup.EventDbContext.Dispose();
-
-            setup.ViewDbContext.Database.ExecuteSqlRaw("DELETE FROM Accounts");
-            setup.ViewDbContext.SaveChanges();
-            setup.ViewDbContext.Dispose();
         }
     }
 }

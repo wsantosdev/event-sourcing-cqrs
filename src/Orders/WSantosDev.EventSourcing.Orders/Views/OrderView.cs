@@ -25,10 +25,10 @@ namespace WSantosDev.EventSourcing.Orders
             Status = order.Status;
         }
 
-        public static OrderView CreateFrom(Order order) =>
-            new (order);
+        public static OrderView CreateFrom(Order source) =>
+            new (source);
 
-        public void UpdateFrom(Order order) =>
-            Status = order.Status;
+        public void UpdateFrom(Order source) =>
+            Status = source.Status;
     }
 }

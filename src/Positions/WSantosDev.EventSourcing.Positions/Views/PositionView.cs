@@ -13,10 +13,10 @@
             Available = available;
         }
 
-        public static PositionView CreateFrom(Position position) =>
-            new (position.AccountId, position.Symbol, position.Available);
+        public static PositionView CreateFrom(Position source) =>
+            new (source.AccountId, source.Symbol, source.Available);
 
-        public void UpdateFrom(Position position) =>
-            Available = position.Available;
+        public void UpdateFrom(Position source) =>
+            Available = source.Available;
     }
 }

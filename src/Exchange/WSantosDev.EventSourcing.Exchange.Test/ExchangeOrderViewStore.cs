@@ -8,18 +8,19 @@ namespace WSantosDev.EventSourcing.Exchange
         public async Task<IEnumerable<ExchangeOrderView>> ListAsync(CancellationToken cancellationToken = default) =>
             await dbContext.ListAsync(cancellationToken);
 
-        public async Task StoreAsync(ExchangeOrderView order)
+        public async Task StoreAsync(ExchangeOrderView view)
         {
-            var stored = await dbContext.ByOrderIdAsync(order.OrderId);
+            var stored = await dbContext.ByOrderIdAsync(view.OrderId);
             if (stored)
             {
-                dbContext.Entry(stored.Get()).State = EntityState.Detached;
-                dbContext.Entry(order).State = EntityState.Modified;
+                var storedView = stored.Get();
+                storedView.UpdateFrom(view);
+                dbContext.Entry(storedView).State = EntityState.Modified;
                 await dbContext.SaveChangesAsync();
                 return;
             }
 
-            dbContext.Add(order);
+            dbContext.Add(view);
             await dbContext.SaveChangesAsync();
         }
     }

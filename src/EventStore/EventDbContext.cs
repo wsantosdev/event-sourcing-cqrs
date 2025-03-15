@@ -9,11 +9,18 @@ namespace WSantosDev.EventSourcing.EventStore
 
         public async Task<IEnumerable<IEvent>> ReadStreamAsync(string streamId, CancellationToken cancellationToken = default)
         {
-            var stream = await Events.Where(e => e.StreamId == streamId)
+            try
+            {
+                var stream = await Events.Where(e => e.StreamId == streamId)
                                      .ToListAsync(cancellationToken);
 
-            return stream.OrderBy(e => e.Id)
-                         .Select(EventSerializer.Desserialize);
+                return stream.OrderBy(e => e.Id)
+                             .Select(EventSerializer.Desserialize);
+            }
+            catch
+            { 
+                return [];
+            }
         }
 
         public void AppendToStream(string streamId, IEnumerable<IEvent> events)

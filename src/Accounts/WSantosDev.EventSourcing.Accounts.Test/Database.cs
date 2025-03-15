@@ -26,7 +26,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
                 ViewDbContext = viewDbContext,
                 ViewStore = viewStore,
                 EventDbContext = eventDbContext,
-                Store = new AccountStore(config),
+                Store = new AccountStore(eventDbContext, viewDbContext),
             };
         }
     }
@@ -36,12 +36,9 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         public static void Dispose(Database setup)
         {
             setup.EventDbContext.Database.ExecuteSqlRaw("DELETE FROM Events");
+            setup.EventDbContext.Database.ExecuteSqlRaw("DELETE FROM Accounts");
             setup.EventDbContext.SaveChanges();
             setup.EventDbContext.Dispose();
-
-            setup.ViewDbContext.Database.ExecuteSqlRaw("DELETE FROM Accounts");
-            setup.ViewDbContext.SaveChanges();
-            setup.ViewDbContext.Dispose();
         }
     }
 }

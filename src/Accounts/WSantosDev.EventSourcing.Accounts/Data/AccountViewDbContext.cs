@@ -8,8 +8,17 @@ namespace WSantosDev.EventSourcing.Accounts
     {
         private DbSet<AccountView> Accounts { get; set; }
 
-        public async Task<Option<AccountView>> ByAccountIdAsync(AccountId accountId, CancellationToken cancellationToken = default) =>
-            (await Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId, cancellationToken)).ToOption();
+        public async Task<Option<AccountView>> ByAccountIdAsync(AccountId accountId, CancellationToken cancellationToken = default)
+        {
+            try 
+            {
+                return (await Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId, cancellationToken)).ToOption();
+            }
+            catch
+            { 
+                return Option.None<AccountView>();
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -19,7 +19,7 @@ namespace WSantosDev.EventSourcing.Positions.Test
             var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
 
             var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), config.ConnectionString).Options;
-            var dbContext = new EventDbContext(options);
+            var eventDbContext = new EventDbContext(options);
             
             var viewOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<PositionViewDbContext>(), config.ConnectionString).Options;
             var viewDbContext = new PositionViewDbContext(viewOptions);
@@ -29,8 +29,8 @@ namespace WSantosDev.EventSourcing.Positions.Test
             {
                 ViewDbContext = viewDbContext,
                 ViewStore = readModelStore,
-                EventDbContext = dbContext,
-                Store = new PositionStore(config)
+                EventDbContext = eventDbContext,
+                Store = new PositionStore(eventDbContext, viewDbContext)
             };
         }
     }

@@ -26,7 +26,10 @@
         public static ExchangeOrderView CreateFrom(ExchangeOrder source) =>
             new(source);
 
-        public void UpdateFrom(ExchangeOrder order) =>
-            Status = order.Status;
+        public void UpdateFrom(ExchangeOrder source) =>
+            Status = source.Status;
+
+        public void UpdateFrom(ExchangeOrderView source) =>
+            Status = source.Status;
     }
 }

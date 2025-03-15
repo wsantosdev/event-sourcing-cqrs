@@ -13,12 +13,29 @@ namespace WSantosDev.EventSourcing.Orders
     {
         private DbSet<OrderView> Orders { get; set; }
 
-        public async Task<IEnumerable<OrderView>> ByAccountIdAsync(AccountId accountId, CancellationToken cancellationToken = default) =>
-            await Orders.Where(o => o.AccountId == accountId)
-                        .ToListAsync(cancellationToken);
+        public async Task<IEnumerable<OrderView>> ByAccountIdAsync(AccountId accountId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return await Orders.Where(o => o.AccountId == accountId).ToListAsync(cancellationToken);
+            }
+            catch
+            {
+                return [];
+            }
+        }
 
-        public async Task<Option<OrderView>> ByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default) =>
-            (await Orders.AsNoTracking().FirstOrDefaultAsync(o => o.OrderId == orderId, cancellationToken)).ToOption();
+        public async Task<Option<OrderView>> ByOrderIdAsync(OrderId orderId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return (await Orders.FirstOrDefaultAsync(o => o.OrderId == orderId, cancellationToken)).ToOption();
+            }
+            catch 
+            {
+                return Option.None<OrderView>();
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
