@@ -16,8 +16,8 @@ namespace WSantosDev.EventSourcing.Accounts
         private Account(AccountId accountId) =>
             RaiseEvent(new AccountOpened(accountId));
 
-        private Account(IEnumerable<IEvent> events) =>
-            Hydrate(events);
+        public Account(IEnumerable<IEvent> events) =>
+            Restore(events);
 
         public static Result<Account, IError> Open(AccountId accountId, Money initialDeposit)
         {
@@ -31,9 +31,6 @@ namespace WSantosDev.EventSourcing.Accounts
 
             return account;
         }
-
-        public static Account Restore(IEnumerable<IEvent> events) =>
-            new (events);
 
         private void Apply(AccountOpened accountCreated) =>
             AccountId = accountCreated.AccountId;

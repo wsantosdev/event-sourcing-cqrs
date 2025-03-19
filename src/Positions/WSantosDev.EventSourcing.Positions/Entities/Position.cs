@@ -28,14 +28,11 @@ namespace WSantosDev.EventSourcing.Positions
             return position;
         }
 
-        private Position(IEnumerable<IEvent> events) =>
-            Hydrate(events);
+        public Position(IEnumerable<IEvent> events) =>
+            Restore(events);
 
         private void Apply(PositionOpened @event) =>
             (AccountId, Symbol, Available) = (@event.AccountId, @event.Symbol, Available);
-
-        public static Position Restore(IEnumerable<IEvent> events) =>
-            new (events);
 
         public Result<IError> Deposit(Quantity quantity)
         {

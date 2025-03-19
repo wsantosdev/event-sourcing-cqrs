@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.Orders
             var stream = await eventDbContext.ReadStreamAsync(StreamId(orderId), cancellationToken);
 
             return stream.Any()
-                ? Order.Restore(stream)
+                ? new Order(stream)
                 : Option.None<Order>();
         }
 

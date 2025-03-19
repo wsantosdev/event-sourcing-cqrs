@@ -32,11 +32,8 @@ namespace WSantosDev.EventSourcing.Orders
             Status = OrderStatus.New;
         }
 
-        private Order(IEnumerable<IEvent> stream) =>
-            Hydrate(stream);
-
-        public static Order Restore(IEnumerable<IEvent> stream) =>
-            new (stream);
+        public Order(IEnumerable<IEvent> stream) =>
+            Restore(stream);
 
         public static Result<Order, IError> New(AccountId accountId, OrderId orderId, OrderSide side,
                                                 Quantity quantity, Symbol symbol, Money price)

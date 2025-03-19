@@ -2,19 +2,19 @@
 {
     public abstract class EventBasedEntity
     {
-        private readonly Queue<IEvent> _uncommittedEvents = new();
-        
-        public IReadOnlyCollection<IEvent> UncommittedEvents =>
-            _uncommittedEvents.ToList().AsReadOnly();
+        private long Index { get; set; }
+        public Dictionary<long, IEvent> UncommittedEvents { get; } = new ();
         
         protected void RaiseEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
-            _uncommittedEvents.Enqueue(@event);
+            UncommittedEvents.Add(++Index, @event);
             ProcessEvent(@event);
         }
 
-        protected void Hydrate(IEnumerable<IEvent> stream)
+        protected void Restore(IEnumerable<IEvent> stream)
         {
+            Index = stream.Count();
+
             foreach (var @event in stream)
                 ProcessEvent(@event);
         }

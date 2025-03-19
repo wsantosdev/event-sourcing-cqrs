@@ -12,7 +12,7 @@ namespace WSantosDev.EventSourcing.EventStore
             try
             {
                 var stream = await Events.Where(e => e.StreamId == streamId)
-                                     .ToListAsync(cancellationToken);
+                                         .ToListAsync(cancellationToken);
 
                 return stream.OrderBy(e => e.Id)
                              .Select(EventSerializer.Desserialize);
@@ -23,18 +23,15 @@ namespace WSantosDev.EventSourcing.EventStore
             }
         }
 
-        public void AppendToStream(string streamId, IEnumerable<IEvent> events)
+        public void AppendToStream(string streamId, IDictionary<long, IEvent> events)
         {
-            var eventsToAppend = events.Select(e => EventSerializer.Serialize(EventIndex.Next(), streamId, e));
+            var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.Key, streamId, e.Value));
             Events.AddRange(eventsToAppend);
         }
 
-        public long CurrentIndex() =>
-            Events.Max(e => e.Id);
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Event>().HasKey(e => e.Id);
+            modelBuilder.Entity<Event>().HasKey(e => new { e.Id, e.StreamId });
             base.OnModelCreating(modelBuilder);
         }
     }

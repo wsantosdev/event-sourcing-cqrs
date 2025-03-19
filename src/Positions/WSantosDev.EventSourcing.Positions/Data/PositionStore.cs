@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing.Positions
             var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId, symbol), cancellationToken);
 
             return stream.Any()
-                ? Position.Restore(stream)
+                ? new Position(stream)
                 : Option.None<Position>();
         }
 

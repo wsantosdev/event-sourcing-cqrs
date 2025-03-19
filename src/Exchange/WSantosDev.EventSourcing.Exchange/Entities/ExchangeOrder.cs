@@ -18,11 +18,8 @@ namespace WSantosDev.EventSourcing.Exchange
                               Quantity quantity, Symbol symbol, Money price) =>
             RaiseEvent(new OrderCreated(accountId, orderId, side, quantity, symbol, price, OrderStatus.New));
 
-        private ExchangeOrder(IEnumerable<IEvent> stream) =>
-            Hydrate(stream);
-
-        public static ExchangeOrder Restore(IEnumerable<IEvent> stream) =>
-            new(stream);
+        public ExchangeOrder(IEnumerable<IEvent> stream) =>
+            Restore(stream);
 
         public static ExchangeOrder Create(AccountId accountId, OrderId orderId, OrderSide side,
                                              Quantity quantity, Symbol symbol, Money price) =>

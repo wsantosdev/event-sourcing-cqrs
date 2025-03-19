@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
@@ -15,7 +14,7 @@ namespace WSantosDev.EventSourcing.Accounts
             var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId), cancellationToken);
             
             return stream.Any()
-                ? Account.Restore(stream)
+                ? new Account(stream)
                 : Option.None<Account>();
         }
 

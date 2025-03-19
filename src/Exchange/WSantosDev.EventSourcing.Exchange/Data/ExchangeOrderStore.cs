@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing.Exchange
             var stream = await eventDbContext.ReadStreamAsync(StreamId(orderId), cancellationToken);
                 
             return stream.Any()
-                ? ExchangeOrder.Restore(stream)
+                ? new ExchangeOrder(stream)
                 : Option.None<ExchangeOrder>();
         }
 
