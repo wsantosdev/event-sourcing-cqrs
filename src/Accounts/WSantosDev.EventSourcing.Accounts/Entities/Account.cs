@@ -6,11 +6,11 @@ namespace WSantosDev.EventSourcing.Accounts
 {
     public sealed partial class Account : EventBasedEntity, ISnapshotable
     {
-        private readonly IList<AccountEntry> _entries = [];
+        private readonly IList<Entry> _entries = [];
 
         public AccountId AccountId { get; private set; } = AccountId.Empty;
         
-        public Money Balance => _entries.DefaultIfEmpty(AccountEntry.Empty)
+        public Money Balance => _entries.DefaultIfEmpty(Entry.Empty)
                                         .Sum(e => e.Value);
 
         private Account(AccountId accountId) =>
@@ -21,10 +21,10 @@ namespace WSantosDev.EventSourcing.Accounts
 
         public Account(ISnapshot snapshot)
         {
-            var accountSnapshot = (snapshot as AccountSnapshot)!;
+            var accountSnapshot = (snapshot as Snapshot)!;
             
             AccountId = accountSnapshot.AccountId;
-            foreach (AccountEntry entry in accountSnapshot.Entries)
+            foreach (Entry entry in accountSnapshot.Entries)
                 _entries.Add(entry);
             Version = accountSnapshot.Version;
         }
@@ -64,7 +64,7 @@ namespace WSantosDev.EventSourcing.Accounts
         }
 
         private void Apply(AmountCredited @event) =>
-            _entries.Add(AccountEntry.Credit(@event.Amount));
+            _entries.Add(Entry.Credit(@event.Amount));
 
         public Result<IError> Debit(Money amount)
         {
@@ -79,7 +79,7 @@ namespace WSantosDev.EventSourcing.Accounts
         }
 
         private void Apply(AmountDebited @event) =>
-            _entries.Add(AccountEntry.Debit(@event.Amount));
+            _entries.Add(Entry.Debit(@event.Amount));
 
         protected override void ProcessEvent(IEvent @event)
         {
@@ -97,6 +97,6 @@ namespace WSantosDev.EventSourcing.Accounts
         public bool ShouldTakeSnapshot() => _entries.Count % 3 == 0;
 
         public ISnapshot TakeSnapshot() =>
-            new AccountSnapshot(AccountId, [.. _entries], Version);
+            new Snapshot(AccountId, [.. _entries], Version);
     }
 }
