@@ -1,7 +1,6 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Commons.Modeling;
 using WSantosDev.EventSourcing.Commons;
-using WSantosDev.EventSourcing.Accounts.Entities;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
