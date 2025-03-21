@@ -29,7 +29,7 @@ namespace WSantosDev.EventSourcing.Positions
         }
 
         public Position(IEnumerable<IEvent> events) =>
-            Restore(events);
+            FeedEvents(events);
 
         private void Apply(PositionOpened @event) =>
             (AccountId, Symbol, Available) = (@event.AccountId, @event.Symbol, Available);

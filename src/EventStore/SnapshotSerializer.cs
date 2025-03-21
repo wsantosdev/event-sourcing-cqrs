@@ -3,22 +3,22 @@ using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.EventStore
 {
-    internal sealed class EventSerializer
+    internal sealed class SnapshotSerializer
     {
-        public static Event Serialize(long eventId, string streamId, IEvent @event)
+        public static Snapshot Serialize(string snapshotId, ISnapshot snapshot)
         {
-            var type = @event.GetType();
-
-            return new(eventId,
-                       streamId,
+            var type = snapshot.GetType();
+            
+            return new(snapshotId,
+                       type.FullName!,
+                       snapshot.Version,
                        DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
                        string.Empty,
-                       type.FullName!,
-                       JsonSerializer.Serialize(@event, type));
+                       JsonSerializer.Serialize(snapshot, type));
         }
 
-        public static IEvent Desserialize(Event @event) =>
-            (IEvent)JsonSerializer.Deserialize(@event.Data, GetType(@event.EventType))!;
+        public static ISnapshot Deserialize(Snapshot snapshot) =>
+            (ISnapshot)JsonSerializer.Deserialize(snapshot.Data, GetType(snapshot.Type))!;
 
         private static Type GetType(string typeName)
         {

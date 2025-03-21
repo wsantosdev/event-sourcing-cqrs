@@ -18,6 +18,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
         {
             var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
             var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
+            var snapshotDbContext = new SnapshotDbContext(new DbContextOptionsBuilder<SnapshotDbContext>().UseSqlite(config.ConnectionString).Options);
             var viewDbContext = new AccountViewDbContext(new DbContextOptionsBuilder<AccountViewDbContext>().UseSqlite(config.ConnectionString).Options);
             var viewStore = new AccountViewStore(viewDbContext);
 
@@ -26,7 +27,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
                 ViewDbContext = viewDbContext,
                 ViewStore = viewStore,
                 EventDbContext = eventDbContext,
-                Store = new AccountStore(eventDbContext, viewDbContext),
+                Store = new AccountStore(eventDbContext, snapshotDbContext, viewDbContext),
             };
         }
     }

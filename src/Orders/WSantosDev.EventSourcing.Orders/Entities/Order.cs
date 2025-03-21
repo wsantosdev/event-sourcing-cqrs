@@ -33,7 +33,7 @@ namespace WSantosDev.EventSourcing.Orders
         }
 
         public Order(IEnumerable<IEvent> stream) =>
-            Restore(stream);
+            FeedEvents(stream);
 
         public static Result<Order, IError> New(AccountId accountId, OrderId orderId, OrderSide side,
                                                 Quantity quantity, Symbol symbol, Money price)

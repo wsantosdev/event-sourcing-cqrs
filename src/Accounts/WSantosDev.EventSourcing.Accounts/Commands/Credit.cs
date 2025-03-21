@@ -15,7 +15,7 @@ namespace WSantosDev.EventSourcing.Accounts.Commands
                 var credited = account.Credit(@params.Amount);
                 if (credited)
                     return await store.StoreAsync(account);
-
+                
                 return Result<IError>.Error(credited.ErrorValue);
             }
 

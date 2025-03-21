@@ -23,6 +23,23 @@ namespace WSantosDev.EventSourcing.EventStore
             }
         }
 
+        public async Task<IEnumerable<IEvent>> ReadStreamFromIdAsync(string streamId, long eventId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var stream = await Events.Where(e => e.StreamId == streamId
+                                                  && e.Id > eventId)
+                                         .ToListAsync(cancellationToken);
+
+                return stream.OrderBy(e => e.Id)
+                             .Select(EventSerializer.Desserialize);
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
         public void AppendToStream(string streamId, IDictionary<long, IEvent> events)
         {
             var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.Key, streamId, e.Value));

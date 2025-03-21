@@ -1,6 +1,4 @@
-﻿using WSantosDev.EventSourcing.Commons;
-
-namespace WSantosDev.EventSourcing.Accounts
+﻿namespace WSantosDev.EventSourcing.Accounts
 {
     public class AccountView(Guid accountId, decimal balance)
     {

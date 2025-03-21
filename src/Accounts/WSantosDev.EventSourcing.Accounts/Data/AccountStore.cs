@@ -7,15 +7,23 @@ using WSantosDev.EventSourcing.EventStore;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
-    public sealed class AccountStore(EventDbContext eventDbContext, AccountViewDbContext viewDbContext)
+    public sealed class AccountStore(EventDbContext eventDbContext, SnapshotDbContext snapshotDbContext, AccountViewDbContext viewDbContext)
     {
         public async Task<Option<Account>> ByIdAsync(AccountId accountId, CancellationToken cancellationToken = default)
         {
-            var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId), cancellationToken);
+            var snapshot = await snapshotDbContext.ByIdAsync(StreamId(accountId), cancellationToken);
+            if (snapshot)
+            {
+                var streamFromId = await eventDbContext.ReadStreamFromIdAsync(StreamId(accountId), snapshot.Get().Version, cancellationToken);
+                var account = Account.Restore(snapshot.Get(), streamFromId);
+
+                return account;
+            }
             
-            return stream.Any()
-                ? new Account(stream)
-                : Option.None<Account>();
+            var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId), cancellationToken);
+                return stream.Any()
+                    ? new Account(stream)
+                    : Option.None<Account>();
         }
 
         public async Task<Result<IError>> StoreAsync(Account account, CancellationToken cancellationToken = default)
@@ -44,6 +52,16 @@ namespace WSantosDev.EventSourcing.Accounts
                 }
                 
                 await viewDbContext.SaveChangesAsync(cancellationToken);
+
+                if (account.ShouldTakeSnapshot())
+                {
+                    snapshotDbContext.Database.SetDbConnection(eventDbContext.Database.GetDbConnection());
+                    await snapshotDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken);
+
+                    await snapshotDbContext.UpsertAsync(StreamId(account.AccountId), account.TakeSnapshot(), cancellationToken);
+                    await snapshotDbContext.SaveChangesAsync(cancellationToken);
+                }
+                
                 await transaction.CommitAsync(cancellationToken);
 
                 return true;

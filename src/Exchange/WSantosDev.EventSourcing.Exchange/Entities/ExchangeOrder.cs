@@ -19,7 +19,7 @@ namespace WSantosDev.EventSourcing.Exchange
             RaiseEvent(new OrderCreated(accountId, orderId, side, quantity, symbol, price, OrderStatus.New));
 
         public ExchangeOrder(IEnumerable<IEvent> stream) =>
-            Restore(stream);
+            FeedEvents(stream);
 
         public static ExchangeOrder Create(AccountId accountId, OrderId orderId, OrderSide side,
                                              Quantity quantity, Symbol symbol, Money price) =>

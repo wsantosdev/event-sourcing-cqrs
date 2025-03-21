@@ -9,7 +9,8 @@ namespace WSantosDev.EventSourcing.WebApi
         {
             var connectionString = configuration["ConnectionStrings:EventStore"]!;
             
-            return services.AddDbContext<EventDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton);
+            return services.AddDbContext<EventDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
+                           .AddDbContext<SnapshotDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton);
         }
     }
 }

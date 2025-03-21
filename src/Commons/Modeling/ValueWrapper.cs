@@ -2,7 +2,7 @@
 {
     public class ValueWrapper<T> : IEquatable<T>
     {
-        public T Value { get; private init; }
+        public T Value { get; set; }
 
         protected ValueWrapper(T value) =>
             Value = value;

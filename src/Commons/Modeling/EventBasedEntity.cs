@@ -2,21 +2,22 @@
 {
     public abstract class EventBasedEntity
     {
-        private long Index { get; set; }
+        protected long Version { get; set; }
         public Dictionary<long, IEvent> UncommittedEvents { get; } = new ();
         
         protected void RaiseEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
-            UncommittedEvents.Add(++Index, @event);
+            UncommittedEvents.Add(++Version, @event);
             ProcessEvent(@event);
         }
 
-        protected void Restore(IEnumerable<IEvent> stream)
+        protected void FeedEvents(IEnumerable<IEvent> stream)
         {
-            Index = stream.Count();
-
             foreach (var @event in stream)
+            {
+                Version++;
                 ProcessEvent(@event);
+            }
         }
 
         protected abstract void ProcessEvent(IEvent @event);
