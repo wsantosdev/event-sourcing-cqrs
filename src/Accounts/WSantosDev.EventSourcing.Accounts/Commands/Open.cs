@@ -1,10 +1,11 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Commons;
+using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.Accounts.Commands
 {
-    public class Open(AccountStore store)
+    public class Open(AccountStore store, IMessageBus messageBus)
     {
         public async Task<Result<IError>> ExecuteAsync(OpenParams @params)
         {
@@ -14,7 +15,13 @@ namespace WSantosDev.EventSourcing.Accounts.Commands
             
             var opened = Account.Open(@params.AccountId, @params.InitialDeposit);
             if (opened)
-                return await store.StoreAsync(opened);
+            {
+                var persisted = await store.StoreAsync(opened);
+                if (persisted)
+                    messageBus.Publish(new AccountOpened(@params.AccountId, @params.InitialDeposit));
+
+                return persisted;
+            }
 
             return Result<IError>.Error(opened.ErrorValue);
         }

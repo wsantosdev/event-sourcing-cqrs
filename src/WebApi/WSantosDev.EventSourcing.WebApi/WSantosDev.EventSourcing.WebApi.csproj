@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BaseOutputPath>bin</BaseOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,34 +16,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Sqlite\EventStore.sqlite" />
-    <None Remove="Sqlite\ReadModelStore.sqlite" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.2" />
     <PackageReference Include="Moonad" Version="5.2.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Accounts\WSantosDev.EventSourcing.Accounts\WSantosDev.EventSourcing.Accounts.csproj" />
     <ProjectReference Include="..\..\Commons\WSantosDev.EventSourcing.Commons.csproj" />
-    <ProjectReference Include="..\..\EventStore\WSantosDev.EventSourcing.EventStore.csproj" />
     <ProjectReference Include="..\..\Exchange\WSantosDev.EventSourcing.Exchange\WSantosDev.EventSourcing.Exchange.csproj" />
     <ProjectReference Include="..\..\Orders\WSantosDev.EventSourcing.Orders\WSantosDev.EventSourcing.Orders.csproj" />
     <ProjectReference Include="..\..\Positions\WSantosDev.EventSourcing.Positions\WSantosDev.EventSourcing.Positions.csproj" />
+    <ProjectReference Include="..\..\SharedStorage\WSantosDev.EventSourcing.SharedStorage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Account.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Update="EventSourcing.sqlite">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Sqlite\EventSourcing.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+ 
 </Project>

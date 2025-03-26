@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Moonad;
 using WSantosDev.EventSourcing.Commons;
 using WSantosDev.EventSourcing.Commons.Modeling;
-using WSantosDev.EventSourcing.EventStore;
+using WSantosDev.EventSourcing.SharedStorage;
 
 namespace WSantosDev.EventSourcing.Orders
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WSantosDev.EventSourcing.EventStore;
+using WSantosDev.EventSourcing.SharedStorage;
 
 namespace WSantosDev.EventSourcing.Positions.Test
 {
@@ -16,12 +16,12 @@ namespace WSantosDev.EventSourcing.Positions.Test
     {
         public static Database Create()
         {
-            var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
+            var connectionString = "Data Source=./Sqlite/EventSourcing.sqlite";
 
-            var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), config.ConnectionString).Options;
+            var options = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<EventDbContext>(), connectionString).Options;
             var eventDbContext = new EventDbContext(options);
             
-            var viewOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<PositionViewDbContext>(), config.ConnectionString).Options;
+            var viewOptions = SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder<PositionViewDbContext>(), connectionString).Options;
             var viewDbContext = new PositionViewDbContext(viewOptions);
             var readModelStore = new PositionViewStore(viewDbContext);
 

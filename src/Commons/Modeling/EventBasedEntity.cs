@@ -3,11 +3,11 @@
     public abstract class EventBasedEntity
     {
         protected long Version { get; set; }
-        public Dictionary<long, IEvent> UncommittedEvents { get; } = new ();
+        public List<EventBag> UncommittedEvents { get; } = new ();
         
         protected void RaiseEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
-            UncommittedEvents.Add(++Version, @event);
+            UncommittedEvents.Add(new EventBag(++Version, @event));
             ProcessEvent(@event);
         }
 

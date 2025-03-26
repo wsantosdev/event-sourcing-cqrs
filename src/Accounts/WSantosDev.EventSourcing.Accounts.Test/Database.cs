@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WSantosDev.EventSourcing.EventStore;
+using WSantosDev.EventSourcing.SharedStorage;
 
 namespace WSantosDev.EventSourcing.Accounts.Test
 {
@@ -16,10 +16,10 @@ namespace WSantosDev.EventSourcing.Accounts.Test
     {
         public static Database Create()
         {
-            var config = new SqliteConfig("Data Source=./Sqlite/EventSourcing.sqlite");
-            var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(config.ConnectionString).Options);
-            var snapshotDbContext = new SnapshotDbContext(new DbContextOptionsBuilder<SnapshotDbContext>().UseSqlite(config.ConnectionString).Options);
-            var viewDbContext = new AccountViewDbContext(new DbContextOptionsBuilder<AccountViewDbContext>().UseSqlite(config.ConnectionString).Options);
+            var connectionString = "Data Source=./Sqlite/EventSourcing.sqlite";
+            var eventDbContext = new EventDbContext(new DbContextOptionsBuilder<EventDbContext>().UseSqlite(connectionString).Options);
+            var snapshotDbContext = new SnapshotDbContext(new DbContextOptionsBuilder<SnapshotDbContext>().UseSqlite(connectionString).Options);
+            var viewDbContext = new AccountViewDbContext(new DbContextOptionsBuilder<AccountViewDbContext>().UseSqlite(connectionString).Options);
             var viewStore = new AccountViewStore(viewDbContext);
 
             return new Database
@@ -27,7 +27,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
                 ViewDbContext = viewDbContext,
                 ViewStore = viewStore,
                 EventDbContext = eventDbContext,
-                Store = new AccountStore(eventDbContext, snapshotDbContext, viewDbContext),
+                Store = new AccountStore(eventDbContext, snapshotDbContext),
             };
         }
     }

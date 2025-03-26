@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\EventStore\WSantosDev.EventSourcing.EventStore.csproj" />
     <ProjectReference Include="..\WSantosDev.EventSourcing.Positions\WSantosDev.EventSourcing.Positions.csproj" />
   </ItemGroup>
 

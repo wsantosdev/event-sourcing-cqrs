@@ -2,7 +2,7 @@
 using Moonad;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
-namespace WSantosDev.EventSourcing.EventStore
+namespace WSantosDev.EventSourcing.SharedStorage
 {
     public sealed class SnapshotDbContext(DbContextOptions<SnapshotDbContext> options) : DbContext(options)
     {

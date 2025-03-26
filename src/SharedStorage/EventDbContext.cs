@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
-namespace WSantosDev.EventSourcing.EventStore
+namespace WSantosDev.EventSourcing.SharedStorage
 {
     public sealed class EventDbContext(DbContextOptions<EventDbContext> options) : DbContext(options)
     {
@@ -23,7 +23,7 @@ namespace WSantosDev.EventSourcing.EventStore
             }
         }
 
-        public async Task<IEnumerable<IEvent>> ReadStreamFromIdAsync(string streamId, long eventId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IEvent>> ReadStreamFromEventIdAsync(string streamId, long eventId, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -40,9 +40,9 @@ namespace WSantosDev.EventSourcing.EventStore
             }
         }
 
-        public void AppendToStream(string streamId, IDictionary<long, IEvent> events)
+        public void AppendToStream(string streamId, IList<EventBag> events)
         {
-            var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.Key, streamId, e.Value));
+            var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.EntityVersion, streamId, e.Event));
             Events.AddRange(eventsToAppend);
         }
 

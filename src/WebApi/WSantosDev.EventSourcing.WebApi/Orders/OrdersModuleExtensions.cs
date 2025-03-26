@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Orders;
 using WSantosDev.EventSourcing.Orders.Commands;
 using WSantosDev.EventSourcing.Orders.Queries;
@@ -10,7 +11,9 @@ namespace WSantosDev.EventSourcing.WebApi.Orders
     {
         public static IServiceCollection AddOrdersModule(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration["ConnectionStrings:EventStore"]!;
+            var databaseFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            var databaseFile = configuration["Database:FileName"]!;
+            var connectionString = $"Data Source={Path.Combine(databaseFolder, databaseFile)}";
 
             return services.AddDbContext<OrderViewDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
                            .AddSingleton<OrderStore>()

@@ -1,10 +1,11 @@
 ﻿using Moonad;
 using WSantosDev.EventSourcing.Commons;
+using WSantosDev.EventSourcing.Commons.Messaging;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.Accounts.Commands
 {
-    public class Credit(AccountStore store)
+    public class Credit(AccountStore store, IMessageBus messageBus)
     {
         public async Task<Result<IError>> ExecuteAsync(CreditParams @params)
         {
@@ -14,7 +15,18 @@ namespace WSantosDev.EventSourcing.Accounts.Commands
                 var account = stored.Get();
                 var credited = account.Credit(@params.Amount);
                 if (credited)
-                    return await store.StoreAsync(account);
+                {
+                    var persisted = await store.StoreAsync(account);
+                    if (persisted) 
+                    {
+                        if (account.ShouldTakeSnapshot())
+                            await store.StoreSnapshotAsync(account.TakeSnapshot());
+
+                        messageBus.Publish(new AccountCredited(@params.AccountId, @params.Amount));
+                    }
+
+                    return persisted;
+                }
                 
                 return Result<IError>.Error(credited.ErrorValue);
             }

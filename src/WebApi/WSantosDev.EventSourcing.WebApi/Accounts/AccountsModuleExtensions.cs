@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Accounts;
 using WSantosDev.EventSourcing.Accounts.Commands;
 using WSantosDev.EventSourcing.Accounts.Queries;
@@ -10,7 +11,9 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
     {
         public static IServiceCollection AddAccountsModule(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration["ConnectionStrings:EventStore"]!;
+            var databaseFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            var databaseFile = configuration["Database:FileName"]!;
+            var connectionString = $"Data Source={Path.Combine(databaseFolder, databaseFile)}";
 
             return services.AddDbContext<AccountViewDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
                            .AddSingleton<AccountStore>()
@@ -18,6 +21,9 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
                            .AddTransient<Credit>()
                            .AddSingleton<Debit>()
                            .AddScoped<AccountById>()
+                           .AddSingleton<AccountOpenedHandler>()
+                           .AddSingleton<AccountCreditedHandler>()
+                           .AddSingleton<AccountDebitedHandler>()
                            .AddSingleton<OrderPlacedHandler>()
                            .AddSingleton<OrderExecutedHandler>();
         }

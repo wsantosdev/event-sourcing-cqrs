@@ -17,7 +17,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
             var stored = await query.ExecuteAsync(new AccountByIdParams(Constants.DefaultAccountId));
             return stored
                     ? Ok(stored.Get().Balance)
-                    : NotFound();
+                    : NotFound("Account not found!");
         }
     }
 }

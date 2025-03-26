@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using WSantosDev.EventSourcing.Exchange;
 using WSantosDev.EventSourcing.Exchange.Commands;
 using WSantosDev.EventSourcing.Exchange.Queries;
@@ -10,7 +11,9 @@ namespace WSantosDev.EventSourcing.WebApi.Exchange
     {
         public static IServiceCollection AddExchangeModule(this IServiceCollection services, IConfiguration configuration) 
         {
-            var connectionString = configuration["ConnectionStrings:EventStore"]!;
+            var databaseFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            var databaseFile = configuration["Database:FileName"]!;
+            var connectionString = $"Data Source={Path.Combine(databaseFolder, databaseFile)}";
 
             return services.AddDbContext<ExchangeOrderViewDbContext>(options => options.UseSqlite(connectionString), ServiceLifetime.Singleton)
                            .AddSingleton<ExchangeOrderStore>()

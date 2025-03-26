@@ -4,8 +4,5 @@
     {
         public Guid AccountId { get; init; } = accountId;
         public decimal Balance { get; set; } = balance;
-
-        public static AccountView Create(Guid accountId, decimal balance) =>
-            new(accountId, balance);
     }
 }

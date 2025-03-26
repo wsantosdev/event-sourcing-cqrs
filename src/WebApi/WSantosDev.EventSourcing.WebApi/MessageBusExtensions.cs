@@ -4,12 +4,12 @@ namespace WSantosDev.EventSourcing.WebApi
 {
     public static class MessageBusExtensions
     {
-        public static IServiceCollection AddEventBus(this IServiceCollection services) 
+        public static IServiceCollection AddMessageBus(this IServiceCollection services) 
         {
             return services.AddSingleton<IMessageBus, InMemoryMessageBus>();
         }
 
-        public static IApplicationBuilder UseEventBus(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseMessageBus(this IApplicationBuilder builder)
         {
             using var scope = builder.ApplicationServices.CreateScope();
             var messageBus = scope.ServiceProvider.GetRequiredService<IMessageBus>();

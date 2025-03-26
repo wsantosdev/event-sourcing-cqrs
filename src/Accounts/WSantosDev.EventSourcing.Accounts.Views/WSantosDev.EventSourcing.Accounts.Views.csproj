@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.2" />
+    <PackageReference Include="Moonad" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Commons\WSantosDev.EventSourcing.Commons.csproj" />
+    <ProjectReference Include="..\..\Commons\WSantosDev.EventSourcing.Commons.csproj" />
   </ItemGroup>
 
 </Project>

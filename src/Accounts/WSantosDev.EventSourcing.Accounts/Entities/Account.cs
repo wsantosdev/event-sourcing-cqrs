@@ -19,19 +19,17 @@ namespace WSantosDev.EventSourcing.Accounts
         public Account(IEnumerable<IEvent> events) =>
             FeedEvents(events);
 
-        public Account(ISnapshot snapshot)
+        public Account(AccountSnapshot snapshot)
         {
-            var accountSnapshot = (snapshot as Snapshot)!;
-            
-            AccountId = accountSnapshot.AccountId;
-            foreach (Entry entry in accountSnapshot.Entries)
+            AccountId = snapshot.AccountId;
+            Version = snapshot.Version;
+            foreach (Entry entry in snapshot.Entries)
                 _entries.Add(entry);
-            Version = accountSnapshot.Version;
         }
 
         public static Account Restore(ISnapshot snapshot, IEnumerable<IEvent> events)
         {
-            var account = new Account(snapshot);
+            var account = new Account((AccountSnapshot)snapshot);
             account.FeedEvents(events);
 
             return account;
@@ -97,6 +95,6 @@ namespace WSantosDev.EventSourcing.Accounts
         public bool ShouldTakeSnapshot() => _entries.Count % 3 == 0;
 
         public ISnapshot TakeSnapshot() =>
-            new Snapshot(AccountId, [.. _entries], Version);
+            new AccountSnapshot(AccountId, Version, [.. _entries]);
     }
 }

@@ -3,5 +3,5 @@ using WSantosDev.EventSourcing.Commons.Modeling;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
-    public record Snapshot(AccountId AccountId, IEnumerable<Entry> Entries, long Version) : ISnapshot;
+    public record AccountSnapshot(AccountId AccountId, long Version, IEnumerable<Entry> Entries) : ISnapshot;
 }

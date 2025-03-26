@@ -1,10 +1,12 @@
 ﻿using System.Text.Json;
 using WSantosDev.EventSourcing.Commons.Modeling;
 
-namespace WSantosDev.EventSourcing.EventStore
+namespace WSantosDev.EventSourcing.SharedStorage
 {
     internal sealed class EventSerializer
     {
+        private static readonly Dictionary<string, Type> _types = [];
+
         public static Event Serialize(long eventId, string streamId, IEvent @event)
         {
             var type = @event.GetType();
@@ -22,10 +24,16 @@ namespace WSantosDev.EventSourcing.EventStore
 
         private static Type GetType(string typeName)
         {
-            return AppDomain.CurrentDomain
-                            .GetAssemblies()
-                            .SelectMany(a => a.GetTypes().Where(x => x.FullName == typeName))
-                            .First();
+            if (_types.TryGetValue(typeName, out var cached))
+                return cached;
+
+            var type = AppDomain.CurrentDomain
+                                .GetAssemblies()
+                                .SelectMany(a => a.GetTypes().Where(x => x.FullName == typeName))
+                                .First();
+            
+            _types.Add(typeName, type);
+            return type;
         }
     }
 }

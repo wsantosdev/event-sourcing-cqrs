@@ -6,8 +6,7 @@ using WSantosDev.EventSourcing.WebApi.Positions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEventBus();
-
+builder.Services.AddMessageBus();
 builder.Services.AddEventStore(builder.Configuration);
 builder.Services.AddAccountsModule(builder.Configuration);
 builder.Services.AddPositionsModule(builder.Configuration);
@@ -32,7 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
-app.UseEventBus();
+app.UseMessageBus();
 
 app.Run();
 

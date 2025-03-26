@@ -1,15 +1,18 @@
 ﻿using WSantosDev.EventSourcing.Accounts.Commands;
 using WSantosDev.EventSourcing.Commons;
+using WSantosDev.EventSourcing.Commons.Messaging;
 
 namespace WSantosDev.EventSourcing.Accounts.Test
 {
     public sealed class DebitTest : IDisposable
     {
         private readonly Database _database;
+        private readonly IMessageBus _messageBus;
 
         public DebitTest()
         {
             _database = DatabaseFactory.Create();
+            _messageBus = new InMemoryMessageBus();
         }
 
         [Fact]
@@ -19,7 +22,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             AccountId accountId = Guid.NewGuid();
             var account = Account.Open(accountId, 100m).ResultValue;
             await _database.Store.StoreAsync(account);
-            var sut = new Debit(_database.Store);
+            var sut = new Debit(_database.Store, _messageBus);
 
             //Act
             var debited = await sut.ExecuteAsync(new DebitParams(accountId, 10m));
@@ -27,7 +30,6 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             //Assert
             Assert.True(debited);
             Assert.Equal<decimal>(90m, (await _database.Store.ByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(90m, (await _database.ViewDbContext.ByAccountIdAsync(accountId)).Get().Balance);
         }
 
         [Fact]
@@ -39,7 +41,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             var account = Account.Open(accountId, initialDeposit).ResultValue;
             await _database.Store.StoreAsync(account);
             await _database.ViewStore.StoreAsync(new AccountView(accountId, account.Balance));
-            var sut = new Debit(_database.Store);
+            var sut = new Debit(_database.Store, _messageBus);
 
             //Act
             var debited = await sut.ExecuteAsync(new DebitParams(accountId, 0m));
@@ -59,7 +61,7 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             var account = Account.Open(accountId, 100m).ResultValue;
             await _database.Store.StoreAsync(account);
             await _database.ViewStore.StoreAsync(new AccountView(accountId, account.Balance));
-            var sut = new Debit(_database.Store);
+            var sut = new Debit(_database.Store, _messageBus);
 
             //Act
             var debited = await sut.ExecuteAsync(new DebitParams(accountId, 200m));
@@ -68,7 +70,6 @@ namespace WSantosDev.EventSourcing.Accounts.Test
             Assert.False(debited);
             Assert.Equal(Errors.InsufficientFunds, debited.ErrorValue);
             Assert.Equal<decimal>(100m, (await _database.Store.ByIdAsync(accountId)).Get().Balance);
-            Assert.Equal(100m, (await _database.ViewDbContext.ByAccountIdAsync(accountId)).Get().Balance);
         }
 
         public void Dispose() =>
