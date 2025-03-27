@@ -5,8 +5,8 @@ namespace WSantosDev.EventSourcing.Accounts
 {
     public sealed partial class Account
     {
-        private record struct AccountOpened(AccountId AccountId) : IEvent;
-        private record struct AmountCredited(decimal Amount) : IEvent;
-        private record struct AmountDebited(decimal Amount) : IEvent;
+        private record struct AccountOpened(int Id, AccountId AccountId) : IEvent;
+        private record struct AmountCredited(int Id, decimal Amount) : IEvent;
+        private record struct AmountDebited(int Id, decimal Amount) : IEvent;
     }
 }

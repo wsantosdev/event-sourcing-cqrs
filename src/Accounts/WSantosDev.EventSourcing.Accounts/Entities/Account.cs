@@ -4,7 +4,7 @@ using WSantosDev.EventSourcing.Commons;
 
 namespace WSantosDev.EventSourcing.Accounts
 {
-    public sealed partial class Account : EventBasedEntity, ISnapshotable
+    public sealed partial class Account : EventBasedEntity, ISnapshotable<AccountSnapshot>
     {
         private readonly IList<Entry> _entries = [];
 
@@ -14,7 +14,7 @@ namespace WSantosDev.EventSourcing.Accounts
                                         .Sum(e => e.Value);
 
         private Account(AccountId accountId) =>
-            RaiseEvent(new AccountOpened(accountId));
+            RaiseEvent(new AccountOpened(Version, accountId));
 
         public Account(IEnumerable<IEvent> events) =>
             FeedEvents(events);
@@ -22,14 +22,14 @@ namespace WSantosDev.EventSourcing.Accounts
         public Account(AccountSnapshot snapshot)
         {
             AccountId = snapshot.AccountId;
-            Version = snapshot.Version;
+            Version = snapshot.EntityVersion;
             foreach (Entry entry in snapshot.Entries)
                 _entries.Add(entry);
         }
 
-        public static Account Restore(ISnapshot snapshot, IEnumerable<IEvent> events)
+        public static Account Restore(AccountSnapshot snapshot, IEnumerable<IEvent> events)
         {
-            var account = new Account((AccountSnapshot)snapshot);
+            var account = new Account(snapshot);
             account.FeedEvents(events);
 
             return account;
@@ -56,7 +56,7 @@ namespace WSantosDev.EventSourcing.Accounts
             if (amount <= Money.Zero)
                 return Result<IError>.Error(Errors.InvalidAmount);
 
-            RaiseEvent(new AmountCredited(amount));
+            RaiseEvent(new AmountCredited(Version, amount));
 
             return true;
         }
@@ -71,7 +71,7 @@ namespace WSantosDev.EventSourcing.Accounts
             if (Money.Zero > Balance - amount)
                 return Errors.InsufficientFunds;
 
-            RaiseEvent(new AmountDebited(amount));
+            RaiseEvent(new AmountDebited(Version, amount));
 
             return true;
         }
@@ -94,7 +94,7 @@ namespace WSantosDev.EventSourcing.Accounts
 
         public bool ShouldTakeSnapshot() => _entries.Count % 3 == 0;
 
-        public ISnapshot TakeSnapshot() =>
-            new AccountSnapshot(AccountId, Version, [.. _entries]);
+        public AccountSnapshot TakeSnapshot() =>
+            new (AccountId, Version, [.. _entries]);
     }
 }

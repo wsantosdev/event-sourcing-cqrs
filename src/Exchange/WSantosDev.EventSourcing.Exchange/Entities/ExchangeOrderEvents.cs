@@ -5,9 +5,9 @@ namespace WSantosDev.EventSourcing.Exchange
 {
     public sealed partial class ExchangeOrder
     {
-        private record struct OrderCreated(AccountId AccountId, OrderId OrderId, string Side, int Quantity,
+        private record struct OrderCreated(int Id, AccountId AccountId, OrderId OrderId, string Side, int Quantity,
                                            string Symbol, decimal Price, string OrderStatus) : IEvent;
-        private record struct OrderExecuted(AccountId AccountId, OrderId OrderId, string Side, int Quantity,
+        private record struct OrderExecuted(int Id, AccountId AccountId, OrderId OrderId, string Side, int Quantity,
                                            string Symbol, decimal Price, string OrderStatus) : IEvent;
     }
 }

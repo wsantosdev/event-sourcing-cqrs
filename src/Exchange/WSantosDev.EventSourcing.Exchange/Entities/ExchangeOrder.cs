@@ -16,7 +16,7 @@ namespace WSantosDev.EventSourcing.Exchange
 
         private ExchangeOrder(AccountId accountId, OrderId orderId, OrderSide side,
                               Quantity quantity, Symbol symbol, Money price) =>
-            RaiseEvent(new OrderCreated(accountId, orderId, side, quantity, symbol, price, OrderStatus.New));
+            RaiseEvent(new OrderCreated(Version, accountId, orderId, side, quantity, symbol, price, OrderStatus.New));
 
         public ExchangeOrder(IEnumerable<IEvent> stream) =>
             FeedEvents(stream);
@@ -41,7 +41,7 @@ namespace WSantosDev.EventSourcing.Exchange
             if (Status == OrderStatus.Filled)
                 return Errors.AlreadyFilled;
 
-            RaiseEvent(new OrderExecuted(AccountId, OrderId, Side, Quantity, Symbol, Price, OrderStatus.Filled));
+            RaiseEvent(new OrderExecuted(Version, AccountId, OrderId, Side, Quantity, Symbol, Price, OrderStatus.Filled));
             return true;
         }
 

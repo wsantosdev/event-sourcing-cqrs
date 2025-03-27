@@ -9,11 +9,12 @@ namespace WSantosDev.EventSourcing.Accounts
     {
         public async Task<Option<Account>> ByIdAsync(AccountId accountId, CancellationToken cancellationToken = default)
         {
-            var snapshot = await snapshotDbContext.ByIdAsync(StreamId(accountId), cancellationToken);
-            if (snapshot)
+            var stored = await snapshotDbContext.ByIdAsync<AccountSnapshot>(StreamId(accountId), cancellationToken);
+            if (stored)
             {
-                var streamFromId = await eventDbContext.ReadStreamFromEventIdAsync(StreamId(accountId), snapshot.Get().Version, cancellationToken);
-                var account = Account.Restore(snapshot.Get(), streamFromId);
+                var snapshot = stored.Get();
+                var streamFromId = await eventDbContext.ReadStreamFromEventIdAsync(StreamId(accountId), snapshot.EntityVersion, cancellationToken);
+                var account = Account.Restore(snapshot, streamFromId);
 
                 return account;
             }
@@ -39,13 +40,11 @@ namespace WSantosDev.EventSourcing.Accounts
             }
         }
 
-        public async Task<Result<IError>> StoreSnapshotAsync(ISnapshot snapshot, CancellationToken cancellationToken = default)
+        public async Task<Result<IError>> StoreSnapshotAsync(AccountSnapshot snapshot, CancellationToken cancellationToken = default)
         {
             try
             {
-                var accountId = ((AccountSnapshot)snapshot).AccountId;
-
-                await snapshotDbContext.UpsertAsync(StreamId(accountId), snapshot, cancellationToken);
+                await snapshotDbContext.UpsertAsync(StreamId(snapshot.AccountId), snapshot, cancellationToken);
                 await snapshotDbContext.SaveChangesAsync(cancellationToken);
 
                 return true;

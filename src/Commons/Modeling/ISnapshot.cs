@@ -2,6 +2,6 @@
 {
     public interface ISnapshot
     {
-        long Version { get; }
+        int EntityVersion { get; }
     }
 }

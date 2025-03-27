@@ -5,10 +5,10 @@ namespace WSantosDev.EventSourcing.Orders
 {
     public sealed partial class Order
     {
-        private record struct OrderCreated(AccountId AccountId, OrderId OrderId, string Side,
+        private record struct OrderCreated(int Id, AccountId AccountId, OrderId OrderId, string Side,
                                            int Quantity, string Symbol, decimal Price) : IEvent;
 
-        private record struct OrderExecuted(AccountId AccountId, OrderId OrderId, string Side,
+        private record struct OrderExecuted(int Id, AccountId AccountId, OrderId OrderId, string Side,
                                             int Quantity, string Symbol, decimal Price) : IEvent;
     }
 }

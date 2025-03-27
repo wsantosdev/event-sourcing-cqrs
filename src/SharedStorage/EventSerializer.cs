@@ -7,14 +7,13 @@ namespace WSantosDev.EventSourcing.SharedStorage
     {
         private static readonly Dictionary<string, Type> _types = [];
 
-        public static Event Serialize(long eventId, string streamId, IEvent @event)
+        public static Event Serialize(int eventId, string streamId, IEvent @event)
         {
             var type = @event.GetType();
 
             return new(eventId,
                        streamId,
                        DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
-                       string.Empty,
                        type.FullName!,
                        JsonSerializer.Serialize(@event, type));
         }

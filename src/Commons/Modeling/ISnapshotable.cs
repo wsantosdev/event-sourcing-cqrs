@@ -1,9 +1,9 @@
 ﻿namespace WSantosDev.EventSourcing.Commons.Modeling
 {
-    public interface ISnapshotable
+    public interface ISnapshotable<T>
     {
         bool ShouldTakeSnapshot();
 
-        ISnapshot TakeSnapshot();
+        T TakeSnapshot();
     }
 }

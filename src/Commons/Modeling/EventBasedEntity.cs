@@ -2,12 +2,13 @@
 {
     public abstract class EventBasedEntity
     {
-        protected long Version { get; set; }
-        public List<EventBag> UncommittedEvents { get; } = new ();
+        public int Version { get; protected set; }
+        public List<IEvent> UncommittedEvents { get; } = new ();
         
         protected void RaiseEvent<TEvent>(TEvent @event) where TEvent : IEvent
         {
-            UncommittedEvents.Add(new EventBag(++Version, @event));
+            Version++;
+            UncommittedEvents.Add(@event);
             ProcessEvent(@event);
         }
 
@@ -15,7 +16,7 @@
         {
             foreach (var @event in stream)
             {
-                Version++;
+                Version = @event.Id;
                 ProcessEvent(@event);
             }
         }

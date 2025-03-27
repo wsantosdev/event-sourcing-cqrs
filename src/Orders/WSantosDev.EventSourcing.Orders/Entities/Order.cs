@@ -18,7 +18,7 @@ namespace WSantosDev.EventSourcing.Orders
         private Order(AccountId accountId, OrderId orderId, OrderSide side,
                       Quantity quantity, Symbol symbol, Money price)
         {
-            RaiseEvent(new OrderCreated(accountId, orderId, side, quantity, symbol, price));
+            RaiseEvent(new OrderCreated(Version, accountId, orderId, side, quantity, symbol, price));
         }
 
         private void Apply(OrderCreated @event)
@@ -59,7 +59,7 @@ namespace WSantosDev.EventSourcing.Orders
             if (Status == OrderStatus.Filled)
                 return Errors.AlreadyFilled;
             
-            RaiseEvent(new OrderExecuted(AccountId, OrderId, Side, Quantity, Symbol, Price));
+            RaiseEvent(new OrderExecuted(Version, AccountId, OrderId, Side, Quantity, Symbol, Price));
             
             return true;
         }

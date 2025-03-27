@@ -11,7 +11,7 @@ namespace WSantosDev.EventSourcing.Positions
         public Quantity Available { get; private set; } = Quantity.Zero;
         
         private Position(AccountId accountId, Symbol symbol) =>
-            RaiseEvent(new PositionOpened(accountId, symbol));
+            RaiseEvent(new PositionOpened(Version, accountId, symbol));
 
         public static Result<Position,IError> Open(AccountId accountId, Symbol symbol, Quantity quantity)
         {
@@ -39,7 +39,7 @@ namespace WSantosDev.EventSourcing.Positions
             if (quantity == Quantity.Zero)
                 return Result<IError>.Error(Errors.QuantityZero);
 
-            RaiseEvent(new SharesDeposited(quantity));
+            RaiseEvent(new SharesDeposited(quantity, Version));
             return true;
         }
 
@@ -53,7 +53,7 @@ namespace WSantosDev.EventSourcing.Positions
             if (Available - quantity < Quantity.Zero)
                 return Errors.InsuficientShares;
 
-            RaiseEvent(new SharesWithdrawn(quantity));
+            RaiseEvent(new SharesWithdrawn(quantity, Version));
 
             return true;
         }

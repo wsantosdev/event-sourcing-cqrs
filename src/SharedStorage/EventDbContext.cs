@@ -27,8 +27,7 @@ namespace WSantosDev.EventSourcing.SharedStorage
         {
             try
             {
-                var stream = await Events.Where(e => e.StreamId == streamId
-                                                  && e.Id > eventId)
+                var stream = await Events.Where(e => e.StreamId == streamId && e.Id > eventId)
                                          .ToListAsync(cancellationToken);
 
                 return stream.OrderBy(e => e.Id)
@@ -40,19 +39,19 @@ namespace WSantosDev.EventSourcing.SharedStorage
             }
         }
 
-        public void AppendToStream(string streamId, IList<EventBag> events)
+        public void AppendToStream(string streamId, IEnumerable<IEvent> events)
         {
-            var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.EntityVersion, streamId, e.Event));
+            var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.Id, streamId, e));
             Events.AddRange(eventsToAppend);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Event>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Event>().HasKey(e => new { e.Id, e.StreamId });
             base.OnModelCreating(modelBuilder);
         }
     }
 
-    internal record Event(long Id, string StreamId, string Created,
-                          string Metadata, string EventType, string Data);
+    internal record Event(int Id, string StreamId, string Created, string EventType, string Data);
 }
