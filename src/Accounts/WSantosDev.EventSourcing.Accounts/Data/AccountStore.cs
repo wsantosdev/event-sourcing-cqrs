@@ -21,7 +21,7 @@ namespace WSantosDev.EventSourcing.Accounts
             
             var stream = await eventDbContext.ReadStreamAsync(StreamId(accountId), cancellationToken);
                 return stream.Any()
-                    ? new Account(stream)
+                    ? Account.Restore(stream)
                     : Option.None<Account>();
         }
 

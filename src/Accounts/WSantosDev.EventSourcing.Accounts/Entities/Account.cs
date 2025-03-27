@@ -27,13 +27,16 @@ namespace WSantosDev.EventSourcing.Accounts
                 _entries.Add(entry);
         }
 
-        public static Account Restore(AccountSnapshot snapshot, IEnumerable<IEvent> events)
+        public static Account Restore(AccountSnapshot snapshot, IEnumerable<IEvent> stream)
         {
             var account = new Account(snapshot);
-            account.FeedEvents(events);
+            account.FeedEvents(stream);
 
             return account;
         }
+
+        public static Account Restore(IEnumerable<IEvent> stream) =>
+            new(stream);
 
         public static Result<Account, IError> Open(AccountId accountId, Money initialDeposit)
         {
