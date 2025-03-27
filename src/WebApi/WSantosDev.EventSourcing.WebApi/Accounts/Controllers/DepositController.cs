@@ -10,7 +10,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
     [ApiController]
     public class CreditController(Credit command) : ControllerBase
     {
-        [HttpPost("Credit")]
+        [HttpPost("Deposit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

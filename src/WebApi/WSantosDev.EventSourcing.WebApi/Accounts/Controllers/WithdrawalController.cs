@@ -7,13 +7,13 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
     [Tags("Account")]
     [Route("api/Account")]
     [ApiController]
-    public class DebitController(Debit command) : ControllerBase
+    public class WithdrawalController(Debit command) : ControllerBase
     {
-        [HttpPost("Debit")]
+        [HttpPost("Withdrawal")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Debit(DebitRequest request)
+        public async Task<IActionResult> Withdraw(DebitRequest request)
         {
             var debited = await command.ExecuteAsync(new DebitParams(Constants.DefaultAccountId, request.Amount));
             if (debited)

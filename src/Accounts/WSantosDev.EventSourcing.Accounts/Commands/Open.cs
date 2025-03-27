@@ -11,7 +11,7 @@ namespace WSantosDev.EventSourcing.Accounts.Commands
         {
             var stored = await store.ByIdAsync(@params.AccountId);
             if (stored)
-                return CommandErrors.AccountAlreadyOpened;
+                return CommandErrors.AccountAlreadyOpen;
             
             var opened = Account.Open(@params.AccountId, @params.InitialDeposit);
             if (opened)
