@@ -41,7 +41,7 @@ namespace WSantosDev.EventSourcing.SharedStorage
 
         public void AppendToStream(string streamId, IEnumerable<IEvent> events)
         {
-            var eventsToAppend = events.Select(e => EventSerializer.Serialize(e.Id, streamId, e));
+            var eventsToAppend = events.Select(e => EventSerializer.Serialize(streamId, e));
             Events.AddRange(eventsToAppend);
         }
 
