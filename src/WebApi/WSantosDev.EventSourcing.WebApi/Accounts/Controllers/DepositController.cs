@@ -8,7 +8,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
     [Tags("Account")]
     [Route("api/Account")]
     [ApiController]
-    public class CreditController(Credit command) : ControllerBase
+    public class DepositController(Credit command) : ControllerBase
     {
         [HttpPost("Deposit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
