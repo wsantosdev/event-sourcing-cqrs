@@ -47,7 +47,6 @@ namespace WSantosDev.EventSourcing.SharedStorage
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Event>().Property(e => e.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Event>().HasKey(e => new { e.Id, e.StreamId });
             base.OnModelCreating(modelBuilder);
         }
