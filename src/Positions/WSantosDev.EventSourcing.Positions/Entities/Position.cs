@@ -39,7 +39,7 @@ namespace WSantosDev.EventSourcing.Positions
             if (quantity == Quantity.Zero)
                 return Result<IError>.Error(Errors.QuantityZero);
 
-            RaiseEvent(new SharesDeposited(quantity, Version));
+            RaiseEvent(new SharesDeposited(Version, quantity));
             return true;
         }
 
@@ -53,7 +53,7 @@ namespace WSantosDev.EventSourcing.Positions
             if (Available - quantity < Quantity.Zero)
                 return Errors.InsuficientShares;
 
-            RaiseEvent(new SharesWithdrawn(quantity, Version));
+            RaiseEvent(new SharesWithdrawn(Version, quantity));
 
             return true;
         }

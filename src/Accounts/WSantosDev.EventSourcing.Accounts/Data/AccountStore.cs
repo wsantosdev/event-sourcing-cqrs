@@ -9,10 +9,10 @@ namespace WSantosDev.EventSourcing.Accounts
     {
         public async Task<Option<Account>> ByIdAsync(AccountId accountId, CancellationToken cancellationToken = default)
         {
-            var stored = await snapshotDbContext.ByIdAsync<AccountSnapshot>(StreamId(accountId), cancellationToken);
-            if (stored)
+            var storedSnapshot = await snapshotDbContext.ByIdAsync<AccountSnapshot>(StreamId(accountId), cancellationToken);
+            if (storedSnapshot)
             {
-                var snapshot = stored.Get();
+                var snapshot = storedSnapshot.Get();
                 var streamFromId = await eventDbContext.ReadStreamFromEventIdAsync(StreamId(accountId), snapshot.EntityVersion, cancellationToken);
                 var account = Account.Restore(snapshot, streamFromId);
 

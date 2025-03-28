@@ -59,7 +59,7 @@ namespace WSantosDev.EventSourcing.Accounts
             if (amount <= Money.Zero)
                 return Result<IError>.Error(Errors.InvalidAmount);
 
-            RaiseEvent(new AmountCredited(Version, amount));
+            RaiseEvent(new AmountCredited(Version, AccountId, amount));
 
             return true;
         }
@@ -69,12 +69,12 @@ namespace WSantosDev.EventSourcing.Accounts
 
         public Result<IError> Debit(Money amount)
         {
-            if(amount == Money.Zero)
+            if(Money.Zero == amount)
                 return Errors.InvalidAmount;
             if (Money.Zero > Balance - amount)
                 return Errors.InsufficientFunds;
 
-            RaiseEvent(new AmountDebited(Version, amount));
+            RaiseEvent(new AmountDebited(Version, AccountId, amount));
 
             return true;
         }

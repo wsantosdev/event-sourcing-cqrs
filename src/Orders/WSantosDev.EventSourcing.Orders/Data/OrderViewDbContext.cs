@@ -57,5 +57,12 @@ namespace WSantosDev.EventSourcing.Orders
 
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

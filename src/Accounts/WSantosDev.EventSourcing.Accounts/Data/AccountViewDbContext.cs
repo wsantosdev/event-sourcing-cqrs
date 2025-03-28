@@ -29,5 +29,12 @@ namespace WSantosDev.EventSourcing.Accounts
                         .HasConversion(v => v.ToString(), v => Guid.Parse(v));
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

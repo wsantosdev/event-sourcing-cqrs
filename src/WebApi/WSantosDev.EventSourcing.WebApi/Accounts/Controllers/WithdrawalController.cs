@@ -13,7 +13,7 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Withdraw(DebitRequest request)
+        public async Task<IActionResult> Withdraw(WithdrawalRequest request)
         {
             var debited = await command.ExecuteAsync(new DebitParams(Constants.DefaultAccountId, request.Amount));
             if (debited)
@@ -22,11 +22,12 @@ namespace WSantosDev.EventSourcing.WebApi.Accounts
             return debited.ErrorValue switch
             {
                 InvalidAmountError => BadRequest($"Invalid amount. The amount should be greater than zero."),
+                InsuficientFundsError => BadRequest($"Insuficient funds."),
                 StorageUnavailableError => StatusCode(StatusCodes.Status500InternalServerError, $"Storage unavailable."),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, "Unspecified error."),
             };
         }
     }
 
-    public record struct DebitRequest(decimal Amount);
+    public record struct WithdrawalRequest(decimal Amount);
 }
