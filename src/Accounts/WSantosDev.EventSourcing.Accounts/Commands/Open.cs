@@ -14,16 +14,15 @@ namespace WSantosDev.EventSourcing.Accounts.Commands
                 return CommandErrors.AccountAlreadyOpen;
             
             var opened = Account.Open(@params.AccountId, @params.InitialDeposit);
-            if (opened)
-            {
-                var persisted = await store.StoreAsync(opened);
-                if (persisted)
-                    messageBus.Publish(new AccountOpened(@params.AccountId, @params.InitialDeposit));
+            if (!opened)
+                return Result<IError>.Error(opened.ErrorValue);
 
+            var persisted = await store.StoreAsync(opened);
+            if (!persisted)
                 return persisted;
-            }
 
-            return Result<IError>.Error(opened.ErrorValue);
+            messageBus.Publish(new AccountOpened(@params.AccountId, @params.InitialDeposit));
+            return true;
         }
     }
 

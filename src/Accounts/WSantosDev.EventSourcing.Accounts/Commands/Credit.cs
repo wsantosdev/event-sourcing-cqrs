@@ -10,28 +10,23 @@ namespace WSantosDev.EventSourcing.Accounts.Commands
         public async Task<Result<IError>> ExecuteAsync(CreditParams @params)
         {
             var stored = await store.ByIdAsync(@params.AccountId);
-            if (stored)
-            {
-                var account = stored.Get();
-                var credited = account.Credit(@params.Amount);
-                if (credited)
-                {
-                    var persisted = await store.StoreAsync(account);
-                    if (persisted) 
-                    {
-                        if (account.ShouldTakeSnapshot())
-                            await store.StoreSnapshotAsync(account.TakeSnapshot());
+            if (!stored)
+                return CommandErrors.AccountNotFound;
 
-                        messageBus.Publish(new AccountCredited(@params.AccountId, @params.Amount));
-                    }
+            var account = stored.Get();
+            var credited = account.Credit(@params.Amount);
+            if (!credited)
+                return credited;
 
-                    return persisted;
-                }
-                
-                return Result<IError>.Error(credited.ErrorValue);
-            }
+            var persisted = await store.StoreAsync(account);
+            if (!persisted)
+                return persisted;
 
-            return CommandErrors.AccountNotFound;
+            if (account.ShouldTakeSnapshot())
+                await store.StoreSnapshotAsync(account.TakeSnapshot());
+
+            messageBus.Publish(new AccountCredited(@params.AccountId, @params.Amount));
+            return true;
         }
     }
 
